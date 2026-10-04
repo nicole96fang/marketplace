@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f1dfbd">
-<title>小镇杂货铺 V4 · My Little Grocery</title>
+<title>小镇杂货铺 V3 · My Little Grocery</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
 :root{--ink:#624b35;--cream:#fff4dc;--paper:#f8e8c8;--wood:#b98455;--wood-dark:#8c603d;--pink:#e99579;--green:#9eb982;--blue:#9fc5cb;--line:#d9b98b;--shadow:0 5px 0 rgba(111,75,42,.22),0 10px 24px rgba(90,63,36,.12)}
@@ -31,59 +31,67 @@ main{min-width:0}.stage{background:#ead5aa;border:4px solid #bd9365;border-radiu
 .tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}.tabs button{background:#efd7b2;border:2px solid #d4b183;border-radius:13px;padding:7px 12px}.tabs button.active{background:#fff2d7}
 @media(max-width:720px){.app{padding:6px}.top{padding:7px 9px;border-radius:17px}.brand .house{font-size:27px}.brand small{font-size:8px}.stats{gap:4px}.stat{font-size:10px;padding:5px 7px}.layout{grid-template-columns:57px minmax(0,1fr);gap:7px;margin-top:8px}nav{gap:6px}nav button{font-size:9px;padding:7px 2px;border-radius:13px}nav button span{font-size:21px}.stage{padding:5px;border-radius:17px}.stagehead{font-size:12px}.stagehead small{font-size:9px}.scene{min-height:205px;aspect-ratio:1.12}.scene img{object-fit:cover}.btn{font-size:11px;padding:8px 9px}.panel{padding:10px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
-/* V4: larger game stage, animated shoppers and cozy living environment */
-.scene{aspect-ratio:16/10;min-height:430px;background:#d7dfc4}
-.scene img{object-fit:cover;object-position:center center}
-.scene-actors{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none}
-.manager-avatar{position:absolute;left:4%;bottom:2%;width:58px;height:94px;filter:drop-shadow(0 5px 3px #624b3544);animation:managerIdle 2.4s ease-in-out infinite}
-.manager-avatar svg{width:100%;height:100%;overflow:visible}
-.manager-tag{position:absolute;top:-13px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:900;white-space:nowrap;color:#fff8e8;background:#8e7656;border-radius:12px;padding:2px 7px}
-.customer-walker{position:absolute;left:-12%;bottom:2%;width:54px;height:91px;filter:drop-shadow(0 5px 3px #624b3544);animation:customerRoute var(--walk-time,13s) linear forwards;z-index:2}
-.customer-walker svg{width:100%;height:100%;overflow:visible;animation:bodyBob .42s ease-in-out infinite alternate}
-.customer-walker .speech{position:absolute;left:50%;top:-22px;transform:translateX(-50%);background:#fff8e9;border:1.5px solid #d2ae7d;border-radius:12px;padding:3px 7px;font-size:10px;font-weight:900;white-space:nowrap;color:#70543b;box-shadow:0 2px 5px #624b3522}
-@keyframes customerRoute{
-  0%{left:-12%;bottom:1%}
-  15%{left:12%;bottom:3%}
-  35%{left:34%;bottom:1%}
-  53%{left:48%;bottom:7%}
-  68%{left:67%;bottom:3%}
-  85%{left:85%;bottom:1%}
-  100%{left:112%;bottom:2%}
+/* V4 REBUILT — fully layered vector shop; no raster background image */
+.scene{position:relative;overflow:hidden;border-radius:22px;border:4px solid #bc8c5d;background:#d9b58a;aspect-ratio:1000/600;min-height:390px;isolation:isolate;box-shadow:inset 0 0 0 2px #fff0d0,0 8px 18px #76543a24}
+.store-art{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hotspot{z-index:6;border:2px solid transparent;background:transparent;border-radius:18px}
+.hotspot:focus,.hotspot:hover{border-color:#fff1bd;background:#fff3bd22;box-shadow:0 0 0 3px #956b3d55}
+.hotspot span{opacity:0;position:absolute;left:50%;top:-27px;transform:translateX(-50%);background:#fff3dc;border:2px solid #c99e6c;border-radius:18px;padding:4px 10px;font-size:11px;white-space:nowrap;color:#705037}
+.hotspot:focus span,.hotspot:hover span{opacity:1}
+.hs-fruit{left:0;top:55%;width:23%;height:36%}
+.hs-snack{left:24%;top:25%;width:45%;height:43%}
+.hs-drink{left:67%;top:9%;width:30%;height:50%}
+.hs-daily{left:68%;top:48%;width:30%;height:20%}
+.hs-bakery{left:75%;top:60%;width:24%;height:30%}
+.hs-cash{left:32%;top:63%;width:38%;height:30%}
+.shopper-layer{position:absolute;inset:0;z-index:4;overflow:hidden;pointer-events:none}
+.shopper{position:absolute;width:clamp(54px,8.5%,88px);height:auto;left:-12%;bottom:3%;filter:drop-shadow(0 7px 4px #5e432c44);animation:shopperWalk var(--duration,15s) linear forwards;transform-origin:50% 100%}
+.shopper svg{width:100%;height:auto;overflow:visible;animation:shopperBob .42s ease-in-out infinite alternate}
+.shopper .bubble{position:absolute;top:-19px;left:50%;transform:translateX(-50%);background:#fff8e8;border:2px solid #d2ae7d;border-radius:15px;padding:3px 7px;font-size:clamp(9px,1.3vw,12px);font-weight:900;white-space:nowrap;color:#76543a;box-shadow:0 3px 5px #624b3522}
+.manager-character{position:absolute;z-index:5;width:clamp(60px,9%,94px);right:4%;bottom:2%;filter:drop-shadow(0 7px 4px #5e432c44);animation:managerBreath 2.4s ease-in-out infinite;pointer-events:none}
+.manager-character svg{width:100%;height:auto}
+.manager-character span{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:900;color:#fff7e8;background:#8c6b4b;border-radius:12px;padding:3px 8px;white-space:nowrap}
+#mgrDress{fill:#a2b88a}
+@keyframes shopperWalk{
+  0%{left:-12%;bottom:2%;transform:scale(.88)}
+  18%{left:15%;bottom:3%;transform:scale(.92)}
+  38%{left:34%;bottom:7%;transform:scale(1)}
+  55%{left:52%;bottom:4%;transform:scale(1.02)}
+  73%{left:70%;bottom:2%;transform:scale(.98)}
+  100%{left:112%;bottom:3%;transform:scale(.9)}
 }
-@keyframes bodyBob{from{transform:translateY(0) rotate(-1deg)}to{transform:translateY(-3px) rotate(1deg)}}
-@keyframes managerIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-.ambient-sparkle{position:absolute;right:13%;top:17%;color:#fff5bd;text-shadow:0 0 9px #fff4b0;font-size:22px;animation:sparkle 2.6s ease-in-out infinite}
-@keyframes sparkle{0%,100%{opacity:.15;transform:scale(.65) rotate(0)}50%{opacity:1;transform:scale(1.2) rotate(35deg)}}
+@keyframes shopperBob{from{transform:translateY(0) rotate(-1deg)}to{transform:translateY(-4px) rotate(1deg)}}
+.shopper .walk-legs{transform-box:fill-box;transform-origin:50% 5%;animation:legSwing .32s ease-in-out infinite alternate}
+.shopper .walk-arms{transform-box:fill-box;transform-origin:50% 0%;animation:armSwing .32s ease-in-out infinite alternate}
+@keyframes legSwing{from{transform:rotate(-8deg)}to{transform:rotate(8deg)}}
+@keyframes armSwing{from{transform:rotate(7deg)}to{transform:rotate(-7deg)}}
+@keyframes managerBreath{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 .stage{padding:10px}
-.actions{gap:10px}
-.btn{transition:transform .18s,filter .18s}
-.btn:hover{filter:brightness(1.04);transform:translateY(-2px)}
-.customer-live{display:inline-flex;align-items:center;gap:5px;background:#fff3d8;border:1px solid #d7b98c;border-radius:20px;padding:4px 9px;font-size:10px;font-weight:900}
-.customer-live i{width:7px;height:7px;border-radius:50%;background:#83ad72;display:inline-block;box-shadow:0 0 0 3px #83ad7228;animation:livePulse 1.5s infinite}
-@keyframes livePulse{50%{box-shadow:0 0 0 6px #83ad7200}}
-@media(min-width:721px){.app{max-width:1320px}.scene{min-height:500px}.layout{grid-template-columns:86px minmax(0,1fr)}}
+.stagehead{font-size:clamp(12px,1.7vw,16px)}
+.actions{gap:9px}
+@media(min-width:721px){.app{max-width:1440px}.layout{grid-template-columns:76px minmax(0,1fr)}.scene{min-height:540px}}
 @media(max-width:720px){
-  .app{padding:5px 5px 88px}
-  .top{gap:5px;padding:6px 8px;border-width:3px}
-  .brand{gap:5px}.brand .house{font-size:24px}.brand h1{font-size:17px}.brand small{font-size:7px;letter-spacing:1px}
-  .stats{max-width:63%;gap:3px}.stat{font-size:9px;padding:4px 6px;border-width:1px}
-  .layout{display:block;margin-top:7px;padding-bottom:0}
-  nav{position:fixed;left:7px;right:7px;bottom:calc(7px + env(safe-area-inset-bottom));z-index:9;display:flex;flex-direction:row;gap:5px;padding:6px;background:#fff0d9ee;border:2px solid #d0a979;border-radius:18px;box-shadow:0 5px 18px #624b3540;overflow-x:auto;scrollbar-width:none;backdrop-filter:blur(8px)}
-  nav::-webkit-scrollbar{display:none}
-  nav button{flex:0 0 55px;min-width:55px;padding:5px 2px;border-width:2px;border-radius:12px;font-size:9px;box-shadow:0 2px 0 #b98e61}
-  nav button span{font-size:20px}
-  main{width:100%}
-  .stage{padding:6px;border-width:3px;border-radius:18px}
-  .stagehead{font-size:12px;padding:3px 5px 7px}
-  .stagehead small{font-size:9px}
-  .scene{width:100%;height:clamp(390px,112vw,560px);min-height:390px;aspect-ratio:auto;border-width:3px;border-radius:15px}
-  .scene img{object-fit:cover;object-position:center center}
-  .manager-avatar{width:49px;height:82px}
-  .customer-walker{width:48px;height:82px}
-  .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-  .actions .btn{font-size:11px;padding:10px 6px}
-  .panel{margin-top:9px;padding:10px;border-width:3px}
-  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .app{padding:5px 5px calc(96px + env(safe-area-inset-bottom))}
+ .top{padding:7px 9px;gap:5px;border-width:3px}
+ .brand{gap:5px}.brand .house{font-size:25px}.brand h1{font-size:17px}.brand small{font-size:7px;letter-spacing:1px}
+ .stats{gap:3px;max-width:67%}.stat{font-size:9px;padding:4px 6px;border-width:1px}
+ .layout{display:block;margin-top:7px;padding:0}
+ nav{position:fixed;z-index:15;left:7px;right:7px;bottom:calc(7px + env(safe-area-inset-bottom));display:flex;flex-direction:row;gap:4px;padding:6px;background:#fff0d9ee;border:2px solid #d0a979;border-radius:18px;box-shadow:0 5px 18px #624b3540;overflow-x:auto;scrollbar-width:none;backdrop-filter:blur(9px)}
+ nav::-webkit-scrollbar{display:none}
+ nav button{flex:0 0 54px;min-width:54px;padding:5px 2px;border-width:2px;border-radius:12px;font-size:9px;gap:1px}
+ nav button span{font-size:20px}
+ main{width:100%}
+ .stage{padding:6px;border-width:3px;border-radius:19px}
+ .stagehead{padding:3px 5px 7px;font-size:12px}
+ .stagehead small{font-size:9px}
+ .scene{width:100%;height:clamp(410px,116vw,610px);min-height:410px;aspect-ratio:auto;border-width:3px;border-radius:16px}
+ .store-art{preserveAspectRatio:none}
+ .manager-character{width:62px;right:3%;bottom:2%}
+ .shopper{width:57px}
+ .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:9px 1px 1px}
+ .actions .btn{font-size:11px;padding:10px 5px;border-radius:14px}
+ .panel{margin-top:9px;padding:10px;border-width:3px}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 
 </style></head>
@@ -92,9 +100,148 @@ main{min-width:0}.stage{background:#ead5aa;border:4px solid #bd9365;border-radiu
 <div class="layout"><nav id="nav">
 <button class="active" data-tab="store"><span>🏠</span>店铺</button><button data-tab="stock"><span>📦</span>库存</button><button data-tab="market"><span>🛒</span>进货</button><button data-tab="customers"><span>👥</span>顾客</button><button data-tab="clean"><span>🧹</span>清洁</button><button data-tab="tasks"><span>📋</span>任务</button><button data-tab="look"><span>👗</span>店长</button><button data-tab="ledger"><span>💰</span>账本</button><button data-tab="save"><span>💾</span>存档</button>
 </nav><main>
-<section class="stage"><div class="stagehead"><div>🌼 今日营业中 <small id="dateLabel">· 小镇的美好一天</small></div><small id="status"><span class="customer-live"><i></i> 顾客营业中</span></small></div>
+<section class="stage"><div class="stagehead"><div>🌼 今日营业中 <small id="dateLabel">· 小镇的美好一天</small></div><small id="status">立体微缩杂货铺 · 点击货架、冰柜和收银台</small></div>
 <div class="scene" id="scene">
-<img src="assets/grocery-scene.jpg" alt="小镇杂货铺3D微缩场景"><div class="scene-actors" id="sceneActors" aria-label="正在店内购物的顾客"><div class="manager-avatar" id="managerAvatar"><span class="manager-tag">店长</span><svg viewBox="0 0 70 100" aria-hidden="true"><ellipse cx="35" cy="94" rx="19" ry="5" fill="#76583b" opacity=".25"/><path d="M20 59 Q35 48 50 59 L55 87 Q35 95 15 87Z" fill="#8fae83" stroke="#75583d" stroke-width="2"/><path d="M22 62 L35 76 L48 62 L46 88 L24 88Z" fill="#f4dfbd"/><path d="M22 26 Q19 8 36 8 Q54 8 51 29 L48 45 L22 43Z" fill="#76513c"/><ellipse cx="36" cy="31" rx="15" ry="19" fill="#f1c49e"/><path d="M20 28 Q17 8 37 8 Q54 10 52 30 Q44 20 32 21 Q27 28 20 28" fill="#6b4937"/><circle cx="30" cy="32" r="1.8" fill="#49382f"/><circle cx="42" cy="32" r="1.8" fill="#49382f"/><path d="M32 40 Q36 43 40 40" fill="none" stroke="#a65e55" stroke-width="1.6" stroke-linecap="round"/><path d="M15 64 Q7 70 13 81 M54 64 Q62 70 56 81" fill="none" stroke="#f1c49e" stroke-width="7" stroke-linecap="round"/><path d="M23 87 L21 96 M47 87 L49 96" stroke="#6d513c" stroke-width="6" stroke-linecap="round"/></svg></div><div class="ambient-sparkle">✦</div></div>
+
+<svg class="store-art" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="可互动的立体微缩杂货店">
+<defs>
+ <linearGradient id="wall" x2="0" y2="1"><stop stop-color="#f4d9ad"/><stop offset="1" stop-color="#d7aa76"/></linearGradient>
+ <linearGradient id="floor" x2="0" y2="1"><stop stop-color="#efd5a8"/><stop offset="1" stop-color="#b98555"/></linearGradient>
+ <linearGradient id="wood" x2="0" y2="1"><stop stop-color="#dba76c"/><stop offset=".48" stop-color="#a96e3d"/><stop offset="1" stop-color="#78472c"/></linearGradient>
+ <linearGradient id="woodLight" x2="0" y2="1"><stop stop-color="#f4cf91"/><stop offset="1" stop-color="#b77c49"/></linearGradient>
+ <linearGradient id="glass" x2="0" y2="1"><stop stop-color="#b9e5ec"/><stop offset=".5" stop-color="#83b9c6"/><stop offset="1" stop-color="#4d8294"/></linearGradient>
+ <linearGradient id="fridge" x2="0" y2="1"><stop stop-color="#fffdf2"/><stop offset="1" stop-color="#9bb9bd"/></linearGradient>
+ <linearGradient id="pinkPack" x2="0" y2="1"><stop stop-color="#ffd5c9"/><stop offset="1" stop-color="#db8c78"/></linearGradient>
+ <linearGradient id="greenPack" x2="0" y2="1"><stop stop-color="#d9e8a9"/><stop offset="1" stop-color="#7f9c58"/></linearGradient>
+ <linearGradient id="bluePack" x2="0" y2="1"><stop stop-color="#c4e5ef"/><stop offset="1" stop-color="#669bb0"/></linearGradient>
+ <radialGradient id="sun"><stop stop-color="#fff8d8" stop-opacity=".9"/><stop offset="1" stop-color="#fff8d8" stop-opacity="0"/></radialGradient>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur stdDeviation="7"/></filter>
+ <filter id="soft"><feGaussianBlur stdDeviation="2"/></filter>
+</defs>
+<!-- room and warm daylight -->
+<rect width="1000" height="600" fill="url(#wall)"/>
+<path d="M0 0H1000V370L0 420Z" fill="#e7c18c"/>
+<path d="M0 0L210 0 210 390 0 430Z" fill="#f3d9ad"/>
+<path d="M0 365L1000 300V600H0Z" fill="url(#floor)"/>
+<path d="M0 425L1000 355M0 505L1000 435M0 580L1000 510" stroke="#a9784c" stroke-width="3" opacity=".24"/>
+<path d="M150 370L330 600M390 350L520 600M660 330L730 600M860 320L920 600" stroke="#a9784c" stroke-width="3" opacity=".2"/>
+<ellipse cx="520" cy="440" rx="490" ry="220" fill="url(#sun)"/>
+<!-- front windows and entry -->
+<g>
+ <rect x="24" y="38" width="185" height="310" rx="15" fill="#8a5635" stroke="#70442d" stroke-width="9"/>
+ <rect x="36" y="50" width="161" height="285" rx="8" fill="#a9d0cf"/>
+ <path d="M36 245L197 120V335H36Z" fill="#d7e8d3" opacity=".65"/>
+ <path d="M36 50L197 50V110L36 220Z" fill="#fff5d5" opacity=".22"/>
+ <path d="M116 50V335M36 195H197" stroke="#8c5b39" stroke-width="10"/>
+ <rect x="50" y="270" width="130" height="44" rx="8" fill="#f6e4bd" stroke="#a9784c" stroke-width="3"/>
+ <text x="115" y="298" font-size="19" text-anchor="middle" fill="#765036" font-weight="bold">WELCOME</text>
+ <path d="M20 46Q115 -10 214 46L205 68H29Z" fill="#f3eee0" stroke="#b78a59" stroke-width="5"/>
+ <path d="M32 50L62 50 58 68H28ZM91 39L122 39 122 65H88ZM153 40L184 46 190 68H154Z" fill="#c77b65"/>
+</g>
+<!-- back wall shelves -->
+<g id="backShelf">
+ <ellipse cx="480" cy="300" rx="360" ry="30" fill="#62432c" opacity=".22" filter="url(#shadow)"/>
+ <rect x="235" y="72" width="410" height="236" rx="10" fill="#805033"/>
+ <rect x="245" y="82" width="390" height="215" rx="5" fill="url(#wood)"/>
+ <path d="M245 145H635M245 214H635M245 282H635" stroke="#6d432b" stroke-width="9"/>
+ <path d="M245 137H635M245 206H635M245 274H635" stroke="#f1c184" stroke-width="7"/>
+ <g stroke="#7e4e30" stroke-width="2">
+  <rect x="260" y="94" width="36" height="40" rx="5" fill="url(#pinkPack)"/><rect x="302" y="99" width="31" height="35" rx="5" fill="url(#greenPack)"/><rect x="339" y="91" width="38" height="43" rx="5" fill="url(#bluePack)"/><rect x="384" y="98" width="31" height="36" rx="5" fill="#f0c46e"/><rect x="421" y="91" width="38" height="43" rx="5" fill="url(#pinkPack)"/><rect x="466" y="96" width="35" height="38" rx="5" fill="url(#greenPack)"/><rect x="507" y="91" width="36" height="43" rx="5" fill="url(#bluePack)"/><rect x="550" y="98" width="34" height="36" rx="5" fill="#e6b66e"/><rect x="590" y="91" width="32" height="43" rx="5" fill="url(#pinkPack)"/>
+  <rect x="260" y="154" width="43" height="48" rx="5" fill="#d6a6cf"/><rect x="310" y="160" width="36" height="42" rx="5" fill="#e7c66f"/><rect x="353" y="153" width="42" height="49" rx="5" fill="#8fb4c5"/><rect x="402" y="159" width="37" height="43" rx="5" fill="#c3d48a"/><rect x="446" y="152" width="43" height="50" rx="5" fill="#e9a18d"/><rect x="496" y="158" width="39" height="44" rx="5" fill="#d9c0e6"/><rect x="542" y="152" width="43" height="50" rx="5" fill="#9abf9a"/><rect x="592" y="160" width="31" height="42" rx="5" fill="#edc16e"/>
+  <rect x="260" y="222" width="37" height="48" rx="5" fill="#e6b66e"/><rect x="304" y="226" width="43" height="44" rx="5" fill="#95b77e"/><rect x="354" y="220" width="38" height="50" rx="5" fill="#e69b83"/><rect x="399" y="226" width="43" height="44" rx="5" fill="#90b6ca"/><rect x="449" y="220" width="40" height="50" rx="5" fill="#d8c08b"/><rect x="496" y="226" width="42" height="44" rx="5" fill="#e8a3bd"/><rect x="545" y="220" width="38" height="50" rx="5" fill="#95b77e"/><rect x="590" y="226" width="32" height="44" rx="5" fill="#e6b66e"/>
+ </g>
+ <g fill="#fff4d6" opacity=".8"><path d="M270 106h15v3h-15zM349 105h18v3h-18zM431 104h16v3h-16zM515 104h18v3h-18zM272 169h19v3h-19zM361 169h18v3h-18zM457 169h18v3h-18zM553 169h18v3h-18z"/></g>
+ <rect x="358" y="48" width="170" height="36" rx="8" fill="#68452e" stroke="#d4a56c" stroke-width="3"/>
+ <text x="443" y="72" text-anchor="middle" font-size="21" fill="#fff0ce" font-weight="bold">零食 · 生活好物</text>
+</g>
+<!-- drink coolers -->
+<g>
+ <ellipse cx="760" cy="330" rx="190" ry="35" fill="#573d2d" opacity=".2" filter="url(#shadow)"/>
+ <rect x="674" y="82" width="136" height="258" rx="13" fill="url(#fridge)" stroke="#6f8790" stroke-width="6"/>
+ <rect x="687" y="98" width="110" height="225" rx="7" fill="url(#glass)" stroke="#eaf7f3" stroke-width="4"/>
+ <rect x="820" y="82" width="136" height="258" rx="13" fill="url(#fridge)" stroke="#6f8790" stroke-width="6"/>
+ <rect x="833" y="98" width="110" height="225" rx="7" fill="url(#glass)" stroke="#eaf7f3" stroke-width="4"/>
+ <path d="M741 100V320M887 100V320" stroke="#eff9f6" stroke-width="4" opacity=".7"/>
+ <g stroke="#557987" stroke-width="2">
+  <path d="M689 157H795M689 220H795M689 282H795M835 157H941M835 220H941M835 282H941" stroke-width="4"/>
+  <g fill="#f1a66f"><rect x="699" y="116" width="16" height="35" rx="5"/><rect x="723" y="112" width="18" height="39" rx="5"/><rect x="750" y="118" width="17" height="33" rx="5"/><rect x="773" y="112" width="16" height="39" rx="5"/><rect x="845" y="116" width="16" height="35" rx="5"/><rect x="869" y="112" width="18" height="39" rx="5"/><rect x="896" y="118" width="17" height="33" rx="5"/><rect x="919" y="112" width="16" height="39" rx="5"/></g>
+  <g fill="#d8e6a4"><rect x="699" y="171" width="18" height="41" rx="6"/><rect x="726" y="174" width="16" height="38" rx="6"/><rect x="751" y="170" width="18" height="42" rx="6"/><rect x="777" y="175" width="15" height="37" rx="6"/><rect x="845" y="171" width="18" height="41" rx="6"/><rect x="872" y="174" width="16" height="38" rx="6"/><rect x="897" y="170" width="18" height="42" rx="6"/><rect x="923" y="175" width="15" height="37" rx="6"/></g>
+  <g fill="#f2d17d"><rect x="699" y="235" width="18" height="40" rx="6"/><rect x="726" y="238" width="16" height="37" rx="6"/><rect x="751" y="234" width="18" height="41" rx="6"/><rect x="777" y="239" width="15" height="36" rx="6"/><rect x="845" y="235" width="18" height="40" rx="6"/><rect x="872" y="238" width="16" height="37" rx="6"/><rect x="897" y="234" width="18" height="41" rx="6"/><rect x="923" y="239" width="15" height="36" rx="6"/></g>
+ </g>
+ <path d="M682 74H962V99H682Z" fill="#69452e" stroke="#c79a62" stroke-width="3"/>
+ <text x="822" y="92" text-anchor="middle" font-size="19" fill="#fff0d0" font-weight="bold">饮料 · 牛奶</text>
+</g>
+<!-- foreground island shelf -->
+<g>
+ <ellipse cx="450" cy="465" rx="290" ry="55" fill="#60442f" opacity=".24" filter="url(#shadow)"/>
+ <path d="M250 350L555 322 690 382 383 421Z" fill="#f0c68a" stroke="#8e5b34" stroke-width="7"/>
+ <path d="M250 350L383 421V515L250 442Z" fill="url(#wood)" stroke="#71472e" stroke-width="5"/>
+ <path d="M383 421L690 382V477L383 515Z" fill="url(#woodLight)" stroke="#71472e" stroke-width="5"/>
+ <path d="M260 370L378 432 378 459 260 399Z" fill="#8b5835"/>
+ <path d="M396 432L675 397V427L396 465Z" fill="#8b5835"/>
+ <g stroke="#87512f" stroke-width="2">
+  <rect x="275" y="345" width="40" height="39" rx="6" fill="#f2a7a0"/><rect x="320" y="354" width="40" height="42" rx="6" fill="#b7cf8b"/><rect x="367" y="365" width="40" height="42" rx="6" fill="#e7c36f"/><rect x="416" y="357" width="40" height="43" rx="6" fill="#9dc7d1"/><rect x="464" y="350" width="40" height="43" rx="6" fill="#e79d8d"/><rect x="512" y="343" width="40" height="43" rx="6" fill="#c4a7d6"/><rect x="560" y="336" width="40" height="43" rx="6" fill="#e9c875"/><rect x="608" y="330" width="40" height="43" rx="6" fill="#9ebc86"/>
+ </g>
+ <path d="M267 420L375 475M395 470L672 436" stroke="#e8bc7d" stroke-width="7"/>
+ <g fill="#f8e5bd"><rect x="277" y="431" width="29" height="19" rx="4"/><rect x="315" y="450" width="31" height="18" rx="4"/><rect x="415" y="475" width="39" height="18" rx="4"/><rect x="463" y="468" width="39" height="18" rx="4"/><rect x="512" y="461" width="39" height="18" rx="4"/><rect x="560" y="454" width="39" height="18" rx="4"/></g>
+</g>
+<!-- produce stand left -->
+<g>
+ <ellipse cx="132" cy="480" rx="130" ry="36" fill="#60442f" opacity=".22" filter="url(#shadow)"/>
+ <path d="M12 355L205 355 226 390 226 501 12 501Z" fill="url(#wood)" stroke="#774a2c" stroke-width="5"/>
+ <path d="M12 355L205 355 226 390 32 390Z" fill="#efc68c" stroke="#774a2c" stroke-width="5"/>
+ <path d="M24 400H213V485H24Z" fill="#a86d3e"/>
+ <g stroke="#8d5936" stroke-width="2">
+  <ellipse cx="55" cy="365" rx="22" ry="16" fill="#e66f58"/><ellipse cx="95" cy="363" rx="22" ry="16" fill="#f2c04f"/><ellipse cx="135" cy="365" rx="22" ry="16" fill="#8eae63"/><ellipse cx="174" cy="366" rx="22" ry="16" fill="#e66f58"/>
+  <ellipse cx="45" cy="383" rx="18" ry="13" fill="#f0c85e"/><ellipse cx="83" cy="383" rx="19" ry="13" fill="#e56c56"/><ellipse cx="123" cy="383" rx="18" ry="13" fill="#8dad62"/><ellipse cx="165" cy="383" rx="19" ry="13" fill="#f0c85e"/><ellipse cx="198" cy="383" rx="16" ry="12" fill="#e56c56"/>
+ </g>
+ <rect x="50" y="442" width="142" height="39" rx="8" fill="#f5dfb4" stroke="#9a693e" stroke-width="3"/>
+ <text x="121" y="468" text-anchor="middle" font-size="19" fill="#765036" font-weight="bold">新鲜蔬果</text>
+</g>
+<!-- bakery side rack -->
+<g>
+ <path d="M748 374L958 356 981 386 981 506 770 525Z" fill="url(#wood)" stroke="#74482d" stroke-width="5"/>
+ <path d="M748 374L958 356 981 386 770 405Z" fill="#f1ca91" stroke="#74482d" stroke-width="5"/>
+ <g fill="#d49a55" stroke="#8a5b32" stroke-width="2"><ellipse cx="795" cy="383" rx="20" ry="13"/><ellipse cx="841" cy="379" rx="20" ry="13"/><ellipse cx="887" cy="374" rx="20" ry="13"/><ellipse cx="932" cy="371" rx="20" ry="13"/></g>
+ <g fill="#f3d59b"><path d="M785 374q10-22 20 0q-10 8-20 0M831 370q10-22 20 0q-10 8-20 0M877 365q10-22 20 0q-10 8-20 0M922 362q10-22 20 0q-10 8-20 0"/></g>
+ <rect x="794" y="432" width="160" height="38" rx="8" fill="#f4dfb8" stroke="#95633a" stroke-width="3"/>
+ <text x="874" y="457" text-anchor="middle" font-size="18" fill="#765036" font-weight="bold">面包点心</text>
+</g>
+<!-- plants -->
+<g fill="#77985d" stroke="#58764b" stroke-width="2">
+ <path d="M210 350Q170 290 195 265Q228 292 210 350M214 350Q245 278 270 289Q257 327 214 350M210 350Q162 325 158 302Q193 294 210 350"/>
+ <path d="M615 320Q585 265 608 244Q638 276 615 320M620 321Q660 258 683 276Q664 307 620 321"/>
+ <path d="M950 535Q912 474 939 451Q968 485 950 535M955 535Q984 480 1004 495Q990 523 955 535"/>
+</g>
+<g fill="#f1c0aa"><circle cx="195" cy="287" r="8"/><circle cx="260" cy="300" r="7"/><circle cx="610" cy="267" r="7"/><circle cx="676" cy="283" r="8"/><circle cx="944" cy="478" r="7"/></g>
+<!-- ceiling lights -->
+<g><path d="M340 0V54M755 0V42" stroke="#8b613e" stroke-width="4"/><path d="M315 55Q340 25 365 55L356 75H324Z" fill="#6b563f"/><path d="M735 43Q755 16 775 43L768 61H742Z" fill="#6b563f"/><ellipse cx="340" cy="95" rx="70" ry="55" fill="url(#sun)" opacity=".6"/><ellipse cx="755" cy="83" rx="70" ry="55" fill="url(#sun)" opacity=".6"/></g>
+</svg>
+<div class="shopper-layer" id="shopperLayer"></div>
+<div class="manager-character" id="managerCharacter" aria-label="店长">
+ <svg viewBox="0 0 100 150">
+  <ellipse cx="50" cy="143" rx="28" ry="6" fill="#67462e" opacity=".22"/>
+  <path d="M33 94L29 130Q31 140 43 137L49 107 56 137Q69 141 72 130L66 93Z" fill="#5c526b" stroke="#70503b" stroke-width="2"/>
+  <path d="M28 70Q50 56 72 70L78 111Q50 125 22 111Z" fill="#9fb88b" stroke="#80583a" stroke-width="3"/>
+  <path d="M39 74L50 89 62 74 64 111H36Z" fill="#fff0d7" stroke="#b28b61" stroke-width="2"/>
+  <path d="M27 77Q15 82 19 105M72 77Q85 83 80 105" fill="none" stroke="#efc4a0" stroke-width="10" stroke-linecap="round"/>
+  <path d="M29 39Q23 7 51 8Q81 7 74 43L68 63H31Z" fill="#6b4735"/>
+  <ellipse cx="51" cy="42" rx="24" ry="29" fill="#f1c6a5" stroke="#b67e60" stroke-width="2"/>
+  <path d="M27 37Q24 8 52 9Q77 10 75 39Q61 24 45 26Q38 36 27 37Z" fill="#76503a"/>
+  <path d="M28 35Q18 55 31 70Q37 56 35 40M72 34Q83 53 70 70Q65 56 66 39" fill="#76503a"/>
+  <ellipse cx="42" cy="43" rx="3" ry="4" fill="#4b372e"/><ellipse cx="60" cy="43" rx="3" ry="4" fill="#4b372e"/>
+  <path d="M44 56Q51 62 58 56" fill="none" stroke="#ad665b" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M37 135L33 146M64 135L69 146" stroke="#6b4934" stroke-width="8" stroke-linecap="round"/>
+ </svg>
+ <span>店长</span>
+</div>
+<button class="hotspot hs-fruit" onclick="openShelf('新鲜蔬果',['apple','banana','orange','tomato','carrot'])" aria-label="新鲜蔬果货架"><span>🍎 新鲜蔬果</span></button>
+<button class="hotspot hs-snack" onclick="openShelf('零食与食品',['noodle','chips','egg','cookie','rice'])" aria-label="零食食品货架"><span>🍪 零食食品</span></button>
+<button class="hotspot hs-drink" onclick="openShelf('饮料与牛奶',['milk','water','juice','tea'])" aria-label="饮料冰柜"><span>🥛 饮料冰柜</span></button>
+<button class="hotspot hs-daily" onclick="openShelf('日用百货',['soap','tissue','toothpaste'])" aria-label="日用百货货架"><span>🧼 日用百货</span></button>
+<button class="hotspot hs-bakery" onclick="openShelf('面包点心',['bread','croissant','cake'])" aria-label="面包点心"><span>🥐 面包点心</span></button>
+<button class="hotspot hs-cash" onclick="openCheckout()" aria-label="收银台"><span>🧾 收银台</span></button>
+
 <button class="hotspot hs-fruit" onclick="openShelf('新鲜蔬果',['apple','banana','orange','tomato','carrot'])" aria-label="新鲜蔬果货架"><span>🍎 新鲜蔬果</span></button>
 <button class="hotspot hs-snack" onclick="openShelf('零食与食品',['noodle','chips','egg','cookie','rice'])" aria-label="零食食品货架"><span>🍪 零食食品</span></button>
 <button class="hotspot hs-drink" onclick="openShelf('饮料与牛奶',['milk','water','juice','tea'])" aria-label="饮料冰柜"><span>🥛 饮料冰柜</span></button>
@@ -144,69 +291,84 @@ function cleanShop(){if(state.clean>=100)return say('店铺已经很干净啦！
 function priceEditor(id){let p=products.find(x=>x.id===id);modal('🏷️ 调整 '+p.name+' 售价',`<p>目前 RM ${p.price.toFixed(2)}</p><div class="field"><label>新售价（RM）</label><input id="price" type="number" min=".1" step=".1" value="${p.price}"></div><button class="btn primary" onclick="applyPrice('${id}')">保存售价</button>`)}
 function applyPrice(id){let p=products.find(x=>x.id===id),n=Number(document.getElementById('price').value);if(!Number.isFinite(n)||n<=0)return say('请输入正确价格');p.price=Math.round(n*100)/100;save();closeModal();say('售价已更新！')}
 function saveLook(){state.manager.name=document.getElementById('mgrName').value||'小芳';state.manager.hair=document.getElementById('hair').value;state.manager.outfit=document.getElementById('outfit').value;save();renderTab('look');say('店长资料已保存！')}
-function endDay(){let reward=20+Math.floor(state.sales*.08);state.money+=reward;state.history.push({day:state.day,note:'每日经营奖励',amount:reward});state.day++;state.sales=0;state.todaySales=0;state.expenses=0;state.visitors=0;state.chatCount=0;state.clean=Math.max(55,state.clean-15);state.weather=['晴天','多云','小雨'][Math.floor(Math.random()*3)];save();render();say('今日打烊！获得 RM '+reward+' 经营奖励。')}
+function endDay(){let reward=20+Math.floor(state.sales*.08);state.money+=reward;state.history.push({day:state.day,note:'每日经营奖励',amount:reward});state.day++;state.sales=0;state.expenses=0;state.visitors=0;state.chatCount=0;state.clean=Math.max(55,state.clean-15);state.weather=['晴天','多云','小雨'][Math.floor(Math.random()*3)];save();render();say('今日打烊！获得 RM '+reward+' 经营奖励。')}
 function backup(){let blob=new Blob([JSON.stringify({state,products},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='my-little-grocery-save.json';a.click();URL.revokeObjectURL(a.href)}
 function restore(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);state={...defaults,...d.state};d.products?.forEach(q=>{let p=products.find(x=>x.id===q.id);if(p)Object.assign(p,q)});save();render();say('存档恢复成功！')}catch(x){say('存档格式不正确')}};r.readAsText(f)}
 function resetGame(){modal('重新开始？','<p>这会清除当前进度，确定吗？</p><button class="btn primary" onclick="resetConfirm()">确定</button> <button class="btn" onclick="closeModal()">取消</button>')}
 function resetConfirm(){localStorage.removeItem('mlg-v3');localStorage.removeItem('mlg-v4');location.reload()}
 
-// V4 customer simulation: independently rendered SVG shoppers walk through the store.
-const shopperLooks=[
-  {hair:'#594333',shirt:'#e5a38a',pants:'#6e8fa7',skin:'#f0c39e',bag:'#d3a45d'},
-  {hair:'#49362f',shirt:'#9ebc8d',pants:'#d8b58b',skin:'#e9b48e',bag:'#8ca6bd'},
-  {hair:'#76513c',shirt:'#a8bfd0',pants:'#806b8c',skin:'#f2c8a5',bag:'#c78d79'},
-  {hair:'#3f302a',shirt:'#e4c47e',pants:'#7e9c79',skin:'#dba77f',bag:'#d5a66e'}
+// Individually rendered chibi customers — layered SVG bodies, faces, hair, outfits and bags.
+const shopperDesigns=[
+ {hair:'#62432f',shirt:'#f0b4a3',skirt:'#7893a7',skin:'#f3c7a6',bag:'#b78c65',bow:'#e9a2aa',kind:'girl'},
+ {hair:'#50392e',shirt:'#9eb6cf',skirt:'#6b788c',skin:'#e8b28f',bag:'#c39a68',bow:'#8fb6a0',kind:'boy'},
+ {hair:'#76523b',shirt:'#e7c37d',skirt:'#9baf7b',skin:'#f1c4a0',bag:'#9d8bb2',bow:'#e5a1a0',kind:'girl'},
+ {hair:'#44332c',shirt:'#b4c9a0',skirt:'#c18e75',skin:'#dba47e',bag:'#718ba1',bow:'#d4b2d6',kind:'boy'}
 ];
-const shopperWords=['找到了！','看看这个','今天买一点','好可爱！'];
-let shopperTimer=null;
-function shopperSvg(c){
- return `<svg viewBox="0 0 64 104" aria-hidden="true">
- <ellipse cx="32" cy="99" rx="17" ry="4" fill="#624b35" opacity=".22"/>
- <path d="M23 69 L21 94 L28 95 L33 75 L38 95 L45 94 L42 67Z" fill="${c.pants}" stroke="#70533b" stroke-width="1.5"/>
- <path d="M20 42 Q32 34 45 43 L48 72 Q32 80 16 71Z" fill="${c.shirt}" stroke="#70533b" stroke-width="1.5"/>
- <path d="M19 47 Q10 51 13 67 M45 47 Q54 52 51 66" fill="none" stroke="${c.skin}" stroke-width="6" stroke-linecap="round"/>
- <path d="M17 48 Q11 52 15 73 L23 72 L24 52Z" fill="${c.bag}" stroke="#70533b" stroke-width="1.5"/>
- <path d="M19 49 Q17 42 24 42 M21 50 Q22 43 28 43" fill="none" stroke="#70533b" stroke-width="2"/>
- <ellipse cx="32" cy="26" rx="15" ry="18" fill="${c.skin}" stroke="#9a7055" stroke-width="1"/>
- <path d="M17 25 Q13 5 32 7 Q51 6 48 27 Q42 18 32 18 Q25 25 17 25Z" fill="${c.hair}" stroke="#57402f" stroke-width="1"/>
- <circle cx="27" cy="28" r="1.7" fill="#4b382e"/><circle cx="38" cy="28" r="1.7" fill="#4b382e"/>
- <path d="M29 36 Q32 39 36 36" fill="none" stroke="#a85e54" stroke-width="1.5" stroke-linecap="round"/>
- <path d="M22 94 L19 101 L29 101 M40 94 L37 101 L47 101" fill="none" stroke="#604a39" stroke-width="4" stroke-linecap="round"/>
+const customerBubbles=['想买一点水果','这个好可爱！','今天有牛奶吗？','去看看面包～','挑到喜欢的啦'];
+function chibiSvg(c){
+ const bow=c.kind==='girl'?`<path d="M30 18Q17 5 14 18Q17 28 30 23Q40 31 45 19Q41 7 30 18Z" fill="${c.bow}" stroke="#9c7057" stroke-width="1.5"/>`:'';
+ return `<svg viewBox="0 0 100 158" aria-hidden="true">
+ <defs><linearGradient id="skin${c.shirt.replace('#','')}" x2="0" y2="1"><stop stop-color="#ffe0c2"/><stop offset="1" stop-color="${c.skin}"/></linearGradient><linearGradient id="cloth${c.shirt.replace('#','')}" x2="0" y2="1"><stop stop-color="#fff0d9"/><stop offset="1" stop-color="${c.shirt}"/></linearGradient></defs>
+ <ellipse cx="50" cy="150" rx="27" ry="6" fill="#5b3d2a" opacity=".24"/>
+ <!-- legs and shoes -->
+ <path class="walk-legs" d="M37 112L34 139Q34 145 44 145L50 119 56 145Q67 147 68 139L63 111Z" fill="${c.skirt}" stroke="#79563d" stroke-width="2"/>
+ <path d="M33 140Q25 141 26 148Q35 153 46 149L46 144Z M56 145Q66 140 74 146Q76 153 61 152L55 150Z" fill="#fff4e5" stroke="#98765b" stroke-width="2"/>
+ <!-- backpack -->
+ <path d="M24 75Q12 78 14 107L27 115 39 105 36 80Z" fill="${c.bag}" stroke="#74543a" stroke-width="2.5"/>
+ <path d="M19 87Q25 82 34 89L34 101 20 104Z" fill="#e8c99b" opacity=".8"/>
+ <path d="M30 72Q21 82 27 103M68 72Q78 82 73 103" fill="none" stroke="#896449" stroke-width="3"/>
+ <!-- torso -->
+ <path d="M31 67Q50 58 69 68L75 112Q51 124 25 112Z" fill="url(#cloth${c.shirt.replace('#','')})" stroke="#8d6447" stroke-width="2.5"/>
+ <path d="M39 68L50 83 61 68 63 112H37Z" fill="${c.skirt}" stroke="#8d6447" stroke-width="1.5"/>
+ <path class="walk-arms" d="M29 77Q18 86 24 105M70 77Q82 87 76 105" fill="none" stroke="url(#skin${c.shirt.replace('#','')})" stroke-width="10" stroke-linecap="round"/>
+ <circle cx="23" cy="107" r="6" fill="${c.skin}" stroke="#b67f61" stroke-width="1.5"/><circle cx="77" cy="107" r="6" fill="${c.skin}" stroke="#b67f61" stroke-width="1.5"/>
+ <!-- neck -->
+ <rect x="43" y="56" width="14" height="16" rx="6" fill="${c.skin}"/>
+ <!-- ears and face -->
+ <circle cx="27" cy="39" r="8" fill="${c.skin}"/><circle cx="73" cy="39" r="8" fill="${c.skin}"/>
+ <ellipse cx="50" cy="39" rx="27" ry="32" fill="${c.skin}" stroke="#b47d5e" stroke-width="2"/>
+ <!-- hair cap -->
+ <path d="M23 39Q15 5 49 6Q84 4 78 42Q69 25 57 23Q45 31 23 39Z" fill="${c.hair}" stroke="#50392c" stroke-width="2"/>
+ <path d="M24 32Q16 53 29 66Q34 56 34 37M76 31Q84 51 70 66Q66 54 66 36" fill="${c.hair}" stroke="#50392c" stroke-width="2"/>
+ ${bow}
+ <!-- face details -->
+ <ellipse cx="40" cy="42" rx="3.4" ry="4.8" fill="#49352d"/><ellipse cx="60" cy="42" rx="3.4" ry="4.8" fill="#49352d"/>
+ <circle cx="41" cy="40" r="1.2" fill="#fff"/><circle cx="61" cy="40" r="1.2" fill="#fff"/>
+ <ellipse cx="32" cy="51" rx="5" ry="2.7" fill="#e9948b" opacity=".65"/><ellipse cx="68" cy="51" rx="5" ry="2.7" fill="#e9948b" opacity=".65"/>
+ <path d="M44 56Q50 62 57 56" fill="none" stroke="#a75e55" stroke-width="2" stroke-linecap="round"/>
+ <!-- highlights -->
+ <path d="M28 25Q39 10 55 13" fill="none" stroke="#ffffff" stroke-width="3" opacity=".22" stroke-linecap="round"/>
  </svg>`;
 }
-function spawnShopper(){
- const layer=document.getElementById('sceneActors');
- if(!layer || layer.querySelectorAll('.customer-walker').length>=3)return;
- const look=shopperLooks[Math.floor(Math.random()*shopperLooks.length)];
- const el=document.createElement('div');
- el.className='customer-walker';
- el.style.setProperty('--walk-time',(12+Math.random()*4)+'s');
- el.innerHTML=shopperSvg(look)+`<span class="speech">${shopperWords[Math.floor(Math.random()*shopperWords.length)]}</span>`;
+function spawnCustomer(){
+ const layer=document.getElementById('shopperLayer');
+ if(!layer || layer.children.length>=3)return;
+ const design=shopperDesigns[Math.floor(Math.random()*shopperDesigns.length)];
+ const el=document.createElement('div');el.className='shopper';
+ el.style.setProperty('--duration',(13+Math.random()*5)+'s');
+ el.innerHTML=chibiSvg(design)+`<span class="bubble">${customerBubbles[Math.floor(Math.random()*customerBubbles.length)]}</span>`;
  layer.appendChild(el);
- // Shopper pauses mid-route, chooses an item and checks out automatically.
+ const pause=6200+Math.random()*900;
  setTimeout(()=>{
-   const available=products.filter(p=>p.stock>0);
-   if(available.length){
-     const p=available[Math.floor(Math.random()*available.length)];
-     p.stock--; state.money+=p.price; state.sales+=p.price; state.todaySales=(state.todaySales||0)+p.price;
-     state.visitors++; state.history.push({day:state.day,note:'顾客购买 '+p.name,amount:p.price});
+   const p=products.filter(x=>x.stock>0).sort(()=>Math.random()-.5)[0];
+   if(p){
+     p.stock--;state.money+=p.price;state.sales+=p.price;state.todaySales=(state.todaySales||0)+p.price;
+     state.visitors++;state.history.push({day:state.day,note:'顾客购买 '+p.name,amount:p.price});
      if(state.history.length>300)state.history=state.history.slice(-300);
      save();
-     const bubble=el.querySelector('.speech');
-     if(bubble)bubble.textContent='买到啦！';
-   }else{
-     const bubble=el.querySelector('.speech');
-     if(bubble)bubble.textContent='下次再来～';
-   }
- },6500);
+     const b=el.querySelector('.bubble');if(b)b.textContent='买到啦！谢谢你～';
+     el.style.filter='drop-shadow(0 0 8px #ffe7a4)';
+   }else{const b=el.querySelector('.bubble');if(b)b.textContent='商品卖完啦…';}
+ },pause);
  el.addEventListener('animationend',()=>el.remove());
 }
-function startShopperLoop(){
- if(shopperTimer)clearInterval(shopperTimer);
- setTimeout(spawnShopper,900);
- shopperTimer=setInterval(spawnShopper,5200);
+let customerInterval=null;
+function startCustomerFlow(){
+ if(customerInterval)clearInterval(customerInterval);
+ spawnCustomer();
+ customerInterval=setInterval(spawnCustomer,4700);
 }
 
 document.getElementById('nav').addEventListener('click',e=>{let b=e.target.closest('button[data-tab]');if(b)renderTab(b.dataset.tab)});
-render();startShopperLoop();setInterval(()=>{if(state.clean>0){state.clean=Math.max(0,state.clean-1);save()}},180000);
+render();startCustomerFlow();setInterval(()=>{if(state.clean>0){state.clean=Math.max(0,state.clean-1);save()}},180000);
 </script></body></html>
