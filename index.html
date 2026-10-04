@@ -1,374 +1,137 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f1dfbd">
-<title>小镇杂货铺 V3 · My Little Grocery</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#e9d6b4"><title>小镇杂货铺 · My Little Grocery</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
-:root{--ink:#624b35;--cream:#fff4dc;--paper:#f8e8c8;--wood:#b98455;--wood-dark:#8c603d;--pink:#e99579;--green:#9eb982;--blue:#9fc5cb;--line:#d9b98b;--shadow:0 5px 0 rgba(111,75,42,.22),0 10px 24px rgba(90,63,36,.12)}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#e6efcf,#d9d5b4 55%,#c8b58f);font-family:Nunito,"Noto Sans SC",sans-serif;color:var(--ink)}
-button,input,select{font:inherit}button{cursor:pointer;color:inherit;font-weight:900}
-.app{max-width:1500px;margin:auto;padding:10px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--cream);border:4px solid #d4b183;border-radius:24px;padding:9px 15px;box-shadow:var(--shadow)}
-.brand{display:flex;align-items:center;gap:10px}.brand .house{font-size:36px}.brand h1{font-size:clamp(18px,2vw,27px);margin:0}.brand small{font-size:10px;letter-spacing:2px;color:#987a59}
-.stats{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.stat{background:#f3dfb9;border:2px solid #dfc18f;border-radius:30px;padding:7px 12px;font-weight:900;white-space:nowrap}
-.layout{display:grid;grid-template-columns:84px minmax(0,1fr);gap:12px;margin-top:12px}
-nav{display:flex;flex-direction:column;gap:8px}nav button{border:3px solid #d0a979;background:#f9e8c8;border-radius:17px;padding:8px 3px;box-shadow:0 4px 0 #b98e61;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px}nav button span{font-size:25px}nav button.active{background:#f1bd91;transform:translateY(2px);box-shadow:0 2px 0 #b98e61}
-main{min-width:0}.stage{background:#ead5aa;border:4px solid #bd9365;border-radius:25px;padding:8px;box-shadow:var(--shadow)}.stagehead{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:3px 7px 9px;font-weight:900}.stagehead small{font-size:11px;color:#8e704e}
-.scene{position:relative;overflow:hidden;border-radius:17px;border:4px solid #c69b6b;background:#d4dfc2;aspect-ratio:1165/635;min-height:220px}
-.scene img{display:block;width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
-.hotspot{position:absolute;border:2px solid transparent;background:transparent;border-radius:16px;z-index:2;transition:.15s}
-.hotspot:focus,.hotspot:hover{border-color:#fff1bd;background:#fff3bd22;box-shadow:0 0 0 3px #956b3d55}
-.hotspot span{position:absolute;left:50%;top:-25px;transform:translateX(-50%);background:#fff1d5;border:1px solid #c99e6c;border-radius:20px;padding:3px 9px;font-size:11px;white-space:nowrap;opacity:0;pointer-events:none}
-.hotspot:hover span,.hotspot:focus span{opacity:1}
-.hs-fruit{left:2%;top:30%;width:28%;height:52%}.hs-snack{left:29%;top:38%;width:27%;height:43%}.hs-drink{left:45%;top:5%;width:25%;height:55%}.hs-daily{left:68%;top:8%;width:25%;height:48%}.hs-bakery{left:87%;top:48%;width:12%;height:42%}.hs-cash{left:77%;top:55%;width:22%;height:43%}
-.actions{display:flex;gap:8px;flex-wrap:wrap;padding:10px 2px 2px}.btn{border:3px solid #d3b183;border-radius:17px;background:#fff0d1;padding:10px 13px;box-shadow:0 4px 0 #b99162;font-size:13px}.btn.primary{background:var(--pink);color:#fff8e8;border-color:#ce8668}.btn.green{background:var(--green)}.btn.blue{background:var(--blue)}.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #b99162}
-.panel{margin-top:12px;background:#fff3dc;border:4px solid #d6b98c;border-radius:23px;padding:13px;box-shadow:var(--shadow)}.panel h2{font-size:19px;margin:0 0 10px}.muted{font-size:12px;color:#987e5d}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px}.card{background:#fff9e9;border:2px solid #e3cba3;border-radius:17px;padding:10px;min-width:0}.card .emoji{font-size:28px}.card strong{display:block}.card small{display:block;color:#967b5a}.card button{width:100%;margin-top:8px}.row{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.modalbg{display:none;position:fixed;inset:0;background:#44352299;z-index:10;align-items:center;justify-content:center;padding:14px}.modalbg.show{display:flex}.modal{background:#fff2d8;border:4px solid #c99f70;border-radius:23px;padding:16px;width:min(650px,100%);max-height:86vh;overflow:auto;box-shadow:0 18px 60px #30221366}.modal h2{margin:0 0 12px}.close{float:right;border:0;border-radius:50%;width:34px;height:34px;background:#e9c89e;font-size:18px}.field{display:grid;gap:5px;margin:9px 0}.field input,.field select{width:100%;padding:10px;border:2px solid #ddc39a;border-radius:12px;background:#fffaf0;color:var(--ink)}
-.progress{height:10px;border-radius:9px;background:#ead9b9;overflow:hidden}.progress i{display:block;height:100%;background:#82a76e}
-.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#624b35;color:#fff4dc;border-radius:30px;padding:11px 18px;z-index:20;display:none;box-shadow:var(--shadow);font-weight:900;max-width:90%;text-align:center}
-.tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}.tabs button{background:#efd7b2;border:2px solid #d4b183;border-radius:13px;padding:7px 12px}.tabs button.active{background:#fff2d7}
-@media(max-width:720px){.app{padding:6px}.top{padding:7px 9px;border-radius:17px}.brand .house{font-size:27px}.brand small{font-size:8px}.stats{gap:4px}.stat{font-size:10px;padding:5px 7px}.layout{grid-template-columns:57px minmax(0,1fr);gap:7px;margin-top:8px}nav{gap:6px}nav button{font-size:9px;padding:7px 2px;border-radius:13px}nav button span{font-size:21px}.stage{padding:5px;border-radius:17px}.stagehead{font-size:12px}.stagehead small{font-size:9px}.scene{min-height:205px;aspect-ratio:1.12}.scene img{object-fit:cover}.btn{font-size:11px;padding:8px 9px}.panel{padding:10px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-
-/* V4 REBUILT — fully layered vector shop; no raster background image */
-.scene{position:relative;overflow:hidden;border-radius:22px;border:4px solid #bc8c5d;background:#d9b58a;aspect-ratio:1000/600;min-height:390px;isolation:isolate;box-shadow:inset 0 0 0 2px #fff0d0,0 8px 18px #76543a24}
-.store-art{position:absolute;inset:0;width:100%;height:100%;display:block}
-.hotspot{z-index:6;border:2px solid transparent;background:transparent;border-radius:18px}
-.hotspot:focus,.hotspot:hover{border-color:#fff1bd;background:#fff3bd22;box-shadow:0 0 0 3px #956b3d55}
-.hotspot span{opacity:0;position:absolute;left:50%;top:-27px;transform:translateX(-50%);background:#fff3dc;border:2px solid #c99e6c;border-radius:18px;padding:4px 10px;font-size:11px;white-space:nowrap;color:#705037}
-.hotspot:focus span,.hotspot:hover span{opacity:1}
-.hs-fruit{left:0;top:55%;width:23%;height:36%}
-.hs-snack{left:24%;top:25%;width:45%;height:43%}
-.hs-drink{left:67%;top:9%;width:30%;height:50%}
-.hs-daily{left:68%;top:48%;width:30%;height:20%}
-.hs-bakery{left:75%;top:60%;width:24%;height:30%}
-.hs-cash{left:32%;top:63%;width:38%;height:30%}
-.shopper-layer{position:absolute;inset:0;z-index:4;overflow:hidden;pointer-events:none}
-.shopper{position:absolute;width:clamp(54px,8.5%,88px);height:auto;left:-12%;bottom:3%;filter:drop-shadow(0 7px 4px #5e432c44);animation:shopperWalk var(--duration,15s) linear forwards;transform-origin:50% 100%}
-.shopper svg{width:100%;height:auto;overflow:visible;animation:shopperBob .42s ease-in-out infinite alternate}
-.shopper .bubble{position:absolute;top:-19px;left:50%;transform:translateX(-50%);background:#fff8e8;border:2px solid #d2ae7d;border-radius:15px;padding:3px 7px;font-size:clamp(9px,1.3vw,12px);font-weight:900;white-space:nowrap;color:#76543a;box-shadow:0 3px 5px #624b3522}
-.manager-character{position:absolute;z-index:5;width:clamp(60px,9%,94px);right:4%;bottom:2%;filter:drop-shadow(0 7px 4px #5e432c44);animation:managerBreath 2.4s ease-in-out infinite;pointer-events:none}
-.manager-character svg{width:100%;height:auto}
-.manager-character span{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:900;color:#fff7e8;background:#8c6b4b;border-radius:12px;padding:3px 8px;white-space:nowrap}
-#mgrDress{fill:#a2b88a}
-@keyframes shopperWalk{
-  0%{left:-12%;bottom:2%;transform:scale(.88)}
-  18%{left:15%;bottom:3%;transform:scale(.92)}
-  38%{left:34%;bottom:7%;transform:scale(1)}
-  55%{left:52%;bottom:4%;transform:scale(1.02)}
-  73%{left:70%;bottom:2%;transform:scale(.98)}
-  100%{left:112%;bottom:3%;transform:scale(.9)}
-}
-@keyframes shopperBob{from{transform:translateY(0) rotate(-1deg)}to{transform:translateY(-4px) rotate(1deg)}}
-.shopper .walk-legs{transform-box:fill-box;transform-origin:50% 5%;animation:legSwing .32s ease-in-out infinite alternate}
-.shopper .walk-arms{transform-box:fill-box;transform-origin:50% 0%;animation:armSwing .32s ease-in-out infinite alternate}
-@keyframes legSwing{from{transform:rotate(-8deg)}to{transform:rotate(8deg)}}
-@keyframes armSwing{from{transform:rotate(7deg)}to{transform:rotate(-7deg)}}
-@keyframes managerBreath{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-.stage{padding:10px}
-.stagehead{font-size:clamp(12px,1.7vw,16px)}
-.actions{gap:9px}
-@media(min-width:721px){.app{max-width:1440px}.layout{grid-template-columns:76px minmax(0,1fr)}.scene{min-height:540px}}
-@media(max-width:720px){
- .app{padding:5px 5px calc(96px + env(safe-area-inset-bottom))}
- .top{padding:7px 9px;gap:5px;border-width:3px}
- .brand{gap:5px}.brand .house{font-size:25px}.brand h1{font-size:17px}.brand small{font-size:7px;letter-spacing:1px}
- .stats{gap:3px;max-width:67%}.stat{font-size:9px;padding:4px 6px;border-width:1px}
- .layout{display:block;margin-top:7px;padding:0}
- nav{position:fixed;z-index:15;left:7px;right:7px;bottom:calc(7px + env(safe-area-inset-bottom));display:flex;flex-direction:row;gap:4px;padding:6px;background:#fff0d9ee;border:2px solid #d0a979;border-radius:18px;box-shadow:0 5px 18px #624b3540;overflow-x:auto;scrollbar-width:none;backdrop-filter:blur(9px)}
- nav::-webkit-scrollbar{display:none}
- nav button{flex:0 0 54px;min-width:54px;padding:5px 2px;border-width:2px;border-radius:12px;font-size:9px;gap:1px}
- nav button span{font-size:20px}
- main{width:100%}
- .stage{padding:6px;border-width:3px;border-radius:19px}
- .stagehead{padding:3px 5px 7px;font-size:12px}
- .stagehead small{font-size:9px}
- .scene{width:100%;height:clamp(410px,116vw,610px);min-height:410px;aspect-ratio:auto;border-width:3px;border-radius:16px}
- .store-art{preserveAspectRatio:none}
- .manager-character{width:62px;right:3%;bottom:2%}
- .shopper{width:57px}
- .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:9px 1px 1px}
- .actions .btn{font-size:11px;padding:10px 5px;border-radius:14px}
- .panel{margin-top:9px;padding:10px;border-width:3px}
- .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap');
+:root{--ink:#624735;--cream:#fff5df;--paper:#f6e6c7;--wood:#9c6740;--wood2:#c18b59;--line:#d4ad7c;--pink:#e99b83;--sage:#9db58a;--blue:#9fc4ca;--shadow:#88603e55}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% 0%,#fff7e5,#e4d0a9 75%);color:var(--ink);font-family:"Noto Sans SC",system-ui,sans-serif}
+button{font:inherit;color:inherit;border:0;cursor:pointer}
+.app{max-width:1050px;margin:auto;padding:12px 12px 100px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fff4dc;border:5px solid #d4b083;border-radius:25px;padding:10px 15px;box-shadow:0 6px 0 #a77d51;margin-bottom:12px}
+.brand{display:flex;align-items:center;gap:9px}.brand .house{font-size:35px}.brand b{font-size:20px;display:block}.brand small{font-size:9px;letter-spacing:2px;color:#98775a}
+.stats{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.pill{background:#f8e8c8;border:2px solid #ddbd8f;border-radius:20px;padding:7px 10px;font-size:12px;font-weight:800;white-space:nowrap}
+.game-card{background:#f2dbb5;border:5px solid #bd9263;border-radius:30px;padding:10px;box-shadow:0 7px 0 #9c754e;margin-bottom:15px}
+.scene-head{display:flex;justify-content:space-between;align-items:center;padding:2px 5px 8px;font-size:13px;font-weight:800}.scene-head small{color:#977653;font-size:10px}
+.scene-wrap{position:relative;width:100%;border:5px solid #bd9568;border-radius:25px;overflow:hidden;background:#f0d9b3;box-shadow:inset 0 0 0 3px #f8e9cb}
+svg#shop{display:block;width:100%;height:auto;aspect-ratio:900/690}
+#people{pointer-events:none}.person{transform-box:fill-box;transform-origin:center bottom;animation:bob 1.2s ease-in-out infinite alternate}.person .legs{transform-box:fill-box;transform-origin:50% 5%;animation:leg .32s ease-in-out infinite alternate}.person .arms{transform-box:fill-box;transform-origin:50% 10%;animation:arm .32s ease-in-out infinite alternate}.person.paused .legs,.person.paused .arms{animation-play-state:paused}
+@keyframes bob{to{transform:translateY(-2px)}}@keyframes leg{to{transform:rotate(12deg)}}@keyframes arm{to{transform:rotate(-10deg)}}
+.bubble{font-size:16px;font-weight:800;fill:#654a35;paint-order:stroke;stroke:#fff1d5;stroke-width:7px;stroke-linejoin:round}
+.action-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.action{border:4px solid #c69b6c;border-radius:22px;padding:13px 5px;font-weight:800;font-size:14px;box-shadow:0 4px 0 #a77c51}.action:active{transform:translateY(3px);box-shadow:0 1px 0 #a77c51}.pink{background:#e99a81}.green{background:#a4bd8d}.blue{background:#a8cbd0}.cream{background:#fff0d2}
+.lower{display:grid;grid-template-columns:1fr 1fr;gap:10px}.panel{background:#fff5e2;border:4px solid #d7b98e;border-radius:24px;padding:13px;box-shadow:0 4px 0 #b18a60}.panel h3{margin:0 0 8px;font-size:17px}.metric{font-size:23px;font-weight:800}.muted{font-size:12px;color:#987b5e}
+.nav{position:fixed;z-index:10;bottom:10px;left:50%;transform:translateX(-50%);width:min(720px,calc(100% - 20px));display:flex;gap:5px;padding:7px;background:#fff4dfed;border:4px solid #cda779;border-radius:24px;box-shadow:0 7px 20px #63482e44;backdrop-filter:blur(10px)}
+.nav button{flex:1;min-width:0;background:#f8e8cb;border:3px solid #d6b486;border-radius:15px;padding:7px 1px;font-size:11px;font-weight:800;box-shadow:0 3px 0 #b58b5d}.nav button.active{background:#edb18d;transform:translateY(-3px)}.nav .ico{display:block;font-size:21px;margin-bottom:2px}
+.toast{position:fixed;z-index:30;top:18%;left:50%;transform:translateX(-50%);background:#fff4dd;border:3px solid #c69a69;border-radius:18px;padding:12px 18px;box-shadow:0 5px 20px #4b321d44;font-weight:800;display:none;max-width:85%;text-align:center}
+.modal-bg{position:fixed;inset:0;background:#35291f88;z-index:20;display:none;align-items:center;justify-content:center;padding:16px}.modal{width:min(520px,100%);max-height:82vh;overflow:auto;background:#fff4df;border:5px solid #c59b6e;border-radius:25px;padding:18px;box-shadow:0 10px 0 #765438}.modal h2{margin:0 0 12px}.modal .close{float:right;background:#e7cba2;border-radius:12px;padding:5px 12px}.item-list{display:grid;gap:8px}.item{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#f9e9cd;border:2px solid #dfc49b;border-radius:15px;padding:9px}.item button{background:#a5bd8e;border-radius:12px;padding:7px 11px;font-weight:800}.item button.alt{background:#e99d84}.bar{height:9px;border-radius:10px;background:#ead8ba;overflow:hidden;margin-top:5px}.bar i{display:block;height:100%;background:#91af7b}
+@media(min-width:700px){.app{padding-bottom:25px}.nav{position:static;transform:none;width:100%;margin:12px auto 0}.scene-wrap{max-height:690px}.action{font-size:16px;padding:15px}}
+@media(max-width:390px){.app{padding:7px 7px 95px}.top{padding:8px}.brand b{font-size:17px}.brand .house{font-size:28px}.pill{font-size:10px;padding:6px}.scene-head{font-size:11px}.action{font-size:12px}.nav button{font-size:10px}.nav .ico{font-size:18px}}
 </style></head>
-<body><div class="app">
-<header class="top"><div class="brand"><div class="house">🏡</div><div><h1>小镇杂货铺</h1><small>MY LITTLE GROCERY</small></div></div><div class="stats"><div class="stat">🪙 RM <b id="money">500.00</b></div><div class="stat">❤️ <b id="hearts">0</b></div><div class="stat">📅 第 <b id="day">1</b> 天</div><div class="stat">☀️ <b id="weather">晴天</b></div></div></header>
-<div class="layout"><nav id="nav">
-<button class="active" data-tab="store"><span>🏠</span>店铺</button><button data-tab="stock"><span>📦</span>库存</button><button data-tab="market"><span>🛒</span>进货</button><button data-tab="customers"><span>👥</span>顾客</button><button data-tab="clean"><span>🧹</span>清洁</button><button data-tab="tasks"><span>📋</span>任务</button><button data-tab="look"><span>👗</span>店长</button><button data-tab="ledger"><span>💰</span>账本</button><button data-tab="save"><span>💾</span>存档</button>
-</nav><main>
-<section class="stage"><div class="stagehead"><div>🌼 今日营业中 <small id="dateLabel">· 小镇的美好一天</small></div><small id="status">立体微缩杂货铺 · 点击货架、冰柜和收银台</small></div>
-<div class="scene" id="scene">
-
-<svg class="store-art" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="可互动的立体微缩杂货店">
+<body>
+<div class="app">
+<header class="top"><div class="brand"><span class="house">🏡</span><div><b>小镇杂货铺</b><small>MY LITTLE GROCERY</small></div></div><div class="stats"><span class="pill" id="money">🪙 RM 500.00</span><span class="pill" id="heart">❤️ 0</span><span class="pill" id="day">📅 第 1 天</span><span class="pill">☀️ 晴天</span></div></header>
+<section class="game-card">
+<div class="scene-head"><span>🌼 今日营业中 · <span id="dayline">第 1 个温暖日子</span></span><small>顾客会自己进店逛逛哦</small></div>
+<div class="scene-wrap">
+<svg id="shop" viewBox="0 0 900 690" role="img" aria-label="温暖精致的微缩杂货铺场景">
 <defs>
- <linearGradient id="wall" x2="0" y2="1"><stop stop-color="#f4d9ad"/><stop offset="1" stop-color="#d7aa76"/></linearGradient>
- <linearGradient id="floor" x2="0" y2="1"><stop stop-color="#efd5a8"/><stop offset="1" stop-color="#b98555"/></linearGradient>
- <linearGradient id="wood" x2="0" y2="1"><stop stop-color="#dba76c"/><stop offset=".48" stop-color="#a96e3d"/><stop offset="1" stop-color="#78472c"/></linearGradient>
- <linearGradient id="woodLight" x2="0" y2="1"><stop stop-color="#f4cf91"/><stop offset="1" stop-color="#b77c49"/></linearGradient>
- <linearGradient id="glass" x2="0" y2="1"><stop stop-color="#b9e5ec"/><stop offset=".5" stop-color="#83b9c6"/><stop offset="1" stop-color="#4d8294"/></linearGradient>
- <linearGradient id="fridge" x2="0" y2="1"><stop stop-color="#fffdf2"/><stop offset="1" stop-color="#9bb9bd"/></linearGradient>
- <linearGradient id="pinkPack" x2="0" y2="1"><stop stop-color="#ffd5c9"/><stop offset="1" stop-color="#db8c78"/></linearGradient>
- <linearGradient id="greenPack" x2="0" y2="1"><stop stop-color="#d9e8a9"/><stop offset="1" stop-color="#7f9c58"/></linearGradient>
- <linearGradient id="bluePack" x2="0" y2="1"><stop stop-color="#c4e5ef"/><stop offset="1" stop-color="#669bb0"/></linearGradient>
- <radialGradient id="sun"><stop stop-color="#fff8d8" stop-opacity=".9"/><stop offset="1" stop-color="#fff8d8" stop-opacity="0"/></radialGradient>
+ <linearGradient id="wall" x2="0" y2="1"><stop stop-color="#f8e7c7"/><stop offset="1" stop-color="#eacb9c"/></linearGradient>
+ <linearGradient id="floor" x2="0" y2="1"><stop stop-color="#e9c99a"/><stop offset="1" stop-color="#c99560"/></linearGradient>
+ <linearGradient id="wood" x2="0" y2="1"><stop stop-color="#d9a36a"/><stop offset=".45" stop-color="#ad7042"/><stop offset="1" stop-color="#81502f"/></linearGradient>
+ <linearGradient id="glass" x2="0" y2="1"><stop stop-color="#c9edf0"/><stop offset="1" stop-color="#77b3c2"/></linearGradient>
+ <linearGradient id="cream" x2="0" y2="1"><stop stop-color="#fff1d1"/><stop offset="1" stop-color="#e9c998"/></linearGradient>
+ <radialGradient id="lamp"><stop stop-color="#fff5cf" stop-opacity=".8"/><stop offset="1" stop-color="#f8d99a" stop-opacity="0"/></radialGradient>
  <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur stdDeviation="7"/></filter>
- <filter id="soft"><feGaussianBlur stdDeviation="2"/></filter>
+ <g id="plant"><path d="M0 30Q-16 4 -4 -15Q11 0 0 30M3 27Q12 -4 27 -8Q26 13 3 27M0 25Q-25 6 -24 -8Q-5 -3 0 25" fill="#73945c" stroke="#557747" stroke-width="2"/><path d="M-4 28L-10 38M4 28L12 38" stroke="#63834d" stroke-width="3"/><path d="M-17 38H20L15 57H-12Z" fill="#d58e69" stroke="#a76b4a" stroke-width="2"/></g>
 </defs>
-<!-- room and warm daylight -->
-<rect width="1000" height="600" fill="url(#wall)"/>
-<path d="M0 0H1000V370L0 420Z" fill="#e7c18c"/>
-<path d="M0 0L210 0 210 390 0 430Z" fill="#f3d9ad"/>
-<path d="M0 365L1000 300V600H0Z" fill="url(#floor)"/>
-<path d="M0 425L1000 355M0 505L1000 435M0 580L1000 510" stroke="#a9784c" stroke-width="3" opacity=".24"/>
-<path d="M150 370L330 600M390 350L520 600M660 330L730 600M860 320L920 600" stroke="#a9784c" stroke-width="3" opacity=".2"/>
-<ellipse cx="520" cy="440" rx="490" ry="220" fill="url(#sun)"/>
-<!-- front windows and entry -->
+<!-- room -->
+<rect width="900" height="690" fill="url(#wall)"/><path d="M0 0H900V490L0 550Z" fill="#f5dfb8"/><path d="M0 465L900 420V690H0Z" fill="url(#floor)"/>
+<path d="M0 545L900 490M0 610L900 570M150 500L80 690M400 480L380 690M690 455L760 690" stroke="#bd8959" stroke-width="3" opacity=".28"/>
+<!-- back wall decoration -->
+<rect x="28" y="28" width="220" height="90" rx="14" fill="#fff0d4" stroke="#c99a67" stroke-width="5"/><text x="138" y="67" text-anchor="middle" font-size="27" font-weight="800" fill="#765036">每日新鲜</text><text x="138" y="94" text-anchor="middle" font-size="13" letter-spacing="3" fill="#a17a55">FRESH &amp; LOCAL</text>
+<path d="M285 0V120M600 0V90" stroke="#d6b58b" stroke-width="5" opacity=".6"/>
+<!-- left awning -->
+<path d="M0 118H230V145H0Z" fill="#fff1d8" stroke="#a86f47" stroke-width="5"/><path d="M0 118H46V150H0M92 118H138V150H92M184 118H230V150H184" fill="#92a97c"/><path d="M0 150Q22 170 46 150Q69 170 92 150Q115 170 138 150Q161 170 184 150Q207 170 230 150" fill="none" stroke="#a86f47" stroke-width="5"/>
+<!-- wall shelf -->
 <g>
- <rect x="24" y="38" width="185" height="310" rx="15" fill="#8a5635" stroke="#70442d" stroke-width="9"/>
- <rect x="36" y="50" width="161" height="285" rx="8" fill="#a9d0cf"/>
- <path d="M36 245L197 120V335H36Z" fill="#d7e8d3" opacity=".65"/>
- <path d="M36 50L197 50V110L36 220Z" fill="#fff5d5" opacity=".22"/>
- <path d="M116 50V335M36 195H197" stroke="#8c5b39" stroke-width="10"/>
- <rect x="50" y="270" width="130" height="44" rx="8" fill="#f6e4bd" stroke="#a9784c" stroke-width="3"/>
- <text x="115" y="298" font-size="19" text-anchor="middle" fill="#765036" font-weight="bold">WELCOME</text>
- <path d="M20 46Q115 -10 214 46L205 68H29Z" fill="#f3eee0" stroke="#b78a59" stroke-width="5"/>
- <path d="M32 50L62 50 58 68H28ZM91 39L122 39 122 65H88ZM153 40L184 46 190 68H154Z" fill="#c77b65"/>
+<rect x="30" y="175" width="540" height="300" rx="12" fill="#8e5935" stroke="#6f432b" stroke-width="7"/>
+<rect x="42" y="188" width="516" height="270" rx="5" fill="#d6a36a"/>
+<g id="shelfGoods"></g>
+<path d="M30 275H570M30 372H570M30 467H570" stroke="#70452c" stroke-width="17"/><path d="M30 266H570M30 363H570M30 458H570" stroke="#e6b77b" stroke-width="5"/>
+<path d="M25 476H578V495H25Z" fill="#70462d"/><path d="M40 495H53V530H40M550 495H563V530H550" fill="#895632"/>
+<rect x="180" y="135" width="245" height="55" rx="18" fill="#704a32" stroke="#d2a16b" stroke-width="5"/><text x="302" y="171" text-anchor="middle" font-size="27" font-weight="800" fill="#fff0d5">零食 · 生活好物</text>
 </g>
-<!-- back wall shelves -->
-<g id="backShelf">
- <ellipse cx="480" cy="300" rx="360" ry="30" fill="#62432c" opacity=".22" filter="url(#shadow)"/>
- <rect x="235" y="72" width="410" height="236" rx="10" fill="#805033"/>
- <rect x="245" y="82" width="390" height="215" rx="5" fill="url(#wood)"/>
- <path d="M245 145H635M245 214H635M245 282H635" stroke="#6d432b" stroke-width="9"/>
- <path d="M245 137H635M245 206H635M245 274H635" stroke="#f1c184" stroke-width="7"/>
- <g stroke="#7e4e30" stroke-width="2">
-  <rect x="260" y="94" width="36" height="40" rx="5" fill="url(#pinkPack)"/><rect x="302" y="99" width="31" height="35" rx="5" fill="url(#greenPack)"/><rect x="339" y="91" width="38" height="43" rx="5" fill="url(#bluePack)"/><rect x="384" y="98" width="31" height="36" rx="5" fill="#f0c46e"/><rect x="421" y="91" width="38" height="43" rx="5" fill="url(#pinkPack)"/><rect x="466" y="96" width="35" height="38" rx="5" fill="url(#greenPack)"/><rect x="507" y="91" width="36" height="43" rx="5" fill="url(#bluePack)"/><rect x="550" y="98" width="34" height="36" rx="5" fill="#e6b66e"/><rect x="590" y="91" width="32" height="43" rx="5" fill="url(#pinkPack)"/>
-  <rect x="260" y="154" width="43" height="48" rx="5" fill="#d6a6cf"/><rect x="310" y="160" width="36" height="42" rx="5" fill="#e7c66f"/><rect x="353" y="153" width="42" height="49" rx="5" fill="#8fb4c5"/><rect x="402" y="159" width="37" height="43" rx="5" fill="#c3d48a"/><rect x="446" y="152" width="43" height="50" rx="5" fill="#e9a18d"/><rect x="496" y="158" width="39" height="44" rx="5" fill="#d9c0e6"/><rect x="542" y="152" width="43" height="50" rx="5" fill="#9abf9a"/><rect x="592" y="160" width="31" height="42" rx="5" fill="#edc16e"/>
-  <rect x="260" y="222" width="37" height="48" rx="5" fill="#e6b66e"/><rect x="304" y="226" width="43" height="44" rx="5" fill="#95b77e"/><rect x="354" y="220" width="38" height="50" rx="5" fill="#e69b83"/><rect x="399" y="226" width="43" height="44" rx="5" fill="#90b6ca"/><rect x="449" y="220" width="40" height="50" rx="5" fill="#d8c08b"/><rect x="496" y="226" width="42" height="44" rx="5" fill="#e8a3bd"/><rect x="545" y="220" width="38" height="50" rx="5" fill="#95b77e"/><rect x="590" y="226" width="32" height="44" rx="5" fill="#e6b66e"/>
- </g>
- <g fill="#fff4d6" opacity=".8"><path d="M270 106h15v3h-15zM349 105h18v3h-18zM431 104h16v3h-16zM515 104h18v3h-18zM272 169h19v3h-19zM361 169h18v3h-18zM457 169h18v3h-18zM553 169h18v3h-18z"/></g>
- <rect x="358" y="48" width="170" height="36" rx="8" fill="#68452e" stroke="#d4a56c" stroke-width="3"/>
- <text x="443" y="72" text-anchor="middle" font-size="21" fill="#fff0ce" font-weight="bold">零食 · 生活好物</text>
-</g>
-<!-- drink coolers -->
-<g>
- <ellipse cx="760" cy="330" rx="190" ry="35" fill="#573d2d" opacity=".2" filter="url(#shadow)"/>
- <rect x="674" y="82" width="136" height="258" rx="13" fill="url(#fridge)" stroke="#6f8790" stroke-width="6"/>
- <rect x="687" y="98" width="110" height="225" rx="7" fill="url(#glass)" stroke="#eaf7f3" stroke-width="4"/>
- <rect x="820" y="82" width="136" height="258" rx="13" fill="url(#fridge)" stroke="#6f8790" stroke-width="6"/>
- <rect x="833" y="98" width="110" height="225" rx="7" fill="url(#glass)" stroke="#eaf7f3" stroke-width="4"/>
- <path d="M741 100V320M887 100V320" stroke="#eff9f6" stroke-width="4" opacity=".7"/>
- <g stroke="#557987" stroke-width="2">
-  <path d="M689 157H795M689 220H795M689 282H795M835 157H941M835 220H941M835 282H941" stroke-width="4"/>
-  <g fill="#f1a66f"><rect x="699" y="116" width="16" height="35" rx="5"/><rect x="723" y="112" width="18" height="39" rx="5"/><rect x="750" y="118" width="17" height="33" rx="5"/><rect x="773" y="112" width="16" height="39" rx="5"/><rect x="845" y="116" width="16" height="35" rx="5"/><rect x="869" y="112" width="18" height="39" rx="5"/><rect x="896" y="118" width="17" height="33" rx="5"/><rect x="919" y="112" width="16" height="39" rx="5"/></g>
-  <g fill="#d8e6a4"><rect x="699" y="171" width="18" height="41" rx="6"/><rect x="726" y="174" width="16" height="38" rx="6"/><rect x="751" y="170" width="18" height="42" rx="6"/><rect x="777" y="175" width="15" height="37" rx="6"/><rect x="845" y="171" width="18" height="41" rx="6"/><rect x="872" y="174" width="16" height="38" rx="6"/><rect x="897" y="170" width="18" height="42" rx="6"/><rect x="923" y="175" width="15" height="37" rx="6"/></g>
-  <g fill="#f2d17d"><rect x="699" y="235" width="18" height="40" rx="6"/><rect x="726" y="238" width="16" height="37" rx="6"/><rect x="751" y="234" width="18" height="41" rx="6"/><rect x="777" y="239" width="15" height="36" rx="6"/><rect x="845" y="235" width="18" height="40" rx="6"/><rect x="872" y="238" width="16" height="37" rx="6"/><rect x="897" y="234" width="18" height="41" rx="6"/><rect x="923" y="239" width="15" height="36" rx="6"/></g>
- </g>
- <path d="M682 74H962V99H682Z" fill="#69452e" stroke="#c79a62" stroke-width="3"/>
- <text x="822" y="92" text-anchor="middle" font-size="19" fill="#fff0d0" font-weight="bold">饮料 · 牛奶</text>
-</g>
-<!-- foreground island shelf -->
-<g>
- <ellipse cx="450" cy="465" rx="290" ry="55" fill="#60442f" opacity=".24" filter="url(#shadow)"/>
- <path d="M250 350L555 322 690 382 383 421Z" fill="#f0c68a" stroke="#8e5b34" stroke-width="7"/>
- <path d="M250 350L383 421V515L250 442Z" fill="url(#wood)" stroke="#71472e" stroke-width="5"/>
- <path d="M383 421L690 382V477L383 515Z" fill="url(#woodLight)" stroke="#71472e" stroke-width="5"/>
- <path d="M260 370L378 432 378 459 260 399Z" fill="#8b5835"/>
- <path d="M396 432L675 397V427L396 465Z" fill="#8b5835"/>
- <g stroke="#87512f" stroke-width="2">
-  <rect x="275" y="345" width="40" height="39" rx="6" fill="#f2a7a0"/><rect x="320" y="354" width="40" height="42" rx="6" fill="#b7cf8b"/><rect x="367" y="365" width="40" height="42" rx="6" fill="#e7c36f"/><rect x="416" y="357" width="40" height="43" rx="6" fill="#9dc7d1"/><rect x="464" y="350" width="40" height="43" rx="6" fill="#e79d8d"/><rect x="512" y="343" width="40" height="43" rx="6" fill="#c4a7d6"/><rect x="560" y="336" width="40" height="43" rx="6" fill="#e9c875"/><rect x="608" y="330" width="40" height="43" rx="6" fill="#9ebc86"/>
- </g>
- <path d="M267 420L375 475M395 470L672 436" stroke="#e8bc7d" stroke-width="7"/>
- <g fill="#f8e5bd"><rect x="277" y="431" width="29" height="19" rx="4"/><rect x="315" y="450" width="31" height="18" rx="4"/><rect x="415" y="475" width="39" height="18" rx="4"/><rect x="463" y="468" width="39" height="18" rx="4"/><rect x="512" y="461" width="39" height="18" rx="4"/><rect x="560" y="454" width="39" height="18" rx="4"/></g>
-</g>
-<!-- produce stand left -->
-<g>
- <ellipse cx="132" cy="480" rx="130" ry="36" fill="#60442f" opacity=".22" filter="url(#shadow)"/>
- <path d="M12 355L205 355 226 390 226 501 12 501Z" fill="url(#wood)" stroke="#774a2c" stroke-width="5"/>
- <path d="M12 355L205 355 226 390 32 390Z" fill="#efc68c" stroke="#774a2c" stroke-width="5"/>
- <path d="M24 400H213V485H24Z" fill="#a86d3e"/>
- <g stroke="#8d5936" stroke-width="2">
-  <ellipse cx="55" cy="365" rx="22" ry="16" fill="#e66f58"/><ellipse cx="95" cy="363" rx="22" ry="16" fill="#f2c04f"/><ellipse cx="135" cy="365" rx="22" ry="16" fill="#8eae63"/><ellipse cx="174" cy="366" rx="22" ry="16" fill="#e66f58"/>
-  <ellipse cx="45" cy="383" rx="18" ry="13" fill="#f0c85e"/><ellipse cx="83" cy="383" rx="19" ry="13" fill="#e56c56"/><ellipse cx="123" cy="383" rx="18" ry="13" fill="#8dad62"/><ellipse cx="165" cy="383" rx="19" ry="13" fill="#f0c85e"/><ellipse cx="198" cy="383" rx="16" ry="12" fill="#e56c56"/>
- </g>
- <rect x="50" y="442" width="142" height="39" rx="8" fill="#f5dfb4" stroke="#9a693e" stroke-width="3"/>
- <text x="121" y="468" text-anchor="middle" font-size="19" fill="#765036" font-weight="bold">新鲜蔬果</text>
-</g>
-<!-- bakery side rack -->
-<g>
- <path d="M748 374L958 356 981 386 981 506 770 525Z" fill="url(#wood)" stroke="#74482d" stroke-width="5"/>
- <path d="M748 374L958 356 981 386 770 405Z" fill="#f1ca91" stroke="#74482d" stroke-width="5"/>
- <g fill="#d49a55" stroke="#8a5b32" stroke-width="2"><ellipse cx="795" cy="383" rx="20" ry="13"/><ellipse cx="841" cy="379" rx="20" ry="13"/><ellipse cx="887" cy="374" rx="20" ry="13"/><ellipse cx="932" cy="371" rx="20" ry="13"/></g>
- <g fill="#f3d59b"><path d="M785 374q10-22 20 0q-10 8-20 0M831 370q10-22 20 0q-10 8-20 0M877 365q10-22 20 0q-10 8-20 0M922 362q10-22 20 0q-10 8-20 0"/></g>
- <rect x="794" y="432" width="160" height="38" rx="8" fill="#f4dfb8" stroke="#95633a" stroke-width="3"/>
- <text x="874" y="457" text-anchor="middle" font-size="18" fill="#765036" font-weight="bold">面包点心</text>
-</g>
-<!-- plants -->
-<g fill="#77985d" stroke="#58764b" stroke-width="2">
- <path d="M210 350Q170 290 195 265Q228 292 210 350M214 350Q245 278 270 289Q257 327 214 350M210 350Q162 325 158 302Q193 294 210 350"/>
- <path d="M615 320Q585 265 608 244Q638 276 615 320M620 321Q660 258 683 276Q664 307 620 321"/>
- <path d="M950 535Q912 474 939 451Q968 485 950 535M955 535Q984 480 1004 495Q990 523 955 535"/>
-</g>
-<g fill="#f1c0aa"><circle cx="195" cy="287" r="8"/><circle cx="260" cy="300" r="7"/><circle cx="610" cy="267" r="7"/><circle cx="676" cy="283" r="8"/><circle cx="944" cy="478" r="7"/></g>
-<!-- ceiling lights -->
-<g><path d="M340 0V54M755 0V42" stroke="#8b613e" stroke-width="4"/><path d="M315 55Q340 25 365 55L356 75H324Z" fill="#6b563f"/><path d="M735 43Q755 16 775 43L768 61H742Z" fill="#6b563f"/><ellipse cx="340" cy="95" rx="70" ry="55" fill="url(#sun)" opacity=".6"/><ellipse cx="755" cy="83" rx="70" ry="55" fill="url(#sun)" opacity=".6"/></g>
+<!-- fridge -->
+<g transform="translate(635 150)"><ellipse cx="105" cy="355" rx="120" ry="15" fill="#68482d" opacity=".2" filter="url(#shadow)"/><rect width="205" height="330" rx="22" fill="#7eafbd" stroke="#6b8e99" stroke-width="8"/><rect x="12" y="13" width="181" height="300" rx="15" fill="url(#glass)" stroke="#e7f4ed" stroke-width="8"/><path d="M102 22V300" stroke="#6d9daa" stroke-width="7"/><g id="fridgeGoods"></g><path d="M18 112H188M18 205H188" stroke="#638e9b" stroke-width="8"/><rect x="172" y="35" width="9" height="55" rx="4" fill="#f7edcf"/><rect x="172" y="130" width="9" height="55" rx="4" fill="#f7edcf"/><rect x="172" y="225" width="9" height="55" rx="4" fill="#f7edcf"/></g>
+<!-- counter -->
+<g><ellipse cx="455" cy="570" rx="315" ry="26" fill="#69452c" opacity=".18" filter="url(#shadow)"/><path d="M210 500L635 475L805 545L390 583Z" fill="#e0ad70" stroke="#80502f" stroke-width="8"/><path d="M390 583L805 545V640L390 676Z" fill="url(#wood)" stroke="#78492d" stroke-width="7"/><path d="M210 500L390 583V676L210 590Z" fill="#a96f42" stroke="#78492d" stroke-width="7"/><path d="M420 600L778 566V590L420 626Z" fill="#6e462e" opacity=".7"/><path d="M225 515L380 585L380 600L225 530Z" fill="#efc58a"/><rect x="492" y="500" width="95" height="18" rx="8" fill="#fff0d1" stroke="#c39460" stroke-width="3"/><rect x="610" y="490" width="65" height="17" rx="7" fill="#fff0d1" stroke="#c39460" stroke-width="3"/></g>
+<!-- produce stand -->
+<g><path d="M35 530L190 565V635L35 598Z" fill="#a76b40" stroke="#77472b" stroke-width="6"/><path d="M35 530L80 500L230 535L190 565Z" fill="#e2b579" stroke="#77472b" stroke-width="6"/><g fill="#91a969" stroke="#6d8a50" stroke-width="3"><circle cx="82" cy="526" r="17"/><circle cx="115" cy="535" r="18"/><circle cx="151" cy="541" r="17"/><circle cx="184" cy="545" r="16"/></g><g fill="#d78c68"><circle cx="75" cy="520" r="7"/><circle cx="110" cy="529" r="7"/><circle cx="150" cy="535" r="7"/></g></g>
+<!-- hanging lamp -->
+<path d="M160 0V90" stroke="#78543a" stroke-width="5"/><path d="M120 105Q160 65 200 105L186 133H134Z" fill="#866343"/><ellipse cx="160" cy="125" rx="100" ry="75" fill="url(#lamp)"/>
+<use href="#plant" x="835" y="560"/><use href="#plant" x="20" y="455" transform="translate(0 0) scale(.8)"/>
+<!-- character stage shadow -->
+<g id="people"></g>
+<g transform="translate(785 30)"><rect width="90" height="34" rx="17" fill="#fff1d7" stroke="#d5b184" stroke-width="3"/><circle cx="17" cy="17" r="6" fill="#8eaf7d"/><text x="55" y="23" text-anchor="middle" font-size="15" font-weight="800" fill="#78583e">营业中</text></g>
 </svg>
-<div class="shopper-layer" id="shopperLayer"></div>
-<div class="manager-character" id="managerCharacter" aria-label="店长">
- <svg viewBox="0 0 100 150">
-  <ellipse cx="50" cy="143" rx="28" ry="6" fill="#67462e" opacity=".22"/>
-  <path d="M33 94L29 130Q31 140 43 137L49 107 56 137Q69 141 72 130L66 93Z" fill="#5c526b" stroke="#70503b" stroke-width="2"/>
-  <path d="M28 70Q50 56 72 70L78 111Q50 125 22 111Z" fill="#9fb88b" stroke="#80583a" stroke-width="3"/>
-  <path d="M39 74L50 89 62 74 64 111H36Z" fill="#fff0d7" stroke="#b28b61" stroke-width="2"/>
-  <path d="M27 77Q15 82 19 105M72 77Q85 83 80 105" fill="none" stroke="#efc4a0" stroke-width="10" stroke-linecap="round"/>
-  <path d="M29 39Q23 7 51 8Q81 7 74 43L68 63H31Z" fill="#6b4735"/>
-  <ellipse cx="51" cy="42" rx="24" ry="29" fill="#f1c6a5" stroke="#b67e60" stroke-width="2"/>
-  <path d="M27 37Q24 8 52 9Q77 10 75 39Q61 24 45 26Q38 36 27 37Z" fill="#76503a"/>
-  <path d="M28 35Q18 55 31 70Q37 56 35 40M72 34Q83 53 70 70Q65 56 66 39" fill="#76503a"/>
-  <ellipse cx="42" cy="43" rx="3" ry="4" fill="#4b372e"/><ellipse cx="60" cy="43" rx="3" ry="4" fill="#4b372e"/>
-  <path d="M44 56Q51 62 58 56" fill="none" stroke="#ad665b" stroke-width="2.5" stroke-linecap="round"/>
-  <path d="M37 135L33 146M64 135L69 146" stroke="#6b4934" stroke-width="8" stroke-linecap="round"/>
- </svg>
- <span>店长</span>
 </div>
-<button class="hotspot hs-fruit" onclick="openShelf('新鲜蔬果',['apple','banana','orange','tomato','carrot'])" aria-label="新鲜蔬果货架"><span>🍎 新鲜蔬果</span></button>
-<button class="hotspot hs-snack" onclick="openShelf('零食与食品',['noodle','chips','egg','cookie','rice'])" aria-label="零食食品货架"><span>🍪 零食食品</span></button>
-<button class="hotspot hs-drink" onclick="openShelf('饮料与牛奶',['milk','water','juice','tea'])" aria-label="饮料冰柜"><span>🥛 饮料冰柜</span></button>
-<button class="hotspot hs-daily" onclick="openShelf('日用百货',['soap','tissue','toothpaste'])" aria-label="日用百货货架"><span>🧼 日用百货</span></button>
-<button class="hotspot hs-bakery" onclick="openShelf('面包点心',['bread','croissant','cake'])" aria-label="面包点心"><span>🥐 面包点心</span></button>
-<button class="hotspot hs-cash" onclick="openCheckout()" aria-label="收银台"><span>🧾 收银台</span></button>
-
-<button class="hotspot hs-fruit" onclick="openShelf('新鲜蔬果',['apple','banana','orange','tomato','carrot'])" aria-label="新鲜蔬果货架"><span>🍎 新鲜蔬果</span></button>
-<button class="hotspot hs-snack" onclick="openShelf('零食与食品',['noodle','chips','egg','cookie','rice'])" aria-label="零食食品货架"><span>🍪 零食食品</span></button>
-<button class="hotspot hs-drink" onclick="openShelf('饮料与牛奶',['milk','water','juice','tea'])" aria-label="饮料冰柜"><span>🥛 饮料冰柜</span></button>
-<button class="hotspot hs-daily" onclick="openShelf('日用百货',['soap','tissue','toothpaste'])" aria-label="日用百货货架"><span>🧼 日用百货</span></button>
-<button class="hotspot hs-bakery" onclick="openShelf('面包点心',['bread','croissant','cake'])" aria-label="面包点心"><span>🥐 面包点心</span></button>
-<button class="hotspot hs-cash" onclick="openCheckout()" aria-label="收银台"><span>🧾 收银台</span></button>
+<div class="action-grid">
+<button class="action pink" onclick="checkout()">🧾 收银结账</button><button class="action green" onclick="openPanel('stock')">📦 快速补货</button><button class="action blue" onclick="openPanel('customers')">💬 顾客互动</button><button class="action cream" onclick="cleanShop()">🧹 打扫卫生</button><button class="action cream" onclick="nextDay()">🌙 今日打烊</button><button class="action cream" onclick="openPanel('tasks')">📋 每日任务</button>
+</div></section>
+<section class="lower">
+<div class="panel"><h3>🧺 店铺经营</h3><div class="metric" id="stockCount">20 种商品</div><div class="muted">货架商品正在等待顾客</div></div>
+<div class="panel"><h3>👣 今日顾客</h3><div class="metric" id="customerCount">0 位</div><div class="muted">进店顾客</div></div>
+<div class="panel"><h3>✨ 店铺整洁度</h3><div class="metric" id="cleanValue">100%</div><div class="bar"><i id="cleanBar" style="width:100%"></i></div></div>
+<div class="panel"><h3>💗 顾客好感</h3><div class="metric" id="loveValue">0</div><div class="muted">友善服务会提升好感</div></div>
+</section>
+<nav class="nav"><button class="active" onclick="navTo('home',this)"><span class="ico">🏠</span>店铺</button><button onclick="openPanel('stock',this)"><span class="ico">📦</span>库存</button><button onclick="openPanel('supply',this)"><span class="ico">🛒</span>进货</button><button onclick="openPanel('customers',this)"><span class="ico">👥</span>顾客</button><button onclick="cleanShop()"><span class="ico">🧹</span>清洁</button><button onclick="openPanel('tasks',this)"><span class="ico">📋</span>任务</button><button onclick="openPanel('manager',this)"><span class="ico">👗</span>店长</button></nav>
 </div>
-<div class="actions"><button class="btn primary" onclick="openCheckout()">🧾 收银结账</button><button class="btn green" onclick="restockQuick()">📦 快速补货</button><button class="btn blue" onclick="chatCustomer()">💬 和顾客聊天</button><button class="btn" onclick="cleanShop()">🧹 打扫卫生</button><button class="btn" onclick="endDay()">🌙 今日打烊</button></div></section>
-<div id="content"></div></main></div></div>
-<div class="modalbg" id="modalbg"><div class="modal" id="modal"></div></div><div class="toast" id="toast"></div>
+<div class="toast" id="toast"></div><div class="modal-bg" id="modalBg" onclick="if(event.target===this)closePanel()"><div class="modal"><button class="close" onclick="closePanel()">关闭 ✕</button><div id="modalContent"></div></div></div>
 <script>
 const products=[
-{id:'apple',name:'苹果',emoji:'🍎',cat:'生鲜',price:3,cost:1.5,stock:12},{id:'banana',name:'香蕉',emoji:'🍌',cat:'生鲜',price:2.5,cost:1.2,stock:8},{id:'orange',name:'橙子',emoji:'🍊',cat:'生鲜',price:3,cost:1.4,stock:9},{id:'tomato',name:'番茄',emoji:'🍅',cat:'生鲜',price:2.8,cost:1.2,stock:10},{id:'carrot',name:'胡萝卜',emoji:'🥕',cat:'生鲜',price:2,cost:.8,stock:7},
-{id:'milk',name:'鲜牛奶',emoji:'🥛',cat:'饮料',price:5,cost:3,stock:15},{id:'water',name:'矿泉水',emoji:'💧',cat:'饮料',price:2,cost:.8,stock:24},{id:'juice',name:'果汁',emoji:'🧃',cat:'饮料',price:4,cost:2,stock:9},{id:'tea',name:'茶饮',emoji:'🧋',cat:'饮料',price:4.5,cost:2.2,stock:8},
-{id:'bread',name:'面包',emoji:'🍞',cat:'面包',price:4,cost:2,stock:6},{id:'croissant',name:'牛角包',emoji:'🥐',cat:'面包',price:4.5,cost:2.2,stock:6},{id:'cake',name:'小蛋糕',emoji:'🧁',cat:'面包',price:5,cost:2.5,stock:5},
-{id:'noodle',name:'泡面',emoji:'🍜',cat:'食品',price:3.5,cost:1.8,stock:18},{id:'chips',name:'薯片',emoji:'🥔',cat:'食品',price:4.5,cost:2.2,stock:20},{id:'egg',name:'鸡蛋',emoji:'🥚',cat:'食品',price:6,cost:3.8,stock:10},{id:'cookie',name:'饼干',emoji:'🍪',cat:'食品',price:3,cost:1.3,stock:11},{id:'rice',name:'米袋',emoji:'🍚',cat:'食品',price:8,cost:5,stock:6},
-{id:'soap',name:'香皂',emoji:'🧼',cat:'日用品',price:3,cost:1.3,stock:5},{id:'tissue',name:'纸巾',emoji:'🧻',cat:'日用品',price:4,cost:2,stock:7},{id:'toothpaste',name:'牙膏',emoji:'🪥',cat:'日用品',price:5,cost:2.5,stock:4}
+{name:'草莓牛奶',price:4.5,qty:8,kind:'drink',color:'#e99d91'},{name:'橙汁',price:4,qty:7,kind:'drink',color:'#edb35f'},{name:'汽水',price:3,qty:9,kind:'drink',color:'#83b7cb'},{name:'矿泉水',price:2,qty:10,kind:'drink',color:'#a6c9d1'},
+{name:'草莓饼干',price:5,qty:6,kind:'snack',color:'#e99b8d'},{name:'薯片',price:4,qty:7,kind:'snack',color:'#e6c16f'},{name:'巧克力',price:6,qty:5,kind:'snack',color:'#9b7054'},{name:'吐司',price:5,qty:8,kind:'bread',color:'#d8a46d'},
+{name:'苹果',price:2.5,qty:12,kind:'fruit',color:'#d96e62'},{name:'梨子',price:2,qty:10,kind:'fruit',color:'#b2bc78'},{name:'橘子',price:2.5,qty:10,kind:'fruit',color:'#e7a44f'},{name:'牛角包',price:4,qty:5,kind:'bread',color:'#d7a36b'},
+{name:'洗衣液',price:8,qty:4,kind:'home',color:'#8db8c5'},{name:'洗洁精',price:6,qty:4,kind:'home',color:'#a9bf86'},{name:'纸巾',price:3.5,qty:8,kind:'home',color:'#e9dfc9'},{name:'鸡蛋',price:5,qty:6,kind:'food',color:'#e8d4a3'},
+{name:'方便面',price:3,qty:12,kind:'snack',color:'#df9d77'},{name:'麦片',price:7,qty:4,kind:'food',color:'#c39b72'},{name:'果酱',price:6,qty:5,kind:'food',color:'#b17b8a'},{name:'咖啡',price:5,qty:6,kind:'drink',color:'#a67b5c'}
 ];
-const defaults={money:500,day:1,hearts:0,sales:0,expenses:0,clean:100,weather:'晴天',manager:{name:'小芳',hair:'栗棕色',outfit:'围裙裙装'},visitors:0,chatCount:0,history:[],storyFlags:[],todaySales:0};
-let state=load(),tab='store',toastTimer;
-function load(){try{let d=JSON.parse(localStorage.getItem('mlg-v4')||localStorage.getItem('mlg-v3')||'null');if(!d)return {...defaults};d.products?.forEach(q=>{let p=products.find(x=>x.id===q.id);if(p)Object.assign(p,q)});return {...defaults,...d.state}}catch(e){return {...defaults}}}
-function save(){const data=JSON.stringify({state,products});localStorage.setItem('mlg-v4',data);localStorage.setItem('mlg-v3',data);hud()}
-function hud(){money.textContent=state.money.toFixed(2);hearts.textContent=state.hearts;day.textContent=state.day;weather.textContent=state.weather;dateLabel.textContent='· 第 '+state.day+' 个温暖日子'}
-function say(t){toast.textContent=t;toast.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.style.display='none',2200)}
-function modal(title,body){document.getElementById('modal').innerHTML=`<button class="close" onclick="closeModal()">×</button><h2>${title}</h2>${body}`;document.getElementById('modalbg').classList.add('show')}
-function closeModal(){document.getElementById('modalbg').classList.remove('show')}
-function render(){hud();renderTab('store')}
-function renderTab(t){tab=t;document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));let title='',body='';
-if(t==='store'){title='🌷 店铺概况';body=`<div class="grid"><div class="card"><div class="emoji">🧺</div><strong>商品种类</strong><small>${products.length} 种商品正在经营</small></div><div class="card"><div class="emoji">👣</div><strong>今日顾客</strong><small>${state.visitors} 位顾客到店</small></div><div class="card"><div class="emoji">✨</div><strong>店铺整洁度</strong><small>${state.clean}% · ${state.clean>75?'环境舒适':'需要打扫啦'}</small><div class="progress"><i style="width:${state.clean}%"></i></div></div><div class="card"><div class="emoji">💗</div><strong>顾客好感</strong><small>${state.hearts} 点</small></div></div>`}
-if(t==='stock'||t==='market'){title=t==='stock'?'📦 商品库存':'🛒 小镇批发市场';body=`<p class="muted">${t==='stock'?'查看库存、售价及商品状态。':'每次进货 5 件，进货成本会从现金扣除。'}</p><div class="grid">${products.map(p=>`<div class="card"><div class="row"><span class="emoji">${p.emoji}</span><small>${p.cat}</small></div><strong>${p.name}</strong><small>库存 ${p.stock} · 售价 RM ${p.price.toFixed(2)}</small><small>成本 RM ${p.cost.toFixed(2)}</small><button class="btn ${t==='market'?'green':''}" onclick="${t==='market'?`buy('${p.id}')`:`priceEditor('${p.id}')`}">${t==='market'?'进货 +5':'修改售价'}</button></div>`).join('')}</div>`}
-if(t==='customers'){title='👥 小镇居民';body=`<div class="grid">${[['grandma','👵🏻','王奶奶','喜欢新鲜鸡蛋和水果。'],['child','🧒🏻','乐乐','最喜欢面包和零食。'],['worker','👩🏻','林小姐','常买牛奶、面包和饮料。']].map(x=>`<div class="card"><div class="emoji">${x[1]}</div><strong>${x[2]}</strong><small>${x[3]}</small><button class="btn" onclick="story('${x[0]}')">打招呼聊天</button></div>`).join('')}</div>`}
-if(t==='clean'){title='🧹 店铺清洁';body=`<div class="card"><div class="row"><strong>店铺整洁度</strong><b>${state.clean}%</b></div><div class="progress"><i style="width:${state.clean}%"></i></div><p>打扫店铺可以让顾客更喜欢这里。</p><button class="btn green" onclick="cleanShop()">🧹 清洁店铺（+25）</button></div>`}
-if(t==='tasks'){let tasks=getTasks();title='📋 今日必做任务';body=`<div class="card"><div class="row"><strong>第 ${state.day} 天经营目标</strong><b>${tasks.filter(x=>x.done).length}/${tasks.length}</b></div>${tasks.map(x=>`<p>${x.done?'✅':'⬜'} ${x.label}</p>`).join('')}</div>`}
-if(t==='look'){title='👗 店长造型屋';body=`<div class="card"><div style="font-size:52px;text-align:center">🧑🏻‍🌾</div><div class="field"><label>店长名字</label><input id="mgrName" maxlength="12" value="${state.manager.name}"></div><div class="field"><label>发色</label><select id="hair"><option>栗棕色</option><option>黑色</option><option>奶茶棕</option><option>亚麻金</option><option>粉棕色</option></select></div><div class="field"><label>服装</label><select id="outfit"><option>围裙裙装</option><option>薄荷绿制服</option><option>奶油色针织衫</option><option>蓝色背带裤</option></select></div><button class="btn primary" onclick="saveLook()">保存造型</button></div>`}
-if(t==='ledger'){title='💰 今日经营账本';body=`<div class="grid"><div class="card"><div class="emoji">💵</div><strong>今日营业额</strong><small>RM ${state.sales.toFixed(2)}</small></div><div class="card"><div class="emoji">📦</div><strong>进货支出</strong><small>RM ${state.expenses.toFixed(2)}</small></div><div class="card"><div class="emoji">🌷</div><strong>当前现金</strong><small>RM ${state.money.toFixed(2)}</small></div></div><h3>最近记录</h3>${state.history.slice(-10).reverse().map(x=>`<p>第 ${x.day} 天 · ${x.note} · RM ${x.amount.toFixed(2)}</p>`).join('')||'<p class="muted">还没有交易记录。</p>'}`}
-if(t==='save'){title='💾 游戏存档';body=`<div class="card"><p>游戏自动保存在当前浏览器。换设备前请先下载备份。</p><button class="btn green" onclick="backup()">⬇ 下载存档</button> <button class="btn blue" onclick="document.getElementById('restore').click()">⬆ 恢复存档</button><input id="restore" type="file" accept="application/json" style="display:none" onchange="restore(event)"><button class="btn" onclick="resetGame()">重新开始</button></div>`}
-document.getElementById('content').innerHTML=`<section class="panel"><h2>${title}</h2>${body}</section>`}
-function getTasks(){return [{label:'接待至少 3 位顾客',done:state.visitors>=3},{label:'完成 2 次商品销售',done:state.history.filter(x=>x.day===state.day&&x.note.startsWith('售出')).length>=2},{label:'打扫一次店铺',done:state.clean===100},{label:'与一位顾客聊天',done:state.chatCount>0},{label:'补充任意商品库存',done:state.history.some(x=>x.day===state.day&&x.note==='进货')}]}
-function openShelf(title,ids){let list=ids.map(id=>products.find(p=>p.id===id)).filter(Boolean);modal('🧺 '+title,`<p class="muted">点击商品可以补货、调整售价或直接售出。</p><div class="grid">${list.map(p=>`<div class="card"><div class="emoji">${p.emoji}</div><strong>${p.name}</strong><small>库存 ${p.stock} · RM ${p.price.toFixed(2)}</small><button class="btn green" onclick="buy('${p.id}')">补货 +5</button><button class="btn" onclick="sell('${p.id}')">售出 1 件</button><button class="btn" onclick="priceEditor('${p.id}')">调整售价</button></div>`).join('')}</div>`)}
-function buy(id){let p=products.find(x=>x.id===id),cost=p.cost*5;if(state.money<cost)return say('现金不足，先卖出一些商品吧！');state.money-=cost;p.stock+=5;state.expenses+=cost;state.history.push({day:state.day,note:'进货',amount:cost});save();if(document.getElementById('modalbg').classList.contains('show'))openShelf(p.cat+'货架',[id]);else renderTab(tab);say(p.name+' 已补货 5 件！')}
-function sell(id){let p=products.find(x=>x.id===id);if(p.stock<1)return say('商品售罄，请先补货！');p.stock--;state.money+=p.price;state.sales+=p.price;state.visitors++;state.history.push({day:state.day,note:'售出 '+p.name,amount:p.price});save();if(document.getElementById('modalbg').classList.contains('show'))openShelf(p.cat+'货架',[id]);else renderTab(tab);say('售出 '+p.name+'，收入 RM '+p.price.toFixed(2))}
-function restockQuick(){let p=products.filter(x=>x.stock<8).sort((a,b)=>a.stock-b.stock)[0];if(!p)p=products[0];buy(p.id)}
-function openCheckout(){let available=products.filter(p=>p.stock>0);if(!available.length)return say('商品都售罄啦，先去进货吧！');let p=available[Math.floor(Math.random()*available.length)];sell(p.id);say('顾客在收银台买走了 '+p.name+'！')}
-function chatCustomer(){let a=[['王奶奶','今天的苹果看起来真新鲜！'],['乐乐','姐姐，今天有牛角包吗？'],['林小姐','下班来这里买东西真方便。']][Math.floor(Math.random()*3)];state.hearts+=2;state.chatCount++;save();modal('💬 '+a[0]+' 对你说','“'+a[1]+'”<p class="muted">顾客好感度 +2</p><button class="btn primary" onclick="closeModal()">继续营业</button>')}
-function story(id){let a={grandma:['王奶奶','我每天都会来买新鲜鸡蛋。你这家小店让我想起以前的日子。'],child:['乐乐','姐姐！我最喜欢你店里的面包香味！'],worker:['林小姐','下班路上能买到牛奶和面包，真的很方便。']}[id];state.hearts+=3;state.chatCount++;save();modal('💗 '+a[0]+' 的小故事','“'+a[1]+'”<p class="muted">熟客好感度 +3</p><button class="btn primary" onclick="closeModal()">开心收下</button>')}
-function cleanShop(){if(state.clean>=100)return say('店铺已经很干净啦！');state.clean=Math.min(100,state.clean+25);save();renderTab(tab);say('✨ 清洁完成！整洁度提升。')}
-function priceEditor(id){let p=products.find(x=>x.id===id);modal('🏷️ 调整 '+p.name+' 售价',`<p>目前 RM ${p.price.toFixed(2)}</p><div class="field"><label>新售价（RM）</label><input id="price" type="number" min=".1" step=".1" value="${p.price}"></div><button class="btn primary" onclick="applyPrice('${id}')">保存售价</button>`)}
-function applyPrice(id){let p=products.find(x=>x.id===id),n=Number(document.getElementById('price').value);if(!Number.isFinite(n)||n<=0)return say('请输入正确价格');p.price=Math.round(n*100)/100;save();closeModal();say('售价已更新！')}
-function saveLook(){state.manager.name=document.getElementById('mgrName').value||'小芳';state.manager.hair=document.getElementById('hair').value;state.manager.outfit=document.getElementById('outfit').value;save();renderTab('look');say('店长资料已保存！')}
-function endDay(){let reward=20+Math.floor(state.sales*.08);state.money+=reward;state.history.push({day:state.day,note:'每日经营奖励',amount:reward});state.day++;state.sales=0;state.expenses=0;state.visitors=0;state.chatCount=0;state.clean=Math.max(55,state.clean-15);state.weather=['晴天','多云','小雨'][Math.floor(Math.random()*3)];save();render();say('今日打烊！获得 RM '+reward+' 经营奖励。')}
-function backup(){let blob=new Blob([JSON.stringify({state,products},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='my-little-grocery-save.json';a.click();URL.revokeObjectURL(a.href)}
-function restore(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);state={...defaults,...d.state};d.products?.forEach(q=>{let p=products.find(x=>x.id===q.id);if(p)Object.assign(p,q)});save();render();say('存档恢复成功！')}catch(x){say('存档格式不正确')}};r.readAsText(f)}
-function resetGame(){modal('重新开始？','<p>这会清除当前进度，确定吗？</p><button class="btn primary" onclick="resetConfirm()">确定</button> <button class="btn" onclick="closeModal()">取消</button>')}
-function resetConfirm(){localStorage.removeItem('mlg-v3');localStorage.removeItem('mlg-v4');location.reload()}
-
-// Individually rendered chibi customers — layered SVG bodies, faces, hair, outfits and bags.
-const shopperDesigns=[
- {hair:'#62432f',shirt:'#f0b4a3',skirt:'#7893a7',skin:'#f3c7a6',bag:'#b78c65',bow:'#e9a2aa',kind:'girl'},
- {hair:'#50392e',shirt:'#9eb6cf',skirt:'#6b788c',skin:'#e8b28f',bag:'#c39a68',bow:'#8fb6a0',kind:'boy'},
- {hair:'#76523b',shirt:'#e7c37d',skirt:'#9baf7b',skin:'#f1c4a0',bag:'#9d8bb2',bow:'#e5a1a0',kind:'girl'},
- {hair:'#44332c',shirt:'#b4c9a0',skirt:'#c18e75',skin:'#dba47e',bag:'#718ba1',bow:'#d4b2d6',kind:'boy'}
-];
-const customerBubbles=['想买一点水果','这个好可爱！','今天有牛奶吗？','去看看面包～','挑到喜欢的啦'];
-function chibiSvg(c){
- const bow=c.kind==='girl'?`<path d="M30 18Q17 5 14 18Q17 28 30 23Q40 31 45 19Q41 7 30 18Z" fill="${c.bow}" stroke="#9c7057" stroke-width="1.5"/>`:'';
- return `<svg viewBox="0 0 100 158" aria-hidden="true">
- <defs><linearGradient id="skin${c.shirt.replace('#','')}" x2="0" y2="1"><stop stop-color="#ffe0c2"/><stop offset="1" stop-color="${c.skin}"/></linearGradient><linearGradient id="cloth${c.shirt.replace('#','')}" x2="0" y2="1"><stop stop-color="#fff0d9"/><stop offset="1" stop-color="${c.shirt}"/></linearGradient></defs>
- <ellipse cx="50" cy="150" rx="27" ry="6" fill="#5b3d2a" opacity=".24"/>
- <!-- legs and shoes -->
- <path class="walk-legs" d="M37 112L34 139Q34 145 44 145L50 119 56 145Q67 147 68 139L63 111Z" fill="${c.skirt}" stroke="#79563d" stroke-width="2"/>
- <path d="M33 140Q25 141 26 148Q35 153 46 149L46 144Z M56 145Q66 140 74 146Q76 153 61 152L55 150Z" fill="#fff4e5" stroke="#98765b" stroke-width="2"/>
- <!-- backpack -->
- <path d="M24 75Q12 78 14 107L27 115 39 105 36 80Z" fill="${c.bag}" stroke="#74543a" stroke-width="2.5"/>
- <path d="M19 87Q25 82 34 89L34 101 20 104Z" fill="#e8c99b" opacity=".8"/>
- <path d="M30 72Q21 82 27 103M68 72Q78 82 73 103" fill="none" stroke="#896449" stroke-width="3"/>
- <!-- torso -->
- <path d="M31 67Q50 58 69 68L75 112Q51 124 25 112Z" fill="url(#cloth${c.shirt.replace('#','')})" stroke="#8d6447" stroke-width="2.5"/>
- <path d="M39 68L50 83 61 68 63 112H37Z" fill="${c.skirt}" stroke="#8d6447" stroke-width="1.5"/>
- <path class="walk-arms" d="M29 77Q18 86 24 105M70 77Q82 87 76 105" fill="none" stroke="url(#skin${c.shirt.replace('#','')})" stroke-width="10" stroke-linecap="round"/>
- <circle cx="23" cy="107" r="6" fill="${c.skin}" stroke="#b67f61" stroke-width="1.5"/><circle cx="77" cy="107" r="6" fill="${c.skin}" stroke="#b67f61" stroke-width="1.5"/>
- <!-- neck -->
- <rect x="43" y="56" width="14" height="16" rx="6" fill="${c.skin}"/>
- <!-- ears and face -->
- <circle cx="27" cy="39" r="8" fill="${c.skin}"/><circle cx="73" cy="39" r="8" fill="${c.skin}"/>
- <ellipse cx="50" cy="39" rx="27" ry="32" fill="${c.skin}" stroke="#b47d5e" stroke-width="2"/>
- <!-- hair cap -->
- <path d="M23 39Q15 5 49 6Q84 4 78 42Q69 25 57 23Q45 31 23 39Z" fill="${c.hair}" stroke="#50392c" stroke-width="2"/>
- <path d="M24 32Q16 53 29 66Q34 56 34 37M76 31Q84 51 70 66Q66 54 66 36" fill="${c.hair}" stroke="#50392c" stroke-width="2"/>
- ${bow}
- <!-- face details -->
- <ellipse cx="40" cy="42" rx="3.4" ry="4.8" fill="#49352d"/><ellipse cx="60" cy="42" rx="3.4" ry="4.8" fill="#49352d"/>
- <circle cx="41" cy="40" r="1.2" fill="#fff"/><circle cx="61" cy="40" r="1.2" fill="#fff"/>
- <ellipse cx="32" cy="51" rx="5" ry="2.7" fill="#e9948b" opacity=".65"/><ellipse cx="68" cy="51" rx="5" ry="2.7" fill="#e9948b" opacity=".65"/>
- <path d="M44 56Q50 62 57 56" fill="none" stroke="#a75e55" stroke-width="2" stroke-linecap="round"/>
- <!-- highlights -->
- <path d="M28 25Q39 10 55 13" fill="none" stroke="#ffffff" stroke-width="3" opacity=".22" stroke-linecap="round"/>
- </svg>`;
-}
-function spawnCustomer(){
- const layer=document.getElementById('shopperLayer');
- if(!layer || layer.children.length>=3)return;
- const design=shopperDesigns[Math.floor(Math.random()*shopperDesigns.length)];
- const el=document.createElement('div');el.className='shopper';
- el.style.setProperty('--duration',(13+Math.random()*5)+'s');
- el.innerHTML=chibiSvg(design)+`<span class="bubble">${customerBubbles[Math.floor(Math.random()*customerBubbles.length)]}</span>`;
- layer.appendChild(el);
- const pause=6200+Math.random()*900;
- setTimeout(()=>{
-   const p=products.filter(x=>x.stock>0).sort(()=>Math.random()-.5)[0];
-   if(p){
-     p.stock--;state.money+=p.price;state.sales+=p.price;state.todaySales=(state.todaySales||0)+p.price;
-     state.visitors++;state.history.push({day:state.day,note:'顾客购买 '+p.name,amount:p.price});
-     if(state.history.length>300)state.history=state.history.slice(-300);
-     save();
-     const b=el.querySelector('.bubble');if(b)b.textContent='买到啦！谢谢你～';
-     el.style.filter='drop-shadow(0 0 8px #ffe7a4)';
-   }else{const b=el.querySelector('.bubble');if(b)b.textContent='商品卖完啦…';}
- },pause);
- el.addEventListener('animationend',()=>el.remove());
-}
-let customerInterval=null;
-function startCustomerFlow(){
- if(customerInterval)clearInterval(customerInterval);
- spawnCustomer();
- customerInterval=setInterval(spawnCustomer,4700);
-}
-
-document.getElementById('nav').addEventListener('click',e=>{let b=e.target.closest('button[data-tab]');if(b)renderTab(b.dataset.tab)});
-render();startCustomerFlow();setInterval(()=>{if(state.clean>0){state.clean=Math.max(0,state.clean-1);save()}},180000);
+let state=JSON.parse(localStorage.getItem('mlg-v5')||'null')||{money:500,day:1,heart:0,customers:0,clean:100,sales:0,closed:0};
+let visitors=[],nextVisitor=0,customerTotal=0;
+function save(){localStorage.setItem('mlg-v5',JSON.stringify(state));updateUI()}
+function updateUI(){money.textContent='🪙 RM '+state.money.toFixed(2);heart.textContent='❤️ '+state.heart;day.textContent='📅 第 '+state.day+' 天';dayline.textContent='第 '+state.day+' 个温暖日子';customerCount.textContent=state.customers+' 位';cleanValue.textContent=state.clean+'%';cleanBar.style.width=state.clean+'%';loveValue.textContent=state.heart;stockCount.textContent=products.length+' 种商品';}
+const ns='http://www.w3.org/2000/svg';
+function svgEl(tag,attrs,parent){let e=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v));parent.appendChild(e);return e}
+function drawPackage(x,y,w,h,color,idx,parent){let g=svgEl('g',{transform:`translate(${x} ${y})`},parent);svgEl('rect',{x:1,y:3,width:w,height:h,rx:5,fill:'#68482f',opacity:.2},g);svgEl('rect',{width:w,height:h,rx:5,fill:color,stroke:'#704d36','stroke-width':2},g);svgEl('rect',{x:4,y:5,width:w-8,height:h*.34,rx:3,fill:'#fff4df',opacity:.8},g);svgEl('path',{d:`M${w*.18} ${h*.64}h${w*.64}`,stroke:'#fff5df','stroke-width':2,opacity:.8},g);if(idx%3===0)svgEl('circle',{cx:w/2,cy:h*.8,r:3,fill:'#fff2d7'},g)}
+function makeShelf(){let root=document.getElementById('shelfGoods');products.forEach((p,i)=>{let row=Math.floor(i/7),col=i%7;let x=48+col*72+(row%2?3:0),y=202+row*96;let color=p.color;drawPackage(x,y,52,61,color,i,root);svgEl('rect',{x:x+8,y:y+68,width:36,height:3,rx:2,fill:'#f5d39d',opacity:.8},root)})}
+function makeFridge(){let root=document.getElementById('fridgeGoods');for(let r=0;r<3;r++)for(let c=0;c<4;c++){let p=products[(r*4+c)%products.length],x=22+c*40,y=35+r*92;drawPackage(x,y,29,62,p.color,r+c,root)}}
+function character(id,x,y,kind,name){let g=svgEl('g',{class:'person',id:'person'+id,transform:`translate(${x} ${y}) scale(${kind==='manager'?.88:.92})`},document.getElementById('people'));svgEl('ellipse',{cx:0,cy:0,rx:35,ry:9,fill:'#765334',opacity:.2},g);
+let body=svgEl('g',{transform:'translate(-30 -130)'},g);
+svgEl('path',{d:'M17 72Q30 64 43 72L47 111Q30 121 12 111Z',fill:kind==='manager'?'#91ad7b':'#88b8c8',stroke:'#77553e','stroke-width':3},body);
+svgEl('path',{d:'M15 78Q3 80 5 103L13 111M44 78Q57 80 56 103L48 111',fill:'none',stroke:'#e9b99b','stroke-width':9,'stroke-linecap':'round',class:'arms'},body);
+svgEl('path',{d:'M19 108L17 132L28 132L31 111L37 132L48 132L44 108Z',fill:kind==='manager'?'#66577d':'#536f8d',stroke:'#725039','stroke-width':2,class:'legs'},body);
+svgEl('path',{d:'M15 130Q9 134 12 139H29Q31 133 25 130M38 130Q34 135 39 139H55Q57 133 48 130',fill:'#f8ead1',stroke:'#76563d','stroke-width':2},body);
+if(kind!=='manager'){svgEl('path',{d:'M11 76Q0 84 8 109L17 112L20 79Z',fill:'#c58b50',stroke:'#765039','stroke-width':3},body);svgEl('path',{d:'M12 83L19 91L15 115',fill:'none',stroke:'#6e513d','stroke-width':3},body)}
+svgEl('rect',{x:11,y:76,width:36,height:31,rx:7,fill:'none',stroke:'#fff0d1','stroke-width':2,opacity:.5},body);
+svgEl('ellipse',{cx:31,cy:48,rx:23,ry:27,fill:'#edc09e',stroke:'#77553e','stroke-width':2},body);
+svgEl('path',{d:'M8 48Q1 13 28 15Q55 11 55 44L49 38Q43 27 34 30Q21 35 12 29Z',fill:kind==='manager'?'#6b4435':'#684331',stroke:'#543828','stroke-width':3});
+svgEl('path',{d:'M8 42Q1 63 14 70L10 48M52 42Q61 61 47 70L50 48',fill:'#684331'},body);
+svgEl('circle',{cx:23,cy:49,r:2.7,fill:'#49362d'},body);svgEl('circle',{cx:40,cy:49,r:2.7,fill:'#49362d'},body);
+svgEl('path',{d:'M26 61Q31 66 37 61',fill:'none',stroke:'#b76f68','stroke-width':2.5,'stroke-linecap':'round'},body);
+svgEl('ellipse',{cx:16,cy:58,rx:5,ry:3,fill:'#e99a8c',opacity:.6},body);svgEl('ellipse',{cx:46,cy:58,rx:5,ry:3,fill:'#e99a8c',opacity:.6},body);
+let label=svgEl('text',{x:0,y:-143,'text-anchor':'middle',class:'bubble'},g);label.textContent=name;
+return g}
+function spawn(){if(visitors.length>=3)return;let id=++nextVisitor;let startX=70+Math.random()*80;let g=character(id,startX,590,'customer',['小葵','安安','米米','乐乐'][Math.floor(Math.random()*4)]);let path=[{x:190,y:590},{x:320,y:560},{x:440,y:500},{x:550,y:560},{x:710,y:600}];let v={id,g,path,index:0,x:startX,y:590,wait:0};visitors.push(v);walk(v)}
+function walk(v){if(!visitors.includes(v))return;let target=v.path[v.index];let dx=target.x-v.x,dy=target.y-v.y,dist=Math.hypot(dx,dy);if(dist<4){v.index++;if(v.index>=v.path.length){shopFor(v);return}setTimeout(()=>walk(v),350+Math.random()*500);return}let step=Math.min(2.1,dist);v.x+=dx/dist*step;v.y+=dy/dist*step;v.g.setAttribute('transform',`translate(${v.x} ${v.y}) scale(.92)`);requestAnimationFrame(()=>walk(v))}
+function shopFor(v){v.g.classList.add('paused');let available=products.filter(p=>p.qty>0);if(available.length){let p=available[Math.floor(Math.random()*available.length)];p.qty--;state.money+=p.price;state.sales++;state.customers++;state.heart+=Math.random()<.35?1:0;toast('🛍️ '+p.name+' 卖出 RM '+p.price.toFixed(2));save()}setTimeout(()=>{v.g.remove();visitors=visitors.filter(x=>x!==v)},1400)}
+function toast(t){let el=document.getElementById('toast');el.textContent=t;el.style.display='block';clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.style.display='none',2100)}
+function checkout(){let sold=state.sales;toast(sold?'🧾 今日已自动完成 '+sold+' 笔销售！':'🧾 顾客正在慢慢挑选商品');}
+function cleanShop(){state.clean=100;state.heart+=1;save();toast('🧹 店铺闪闪发亮！顾客好感 +1')}
+function nextDay(){if(state.sales===0){toast('今天还没有营业记录，再等等顾客吧！');return}state.day++;state.sales=0;state.clean=Math.max(65,state.clean-10);products.forEach(p=>p.qty=Math.max(0,p.qty));save();toast('🌙 打烊完成！新的一天开始啦')}
+function openPanel(type){let c=document.getElementById('modalContent'),title='',body='';if(type==='stock'||type==='supply'){title=type==='stock'?'📦 商品库存':'🛒 进货补货';body=products.map((p,i)=>`<div class="item"><div><b>${p.name}</b><div class="muted">售价 RM ${p.price.toFixed(2)} · 库存 ${p.qty}</div></div><button onclick="restock(${i})">补货 RM ${(p.price*.45*5).toFixed(2)}</button></div>`).join('')}else if(type==='customers'){title='💬 顾客互动';body=`<p>今天有 ${state.customers} 位顾客来过店里。</p><div class="item"><b>小葵：这家店好温馨呀！</b><button onclick="reply()">亲切回应</button></div><div class="item"><b>安安：有我喜欢的零食吗？</b><button onclick="reply()">推荐商品</button></div>`}else if(type==='tasks'){title='📋 每日小任务';body=`<div class="item"><b>接待 3 位顾客</b><span>${Math.min(3,state.customers)}/3</span></div><div class="item"><b>保持店铺整洁</b><span>${state.clean}%</span></div><div class="item"><b>卖出 5 件商品</b><span>${Math.min(5,state.sales)}/5</span></div>`}else{title='👗 店长小衣橱';body='<p>今天也要好好经营杂货铺！</p><div class="item"><b>薄荷绿围裙</b><button onclick="toast(\'已穿上薄荷绿围裙！\')">穿上</button></div><div class="item"><b>奶油色工作服</b><button onclick="toast(\'已换上奶油色工作服！\')">穿上</button></div>'}c.innerHTML='<h2>'+title+'</h2><div class="item-list">'+body+'</div>';document.getElementById('modalBg').style.display='flex'}
+function closePanel(){document.getElementById('modalBg').style.display='none'}
+function restock(i){let p=products[i],cost=p.price*.45*5;if(state.money<cost){toast('金币不够啦！');return}state.money-=cost;p.qty+=5;save();openPanel('stock');toast('📦 '+p.name+' 已补货 5 件')}
+function reply(){state.heart+=2;save();toast('💗 顾客很开心！好感 +2')}
+function navTo(page,btn){document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
+makeShelf();makeFridge();updateUI();setTimeout(spawn,800);setInterval(()=>{if(Math.random()<.72)spawn();state.clean=Math.max(55,state.clean-1);updateUI();save()},9000);
 </script></body></html>
