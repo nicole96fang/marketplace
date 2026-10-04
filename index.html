@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#c9d9d5">
-<title>小镇杂货铺 · V7.0 空店铺</title>
+<title>乡间小杂货铺 · V7.5 前置招牌</title>
 <style>
 :root{--cream:#fff5df;--ink:#654a35;--brown:#a9784f;--pink:#e99583;--green:#9dbb83;--blue:#91bdc8}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#c9d9d5;font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink)}
@@ -405,6 +405,113 @@ renderer.domElement.addEventListener('pointerup',e=>{
     if(pivot){pivot.userData.isOpen=!pivot.userData.isOpen;pivot.userData.target=pivot.userData.isOpen?-1.18:0;}
   }
 });
+
+
+// V7.5 FRONT FASCIA SIGN — mounted on the CUSTOMER-FACING FRONT edge (+Z).
+// The sign is deliberately above the open storefront, not on the rear roof.
+const signWoodMat=new THREE.MeshStandardMaterial({color:'#a9754d',roughness:.72});
+const signTrimMat=new THREE.MeshStandardMaterial({color:'#6f472f',roughness:.76});
+const signMetalMat=new THREE.MeshStandardMaterial({color:'#292a29',metalness:.68,roughness:.3});
+const signGlowMat=new THREE.MeshStandardMaterial({
+  color:'#fff0ce',emissive:'#ffc66e',emissiveIntensity:2.2,roughness:.25
+});
+
+// Custom high-resolution timber sign face with the exact shop name.
+const signCanvas=document.createElement('canvas');
+signCanvas.width=2048;signCanvas.height=320;
+const sg=signCanvas.getContext('2d');
+const signGrad=sg.createLinearGradient(0,0,0,320);
+signGrad.addColorStop(0,'#d6a879');signGrad.addColorStop(.48,'#bd895b');signGrad.addColorStop(1,'#a9754b');
+sg.fillStyle=signGrad;sg.fillRect(0,0,2048,320);
+// Fine natural timber grain.
+let signSeed=4821;
+const signRand=()=>{signSeed=(signSeed*9301+49297)%233280;return signSeed/233280;};
+for(let i=0;i<115;i++){
+  const y=signRand()*320,x=signRand()*2048,w=80+signRand()*560;
+  sg.strokeStyle=i%3===0?'#f4d3a6':'#70482f';
+  sg.globalAlpha=.10+signRand()*.12;sg.lineWidth=1+signRand()*3;
+  sg.beginPath();sg.moveTo(x,y);sg.bezierCurveTo(x+w*.3,y-4,x+w*.7,y+4,x+w,y);sg.stroke();
+}
+sg.globalAlpha=1;
+// Inner inset border.
+sg.strokeStyle='#f0d0a7';sg.lineWidth=12;sg.strokeRect(22,22,2004,276);
+sg.strokeStyle='#805435';sg.lineWidth=5;sg.strokeRect(37,37,1974,246);
+// Shop name with a warm cream outline and dark raised-looking face.
+sg.textAlign='center';sg.textBaseline='middle';
+sg.font='900 184px "PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif';
+sg.lineJoin='round';sg.shadowColor='rgba(55,31,17,.48)';sg.shadowBlur=8;sg.shadowOffsetY=9;
+sg.lineWidth=25;sg.strokeStyle='#fff0d9';sg.strokeText('乡间小杂货铺',1024,165);
+sg.fillStyle='#60351f';sg.fillText('乡间小杂货铺',1024,165);
+sg.shadowColor='transparent';sg.shadowBlur=0;sg.shadowOffsetY=0;
+const signTexture=new THREE.CanvasTexture(signCanvas);
+signTexture.colorSpace=THREE.SRGBColorSpace;
+signTexture.anisotropy=8;
+const signFaceMat=new THREE.MeshStandardMaterial({map:signTexture,roughness:.68});
+
+// Wide fascia board sits just in front of the front roof beam, facing outward.
+const signW=16.8, signH=2.55, signY=8.55, signZ=9.02;
+addBox(signW+.34,signH+.30,.42,signTrimMat,0,signY,signZ);
+const signFace=new THREE.Mesh(new THREE.PlaneGeometry(signW,signH),signFaceMat);
+signFace.position.set(0,signY,signZ+.216);scene.add(signFace);
+// Solid timber top/bottom caps and end posts create a readable 3D frame.
+addBox(signW+.48,.16,.52,signWoodMat,0,signY+signH/2+.08,signZ);
+addBox(signW+.48,.16,.52,signWoodMat,0,signY-signH/2-.08,signZ);
+for(const x of [-signW/2-.12,signW/2+.12]){
+  addBox(.18,signH+.30,.54,signWoodMat,x,signY,signZ);
+  // Decorative round metal fixing bolts.
+  for(const y of [signY-signH/2+.18,signY+signH/2-.18]){
+    const bolt=new THREE.Mesh(new THREE.CylinderGeometry(.055,.055,.035,16),signMetalMat);
+    bolt.rotation.x=Math.PI/2;bolt.position.set(x,y,signZ+.29);scene.add(bolt);
+  }
+}
+// Timber support brackets tie the sign back to the front roof lintel.
+for(const x of [-6.9,0,6.9]){
+  addBox(.16,.72,.18,beamMat,x,7.18,8.78);
+  const brace=new THREE.Mesh(new THREE.BoxGeometry(.16,.78,.18),beamMat);
+  brace.position.set(x,7.62,8.78);brace.rotation.z=x===0?0:(x<0?-.45:.45);scene.add(brace);
+}
+// Three black gooseneck lamps above the sign, aimed down at its lettering.
+for(const x of [-5.7,0,5.7]){
+  const stem=new THREE.Mesh(new THREE.CylinderGeometry(.055,.055,.32,12),signMetalMat);
+  stem.position.set(x,9.99,signZ-.03);scene.add(stem);
+  const armCurve=new THREE.QuadraticBezierCurve3(
+    new THREE.Vector3(x,10.12,signZ-.03),
+    new THREE.Vector3(x,10.42,signZ+.02),
+    new THREE.Vector3(x,10.32,signZ+.24)
+  );
+  const arm=new THREE.Mesh(new THREE.TubeGeometry(armCurve,16,.045,8,false),signMetalMat);
+  scene.add(arm);
+  const shade=new THREE.Mesh(new THREE.CylinderGeometry(.17,.25,.22,20),signMetalMat);
+  shade.position.set(x,10.22,signZ+.27);shade.rotation.x=Math.PI;scene.add(shade);
+  const bulb=new THREE.Mesh(new THREE.SphereGeometry(.105,16,12),signGlowMat);
+  bulb.position.set(x,10.08,signZ+.27);scene.add(bulb);
+  const lampLight=new THREE.PointLight(0xffcf86,8,5,2);
+  lampLight.position.set(x,10.0,signZ+.52);scene.add(lampLight);
+}
+// Small greenery and white blossoms at both ends, kept clear of the sign text.
+const signLeafMat=new THREE.MeshStandardMaterial({color:'#527d45',roughness:.8});
+const signFlowerMat=new THREE.MeshStandardMaterial({color:'#fff5df',roughness:.65});
+const signCenterMat=new THREE.MeshStandardMaterial({color:'#e5b85e',roughness:.7});
+for(const side of [-1,1]){
+  const bx=side*7.55;
+  for(let i=0;i<5;i++){
+    const leaf=new THREE.Mesh(new THREE.SphereGeometry(.13,12,10),signLeafMat);
+    leaf.scale.set(.55,1.65,.48);
+    leaf.position.set(bx+side*(i%2)*.16,signY-.48+(i%3)*.16,signZ+.29);
+    leaf.rotation.z=side*(.35+i*.12);scene.add(leaf);
+  }
+  for(let i=0;i<3;i++){
+    const fx=bx-side*.28+(i-1)*.18, fy=signY-.48+(i%2)*.15;
+    const flower=new THREE.Group();flower.position.set(fx,fy,signZ+.34);scene.add(flower);
+    for(let p=0;p<5;p++){
+      const a=p*Math.PI*2/5;
+      const petal=new THREE.Mesh(new THREE.SphereGeometry(.075,10,8),signFlowerMat);
+      petal.position.set(Math.cos(a)*.09,Math.sin(a)*.09,0);flower.add(petal);
+    }
+    const center=new THREE.Mesh(new THREE.SphereGeometry(.045,10,8),signCenterMat);
+    flower.add(center);
+  }
+}
 
 // Subtle natural daylight from the open front; no props, fixtures or furniture.
 const ambientPlane=new THREE.Mesh(
