@@ -1,163 +1,98 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#e8d8b8"><title>小镇杂货铺 V2 · My Little Grocery</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f1dfbd">
+<title>小镇杂货铺 V3 · My Little Grocery</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
-:root{--ink:#594936;--cream:#fff5df;--paper:#f8e8c9;--wood:#9a6845;--wood2:#c18a5d;--green:#66885b;--pink:#e99d91;--blue:#83b5c2;--shadow:0 7px 0 rgba(92,61,34,.13),0 12px 25px rgba(83,59,35,.12)}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#c9d8b6,#e9d8b6 48%,#d9c8a7);color:var(--ink);font-family:Nunito,"Noto Sans SC",sans-serif}
-button,input,select{font:inherit}button{cursor:pointer;border:0;color:var(--ink);font-weight:900}
-.game{max-width:1500px;margin:auto;padding:12px;min-height:100vh}
-.top{display:flex;align-items:center;gap:12px;justify-content:space-between;background:var(--cream);border:3px solid #d6b78a;border-radius:22px;padding:9px 14px;box-shadow:var(--shadow);position:relative;z-index:2}
-.brand{display:flex;align-items:center;gap:10px}.logo{font-size:34px;filter:drop-shadow(2px 3px 0 #d6b78a)}.brand h1{font-size:clamp(17px,2vw,25px);margin:0;line-height:1.1}.brand small{font-size:10px;letter-spacing:2px;color:#9a7957}
-.stats{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.pill{background:#f4dfb8;border:2px solid #dfc18e;border-radius:16px;padding:7px 12px;font-weight:900;white-space:nowrap}
-.layout{display:grid;grid-template-columns:76px minmax(0,1fr);gap:12px;margin-top:12px}
-nav{display:flex;flex-direction:column;gap:8px}nav button{background:#f9e9ca;border:2px solid #d2ae7d;border-radius:17px;padding:9px 4px;box-shadow:0 4px 0 #bd9567;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:3px}nav button span{font-size:23px}nav button.active{background:#f0bd8d;transform:translateY(2px);box-shadow:0 2px 0 #bd9567}
-main{min-width:0}.scene-wrap{background:#e9d6ae;border:4px solid #c69b6c;border-radius:23px;padding:7px;box-shadow:var(--shadow);overflow:hidden;position:relative}
-.scene-head{display:flex;justify-content:space-between;align-items:center;padding:5px 9px 9px;font-weight:900}.scene-head small{font-size:11px;color:#927250}
-canvas{display:block;width:100%;height:auto;aspect-ratio:1100/610;border-radius:14px;background:#c9d9b4;touch-action:manipulation}
-.scene-foot{display:flex;gap:7px;flex-wrap:wrap;padding:9px 2px 2px}
-.action{background:#fff0d1;border:2px solid #d4ae7b;border-radius:14px;padding:9px 13px;box-shadow:0 4px 0 #c39b69;font-size:13px}
-.action.primary{background:#e99d78;color:#fff9e8;border-color:#ca805e}.action.green{background:#a9c18b}.action.blue{background:#a8cbd0}.action:active{transform:translateY(3px);box-shadow:0 1px 0 #c39b69}
-.panel{margin-top:12px;background:#fff2d8;border:3px solid #d4b587;border-radius:20px;padding:13px;box-shadow:var(--shadow)}
-.panel h2{font-size:18px;margin:0 0 10px}.muted{color:#9a805e;font-size:12px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px}
-.card{background:#fff9e9;border:2px solid #e3c99d;border-radius:15px;padding:10px;min-width:0}.card .emoji{font-size:28px}.card strong{display:block}.card small{color:#997d5a}.card button{margin-top:8px;width:100%}
-.row{display:flex;align-items:center;justify-content:space-between;gap:8px}.progress{height:9px;background:#e9d7b7;border-radius:9px;overflow:hidden}.progress i{display:block;height:100%;background:#83a66e;border-radius:9px}
-.modal-bg{position:fixed;inset:0;background:#493b2c88;display:none;align-items:center;justify-content:center;padding:15px;z-index:10}.modal-bg.show{display:flex}.modal{background:#fff2d8;border:4px solid #c99d6b;border-radius:22px;padding:17px;width:min(560px,100%);max-height:85vh;overflow:auto;box-shadow:0 15px 50px #392a1c66}.modal h2{margin:0 0 12px}.modal .close{float:right;background:#e9c59b;border-radius:50%;width:32px;height:32px}.field{display:grid;gap:5px;margin:9px 0}.field input,.field select{border:2px solid #dfc49a;border-radius:11px;padding:9px;background:#fffaf0;color:var(--ink);width:100%}
-.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#594936;color:#fff4dc;padding:11px 18px;border-radius:30px;z-index:20;display:none;box-shadow:var(--shadow);font-weight:800}
-@media(max-width:700px){.game{padding:7px}.top{padding:7px 9px;border-radius:16px}.logo{font-size:27px}.stats{gap:4px}.pill{font-size:11px;padding:5px 7px}.layout{grid-template-columns:54px minmax(0,1fr);gap:7px;margin-top:8px}nav{gap:6px}nav button{font-size:9px;padding:7px 2px;border-radius:12px}nav button span{font-size:20px}.scene-wrap{padding:5px;border-radius:16px}.scene-head{font-size:12px}.scene-head small{font-size:9px}.action{font-size:11px;padding:8px 9px}.panel{padding:10px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+:root{--ink:#624b35;--cream:#fff4dc;--paper:#f8e8c8;--wood:#b98455;--wood-dark:#8c603d;--pink:#e99579;--green:#9eb982;--blue:#9fc5cb;--line:#d9b98b;--shadow:0 5px 0 rgba(111,75,42,.22),0 10px 24px rgba(90,63,36,.12)}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#e6efcf,#d9d5b4 55%,#c8b58f);font-family:Nunito,"Noto Sans SC",sans-serif;color:var(--ink)}
+button,input,select{font:inherit}button{cursor:pointer;color:inherit;font-weight:900}
+.app{max-width:1500px;margin:auto;padding:10px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--cream);border:4px solid #d4b183;border-radius:24px;padding:9px 15px;box-shadow:var(--shadow)}
+.brand{display:flex;align-items:center;gap:10px}.brand .house{font-size:36px}.brand h1{font-size:clamp(18px,2vw,27px);margin:0}.brand small{font-size:10px;letter-spacing:2px;color:#987a59}
+.stats{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.stat{background:#f3dfb9;border:2px solid #dfc18f;border-radius:30px;padding:7px 12px;font-weight:900;white-space:nowrap}
+.layout{display:grid;grid-template-columns:84px minmax(0,1fr);gap:12px;margin-top:12px}
+nav{display:flex;flex-direction:column;gap:8px}nav button{border:3px solid #d0a979;background:#f9e8c8;border-radius:17px;padding:8px 3px;box-shadow:0 4px 0 #b98e61;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px}nav button span{font-size:25px}nav button.active{background:#f1bd91;transform:translateY(2px);box-shadow:0 2px 0 #b98e61}
+main{min-width:0}.stage{background:#ead5aa;border:4px solid #bd9365;border-radius:25px;padding:8px;box-shadow:var(--shadow)}.stagehead{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:3px 7px 9px;font-weight:900}.stagehead small{font-size:11px;color:#8e704e}
+.scene{position:relative;overflow:hidden;border-radius:17px;border:4px solid #c69b6b;background:#d4dfc2;aspect-ratio:1165/635;min-height:220px}
+.scene img{display:block;width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.hotspot{position:absolute;border:2px solid transparent;background:transparent;border-radius:16px;z-index:2;transition:.15s}
+.hotspot:focus,.hotspot:hover{border-color:#fff1bd;background:#fff3bd22;box-shadow:0 0 0 3px #956b3d55}
+.hotspot span{position:absolute;left:50%;top:-25px;transform:translateX(-50%);background:#fff1d5;border:1px solid #c99e6c;border-radius:20px;padding:3px 9px;font-size:11px;white-space:nowrap;opacity:0;pointer-events:none}
+.hotspot:hover span,.hotspot:focus span{opacity:1}
+.hs-fruit{left:2%;top:30%;width:28%;height:52%}.hs-snack{left:29%;top:38%;width:27%;height:43%}.hs-drink{left:45%;top:5%;width:25%;height:55%}.hs-daily{left:68%;top:8%;width:25%;height:48%}.hs-bakery{left:87%;top:48%;width:12%;height:42%}.hs-cash{left:77%;top:55%;width:22%;height:43%}
+.actions{display:flex;gap:8px;flex-wrap:wrap;padding:10px 2px 2px}.btn{border:3px solid #d3b183;border-radius:17px;background:#fff0d1;padding:10px 13px;box-shadow:0 4px 0 #b99162;font-size:13px}.btn.primary{background:var(--pink);color:#fff8e8;border-color:#ce8668}.btn.green{background:var(--green)}.btn.blue{background:var(--blue)}.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #b99162}
+.panel{margin-top:12px;background:#fff3dc;border:4px solid #d6b98c;border-radius:23px;padding:13px;box-shadow:var(--shadow)}.panel h2{font-size:19px;margin:0 0 10px}.muted{font-size:12px;color:#987e5d}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px}.card{background:#fff9e9;border:2px solid #e3cba3;border-radius:17px;padding:10px;min-width:0}.card .emoji{font-size:28px}.card strong{display:block}.card small{display:block;color:#967b5a}.card button{width:100%;margin-top:8px}.row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.modalbg{display:none;position:fixed;inset:0;background:#44352299;z-index:10;align-items:center;justify-content:center;padding:14px}.modalbg.show{display:flex}.modal{background:#fff2d8;border:4px solid #c99f70;border-radius:23px;padding:16px;width:min(650px,100%);max-height:86vh;overflow:auto;box-shadow:0 18px 60px #30221366}.modal h2{margin:0 0 12px}.close{float:right;border:0;border-radius:50%;width:34px;height:34px;background:#e9c89e;font-size:18px}.field{display:grid;gap:5px;margin:9px 0}.field input,.field select{width:100%;padding:10px;border:2px solid #ddc39a;border-radius:12px;background:#fffaf0;color:var(--ink)}
+.progress{height:10px;border-radius:9px;background:#ead9b9;overflow:hidden}.progress i{display:block;height:100%;background:#82a76e}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#624b35;color:#fff4dc;border-radius:30px;padding:11px 18px;z-index:20;display:none;box-shadow:var(--shadow);font-weight:900;max-width:90%;text-align:center}
+.tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}.tabs button{background:#efd7b2;border:2px solid #d4b183;border-radius:13px;padding:7px 12px}.tabs button.active{background:#fff2d7}
+@media(max-width:720px){.app{padding:6px}.top{padding:7px 9px;border-radius:17px}.brand .house{font-size:27px}.brand small{font-size:8px}.stats{gap:4px}.stat{font-size:10px;padding:5px 7px}.layout{grid-template-columns:57px minmax(0,1fr);gap:7px;margin-top:8px}nav{gap:6px}nav button{font-size:9px;padding:7px 2px;border-radius:13px}nav button span{font-size:21px}.stage{padding:5px;border-radius:17px}.stagehead{font-size:12px}.stagehead small{font-size:9px}.scene{min-height:205px;aspect-ratio:1.12}.scene img{object-fit:cover}.btn{font-size:11px;padding:8px 9px}.panel{padding:10px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style></head>
-<body><div class="game">
-<header class="top"><div class="brand"><div class="logo">🏡</div><div><h1>小镇杂货铺</h1><small>MY LITTLE GROCERY · V2</small></div></div><div class="stats"><div class="pill">🪙 RM <b id="money">500</b></div><div class="pill">❤️ <b id="hearts">0</b></div><div class="pill">📅 第 <b id="day">1</b> 天</div><div class="pill">☀️ <b id="weather">晴天</b></div></div></header>
+<body><div class="app">
+<header class="top"><div class="brand"><div class="house">🏡</div><div><h1>小镇杂货铺</h1><small>MY LITTLE GROCERY</small></div></div><div class="stats"><div class="stat">🪙 RM <b id="money">500.00</b></div><div class="stat">❤️ <b id="hearts">0</b></div><div class="stat">📅 第 <b id="day">1</b> 天</div><div class="stat">☀️ <b id="weather">晴天</b></div></div></header>
 <div class="layout"><nav id="nav">
 <button class="active" data-tab="store"><span>🏠</span>店铺</button><button data-tab="stock"><span>📦</span>库存</button><button data-tab="market"><span>🛒</span>进货</button><button data-tab="customers"><span>👥</span>顾客</button><button data-tab="clean"><span>🧹</span>清洁</button><button data-tab="tasks"><span>📋</span>任务</button><button data-tab="look"><span>👗</span>店长</button><button data-tab="ledger"><span>💰</span>账本</button><button data-tab="save"><span>💾</span>存档</button>
 </nav><main>
-<section class="scene-wrap"><div class="scene-head"><div>🌼 今日营业中 <small id="dateLabel">· 小镇的美好一天</small></div><small id="shopStatus">点击货架互动 · 顾客正在逛店</small></div>
-<canvas id="scene" width="1100" height="610" aria-label="小镇杂货铺游戏场景"></canvas>
-<div class="scene-foot"><button class="action primary" onclick="openCheckout()">🧾 收银结账</button><button class="action green" onclick="restockQuick()">📦 快速补货</button><button class="action blue" onclick="chatCustomer()">💬 和顾客聊天</button><button class="action" onclick="cleanShop()">🧹 打扫卫生</button><button class="action" onclick="endDay()">🌙 今日打烊</button></div></section>
+<section class="stage"><div class="stagehead"><div>🌼 今日营业中 <small id="dateLabel">· 小镇的美好一天</small></div><small id="status">精致杂货铺 · 点击货架互动</small></div>
+<div class="scene" id="scene">
+<img src="assets/grocery-scene.jpg" alt="小镇杂货铺3D微缩场景">
+<button class="hotspot hs-fruit" onclick="openShelf('新鲜蔬果',['apple','banana','orange','tomato','carrot'])" aria-label="新鲜蔬果货架"><span>🍎 新鲜蔬果</span></button>
+<button class="hotspot hs-snack" onclick="openShelf('零食与食品',['noodle','chips','egg','cookie','rice'])" aria-label="零食食品货架"><span>🍪 零食食品</span></button>
+<button class="hotspot hs-drink" onclick="openShelf('饮料与牛奶',['milk','water','juice','tea'])" aria-label="饮料冰柜"><span>🥛 饮料冰柜</span></button>
+<button class="hotspot hs-daily" onclick="openShelf('日用百货',['soap','tissue','toothpaste'])" aria-label="日用百货货架"><span>🧼 日用百货</span></button>
+<button class="hotspot hs-bakery" onclick="openShelf('面包点心',['bread','croissant','cake'])" aria-label="面包点心"><span>🥐 面包点心</span></button>
+<button class="hotspot hs-cash" onclick="openCheckout()" aria-label="收银台"><span>🧾 收银台</span></button>
+</div>
+<div class="actions"><button class="btn primary" onclick="openCheckout()">🧾 收银结账</button><button class="btn green" onclick="restockQuick()">📦 快速补货</button><button class="btn blue" onclick="chatCustomer()">💬 和顾客聊天</button><button class="btn" onclick="cleanShop()">🧹 打扫卫生</button><button class="btn" onclick="endDay()">🌙 今日打烊</button></div></section>
 <div id="content"></div></main></div></div>
-<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div><div class="toast" id="toast"></div>
+<div class="modalbg" id="modalbg"><div class="modal" id="modal"></div></div><div class="toast" id="toast"></div>
 <script>
 const products=[
-{id:'apple',name:'红苹果',emoji:'🍎',price:3,cost:1.5,stock:12,cat:'水果'},
-{id:'banana',name:'香蕉',emoji:'🍌',price:2.5,cost:1.2,stock:10,cat:'水果'},
-{id:'milk',name:'鲜牛奶',emoji:'🥛',price:5,cost:3,stock:8,cat:'饮料'},
-{id:'bread',name:'牛角面包',emoji:'🥐',price:4,cost:2,stock:7,cat:'面包'},
-{id:'egg',name:'新鲜鸡蛋',emoji:'🥚',price:6,cost:3.8,stock:10,cat:'食品'},
-{id:'noodle',name:'方便面',emoji:'🍜',price:3.5,cost:1.8,stock:9,cat:'食品'},
-{id:'water',name:'矿泉水',emoji:'🧃',price:2,cost:.8,stock:14,cat:'饮料'},
-{id:'chips',name:'薯片',emoji:'🍟',price:4.5,cost:2.2,stock:6,cat:'零食'},
-{id:'flower',name:'小雏菊',emoji:'🌼',price:5,cost:2,stock:4,cat:'日用品'},
-{id:'soap',name:'香皂',emoji:'🧼',price:3,cost:1.3,stock:5,cat:'日用品'}
+{id:'apple',name:'苹果',emoji:'🍎',cat:'生鲜',price:3,cost:1.5,stock:12},{id:'banana',name:'香蕉',emoji:'🍌',cat:'生鲜',price:2.5,cost:1.2,stock:8},{id:'orange',name:'橙子',emoji:'🍊',cat:'生鲜',price:3,cost:1.4,stock:9},{id:'tomato',name:'番茄',emoji:'🍅',cat:'生鲜',price:2.8,cost:1.2,stock:10},{id:'carrot',name:'胡萝卜',emoji:'🥕',cat:'生鲜',price:2,cost:.8,stock:7},
+{id:'milk',name:'鲜牛奶',emoji:'🥛',cat:'饮料',price:5,cost:3,stock:15},{id:'water',name:'矿泉水',emoji:'💧',cat:'饮料',price:2,cost:.8,stock:24},{id:'juice',name:'果汁',emoji:'🧃',cat:'饮料',price:4,cost:2,stock:9},{id:'tea',name:'茶饮',emoji:'🧋',cat:'饮料',price:4.5,cost:2.2,stock:8},
+{id:'bread',name:'面包',emoji:'🍞',cat:'面包',price:4,cost:2,stock:6},{id:'croissant',name:'牛角包',emoji:'🥐',cat:'面包',price:4.5,cost:2.2,stock:6},{id:'cake',name:'小蛋糕',emoji:'🧁',cat:'面包',price:5,cost:2.5,stock:5},
+{id:'noodle',name:'泡面',emoji:'🍜',cat:'食品',price:3.5,cost:1.8,stock:18},{id:'chips',name:'薯片',emoji:'🥔',cat:'食品',price:4.5,cost:2.2,stock:20},{id:'egg',name:'鸡蛋',emoji:'🥚',cat:'食品',price:6,cost:3.8,stock:10},{id:'cookie',name:'饼干',emoji:'🍪',cat:'食品',price:3,cost:1.3,stock:11},{id:'rice',name:'米袋',emoji:'🍚',cat:'食品',price:8,cost:5,stock:6},
+{id:'soap',name:'香皂',emoji:'🧼',cat:'日用品',price:3,cost:1.3,stock:5},{id:'tissue',name:'纸巾',emoji:'🧻',cat:'日用品',price:4,cost:2,stock:7},{id:'toothpaste',name:'牙膏',emoji:'🪥',cat:'日用品',price:5,cost:2.5,stock:4}
 ];
-const defaultState={money:500,day:1,hearts:0,sales:0,expenses:0,clean:100,manager:{name:'小芳',hair:'栗棕色',outfit:'围裙裙装',face:'😊'},tasks:[],history:[],chatCount:0,customers:3,visitors:0,decor:0,weather:'晴天'};
-let state=load();let currentTab='store';let toastTimer;
-let walker={x:720,y:452,dir:1,step:0}; let lastFrame=0;
-function load(){try{let d=JSON.parse(localStorage.getItem('mlg-save')||'{}');if(d.state){d.products?.forEach(saved=>{let item=products.find(x=>x.id===saved.id);if(item)Object.assign(item,saved)});return {...defaultState,...d.state}}return {...defaultState,...d}}catch(e){return {...defaultState}}}
-function save(){localStorage.setItem('mlg-save',JSON.stringify({state,products}));updateHud()}
-function updateHud(){money.textContent=state.money.toFixed(2);hearts.textContent=state.hearts;day.textContent=state.day;weather.textContent=state.weather;dateLabel.textContent='· 第 '+state.day+' 个温暖日子'}
-function notify(s){toast.textContent=s;toast.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.style.display='none',2200)}
-function drawScene(){
-const c=scene,ctx=c.getContext('2d'),w=c.width,h=c.height;ctx.clearRect(0,0,w,h);
-const poly=(pts,fill,stroke='#8e6848',lw=4)=>{ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(...p):ctx.moveTo(...p));ctx.closePath();ctx.fillStyle=fill;ctx.fill();ctx.lineWidth=lw;ctx.strokeStyle=stroke;ctx.stroke()};
-const rr=(x,y,ww,hh,r,fill,stroke='#a77a51',lw=3)=>{ctx.beginPath();ctx.roundRect(x,y,ww,hh,r);ctx.fillStyle=fill;ctx.fill();ctx.lineWidth=lw;ctx.strokeStyle=stroke;ctx.stroke()};
-const text=(t,x,y,size=20,color='#62482f',align='center')=>{ctx.font=`900 ${size}px Nunito, sans-serif`;ctx.textAlign=align;ctx.fillStyle=color;ctx.fillText(t,x,y)};
-const ellipse=(x,y,rx,ry,fill)=>{ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fillStyle=fill;ctx.fill()};
-const line=(x,y,x2,y2,col='#9b714b',lw=5)=>{ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x2,y2);ctx.strokeStyle=col;ctx.lineWidth=lw;ctx.stroke()};
-// garden backdrop
-let g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#a9c99a');g.addColorStop(1,'#e6d4a9');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
-for(let i=0;i<15;i++){let x=(i*83+25)%w,y=65+(i*37)%145;ellipse(x,y,40,22,'#7ea875');ellipse(x-15,y-9,24,17,'#93bd82')}
-rr(28,25,1044,535,24,'#f0d9b2','#a77a51',7);
-// shop back wall
-poly([[75,185],[540,50],[1025,185],[1025,490],[75,490]],'#e8c99b','#9d704a',6);
-poly([[75,185],[540,50],[1025,185],[540,330]],'#bd8b61','#946440',5);
-poly([[75,185],[540,330],[540,490],[75,490]],'#d9b58a','#9d704a',5);
-poly([[540,330],[1025,185],[1025,490],[540,490]],'#f0d8ad','#9d704a',5);
-// wall trim & windows
-for(let x of [115,890]){rr(x,170,105,145,9,'#a7c9c1','#875e3f',5);line(x+52,172,x+52,312,'#f7e7c7',7);line(x,240,x+105,240,'#f7e7c7',7)}
-// sign
-rr(345,72,360,66,17,'#fff0cd','#9c7048',5);text('🌷 小镇杂货铺 🌷',525,115,32);
-// floor
-poly([[75,490],[540,330],[1025,490],[540,570]],'#d9a875','#9b704c',5);
-for(let i=0;i<7;i++){line(115+i*67,477-i*22,540+i*45,558-i*11,'#c18e60',2)}
-// back shelves
-function shelf(x,y,ww,label,items){rr(x,y,ww,105,8,'#b77b4b','#835536',5);rr(x+5,y+5,ww-10,20,4,'#f4d5a4','#8d603c',2);text(label,x+ww/2,y+21,13);for(let r=0;r<2;r++){line(x+5,y+59+r*38,x+ww-5,y+59+r*38,'#704a31',5);items.forEach((it,i)=>{let xx=x+15+i*(ww-35)/items.length;rr(xx,y+29+r*38,24,27,5,['#e78d76','#8db5c6','#e8bf70','#94b47d'][i%4],'#946744',2);text(it,xx+12,y+49+r*38,16)})}}
-shelf(130,215,260,'🥫 零食饮料',['🥫','🥤','🍪','🍫','🧃','🥛']);shelf(420,160,250,'🍞 面包食品',['🍞','🥐','🍜','🥚','🧀']);shelf(700,235,255,'🧴 日用百货',['🧼','🧻','🧽','🪥','🧴']);
-// produce island
-poly([[125,390],[355,315],[480,365],[245,445]],'#9b663e','#71492e',5);poly([[125,390],[245,445],[245,490],[125,435]],'#b87d4d','#71492e',4);poly([[245,445],[480,365],[480,412],[245,490]],'#875633','#71492e',4);
-let fruit=['🍎','🍐','🍊','🍅','🥬','🥕'];fruit.forEach((f,i)=>{let x=170+(i%3)*83+(i>2?18:0),y=380+Math.floor(i/3)*39-(i%3)*12;text(f,x,y,30)});
-text('新鲜蔬果',295,465,16,'#fff1d1');
-// counter
-poly([[650,390],[870,320],[1010,370],[790,455]],'#bd8351','#805536',5);poly([[650,390],[790,455],[790,515],[650,450]],'#d5a16d','#805536',4);poly([[790,455],[1010,370],[1010,430],[790,515]],'#a56e45','#805536',4);rr(817,365,105,47,7,'#f9e8c7','#8c603c',3);text('收 银 台',870,395,19);text('🧾',950,393,30);
-// plant pots
-function plant(x,y){rr(x-19,y-25,38,32,7,'#c77f5d','#8c583f',3);ellipse(x,y-42,12,27,'#6e9b68');ellipse(x-13,y-49,13,19,'#83ad70');ellipse(x+14,y-51,13,19,'#78a66b')}
-plant(80,470);plant(1010,490);plant(575,500);
-// manager & customers chibi
-function person(x,y,shirt,hair,bag=false,scale=1){ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);ellipse(0,0,25,9,'#8a6746aa');rr(-17,-53,34,48,12,shirt,'#805c42',3);ellipse(0,-75,21,23,'#f2c9a3');ellipse(0,-91,22,13,hair);ellipse(-18,-77,7,15,hair);ellipse(-7,-74,2,3,'#594332');ellipse(7,-74,2,3,'#594332');ctx.beginPath();ctx.arc(0,-66,7,.1,Math.PI-.1);ctx.strokeStyle='#b86e60';ctx.lineWidth=2;ctx.stroke();line(-12,-12,-17,0,'#76513a',7);line(12,-12,17,0,'#76513a',7);if(bag){rr(16,-43,17,25,4,'#c88a51','#805b3e',2)}ctx.restore()}
-person(560,472,'#d58f78','#80543d',false,1.05);
-person(walker.x,walker.y,'#9bb9c0','#634c3e',true,.92);
-person(940,460,'#e6b47c','#805b42',true,.86);
-text('正在挑选商品…',walker.x,walker.y-112,13,'#74533a');
-// flowers & hanging lamps
-for(let x of [310,770]){line(x,140,x,178,'#755338',3);ellipse(x,180,18,9,'#f3d9a0');ellipse(x,176,11,8,'#fff0c5')}
-text('欢迎光临！',545,548,18,'#75533a');
-}
-
-// V2: click a physical shelf or the checkout counter to interact with the shop.
-scene.addEventListener('click',e=>{
- const r=scene.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*1100,y=(e.clientY-r.top)/r.height*610;
- if(y>320&&x>630){openCheckout();return}
- if(x<405&&y>205&&y<475){shelfInteraction('水果与蔬菜',['apple','banana']);return}
- if(x>=405&&x<690&&y>145&&y<330){shelfInteraction('面包与食品',['bread','egg','noodle']);return}
- if(x>=690&&y>210&&y<370){shelfInteraction('饮料与日用品',['milk','water','soap','flower','chips']);return}
- if(y>470){moveShopkeeper();return}
-});
-function shelfInteraction(label,ids){
- const list=ids.map(id=>products.find(p=>p.id===id)).filter(Boolean);
- showModal('🧺 '+label,`<p class="muted">点击商品可查看库存、补货或调整售价。</p><div class="cards">${list.map(p=>`<div class="card"><div class="emoji">${p.emoji}</div><strong>${p.name}</strong><small>库存 ${p.stock} · RM ${p.price.toFixed(2)}</small><button class="action green" onclick="buy('${p.id}')">补货 5 件</button><button class="action" onclick="changePrice('${p.id}')">调整售价</button></div>`).join('')}</div>`);
-}
-function changePrice(id){
- const p=products.find(x=>x.id===id);
- showModal('🏷️ 调整 '+p.name+' 售价',`<p>目前售价：RM ${p.price.toFixed(2)}</p><div class="field"><label>新售价（RM）</label><input id="newPrice" type="number" min="0.1" step="0.1" value="${p.price.toFixed(2)}"></div><button class="action primary" onclick="applyPrice('${id}')">保存售价</button>`);
-}
-function applyPrice(id){let p=products.find(x=>x.id===id),v=Number(document.getElementById('newPrice').value);if(!Number.isFinite(v)||v<=0)return notify('请输入有效售价');p.price=Math.round(v*100)/100;save();closeModal();notify('售价已更新！');}
-function moveShopkeeper(){walker.x=Math.max(490,Math.min(900,walker.x+(walker.x<700?70:-70)));notify('店长正在店里巡视～');}
-function animateShop(t){
- if(t-lastFrame>75){lastFrame=t;walker.x+=walker.dir*1.15;if(walker.x>835){walker.x=835;walker.dir=-1}if(walker.x<680){walker.x=680;walker.dir=1}walker.step++;drawScene();}
- requestAnimationFrame(animateShop);
-}
-requestAnimationFrame(animateShop);
-
-function render(){updateHud();drawScene();renderTab(currentTab)}
-function productCard(p,kind){return `<div class="card"><div class="row"><span class="emoji">${p.emoji}</span><span class="muted">${p.cat}</span></div><strong>${p.name}</strong><small>库存 ${p.stock} · 售价 RM ${p.price.toFixed(2)}</small>${kind==='market'?`<small>进货成本 RM ${p.cost.toFixed(2)}</small>`:''}<button class="action ${kind==='market'?'green':''}" onclick="${kind==='market'?`buy('${p.id}')`:`sell('${p.id}')`}">${kind==='market'?'进货 +5':'售出 1 件'}</button></div>`}
-function renderTab(tab){currentTab=tab;document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));let el=document.getElementById('content');
-let title='',body='';
-if(tab==='store'){title='🌷 店铺概况';body=`<div class="cards"><div class="card"><span class="emoji">🧺</span><strong>商品种类</strong><small>10 种商品正在经营</small></div><div class="card"><span class="emoji">👣</span><strong>今日顾客</strong><small>${state.visitors} 位顾客到店</small></div><div class="card"><span class="emoji">✨</span><strong>店铺整洁度</strong><small>${state.clean}% · ${state.clean>75?'环境舒适':'需要打扫啦'}</small></div><div class="card"><span class="emoji">💗</span><strong>顾客好感</strong><small>${state.hearts} 点</small></div></div>`}
-if(tab==='stock'||tab==='market'){title=tab==='stock'?'📦 商品库存':'🛒 小镇批发市场';body=`<p class="muted">${tab==='stock'?'检查库存，及时补货，避免顾客买不到商品。':'花费资金进货，每次补充 5 件商品。'}</p><div class="cards">${products.map(p=>productCard(p,tab)).join('')}</div>`}
-if(tab==='customers'){title='👥 小镇居民';body=`<div class="cards"><div class="card"><div class="emoji">👵🏻</div><strong>王奶奶 · 常客</strong><small>喜欢新鲜鸡蛋和水果。今天来买菜。</small><button class="action" onclick="story('grandma')">打招呼聊天</button></div><div class="card"><div class="emoji">🧒🏻</div><strong>乐乐 · 小朋友</strong><small>最喜欢面包和甜甜的零食。</small><button class="action" onclick="story('child')">打招呼聊天</button></div><div class="card"><div class="emoji">👩🏻</div><strong>林小姐 · 上班族</strong><small>经常购买牛奶、面包和饮料。</small><button class="action" onclick="story('worker')">打招呼聊天</button></div></div><p class="muted">聊天可以增加好感度，也可能解锁顾客小故事。</p>`}
-if(tab==='clean'){title='🧹 店铺清洁';body=`<div class="card"><div class="row"><strong>当前整洁度</strong><b>${state.clean}%</b></div><div class="progress"><i style="width:${state.clean}%"></i></div><p>干净的店铺会让顾客更愿意停留。每天记得打扫地面、整理货架。</p><button class="action green" onclick="cleanShop()">🧹 打扫一次（恢复 25 点）</button></div>`}
-if(tab==='tasks'){title='📋 今日必做任务';let ts=getTasks();body=`<div class="card"><div class="row"><strong>第 ${state.day} 天的经营目标</strong><b>${ts.filter(t=>t.done()).length}/${ts.length}</b></div>${ts.map(t=>`<p>${t.done()?'✅':'⬜'} ${t.label}</p>`).join('')}<small>完成每日任务，积累经营经验与奖励。</small></div>`}
-if(tab==='look'){title='👗 店长造型屋';body=`<div class="card"><div style="font-size:50px;text-align:center">🧑🏻‍🌾</div><div class="field"><label>店长名字</label><input id="mgrName" value="${state.manager.name}" maxlength="12"></div><div class="field"><label>发色</label><select id="hair"><option>栗棕色</option><option>黑色</option><option>奶茶棕</option><option>亚麻金</option><option>粉棕色</option></select></div><div class="field"><label>服装</label><select id="outfit"><option>围裙裙装</option><option>薄荷绿制服</option><option>奶油色针织衫</option><option>蓝色背带裤</option></select></div><button class="action primary" onclick="saveLook()">保存店长造型</button><p class="muted">当前店长：${state.manager.name} · ${state.manager.hair} · ${state.manager.outfit}</p></div>`}
-if(tab==='ledger'){title='💰 今日经营账本';body=`<div class="cards"><div class="card"><span class="emoji">💵</span><strong>今日营业额</strong><small>RM ${state.sales.toFixed(2)}</small></div><div class="card"><span class="emoji">📦</span><strong>进货支出</strong><small>RM ${state.expenses.toFixed(2)}</small></div><div class="card"><span class="emoji">🌷</span><strong>当前现金</strong><small>RM ${state.money.toFixed(2)}</small></div></div><h3>最近营业记录</h3>${state.history.slice(-8).reverse().map(x=>`<p>📅 第 ${x.day} 天 · ${x.note} · RM ${x.amount.toFixed(2)}</p>`).join('')||'<p class="muted">还没有交易记录，开始营业吧！</p>'}`}
-if(tab==='save'){title='💾 游戏存档';body=`<div class="card"><p>游戏会自动保存在当前浏览器。你也可以下载备份，换设备时再恢复。</p><button class="action green" onclick="backup()">⬇ 下载存档备份</button> <button class="action blue" onclick="document.getElementById('restoreFile').click()">⬆ 恢复存档</button><input id="restoreFile" type="file" accept="application/json" style="display:none" onchange="restore(event)"><button class="action" onclick="resetGame()">重新开始（清除进度）</button></div>`}
-el.innerHTML=`<section class="panel"><h2>${title}</h2>${body}</section>`}
-function getTasks(){return [{label:'接待至少 3 位顾客',done:()=>state.visitors>=3},{label:'完成 2 次商品销售',done:()=>state.history.filter(x=>x.day===state.day&&x.note.startsWith('售出')).length>=2},{label:'打扫一次店铺',done:()=>state.clean>=100},{label:'与一位顾客聊天',done:()=>state.chatCount>0},{label:'补充任意商品库存',done:()=>state.history.some(x=>x.day===state.day&&x.note==='进货')}]}
-function buy(id){let p=products.find(x=>x.id===id),cost=p.cost*5;if(state.money<cost)return notify('零钱不够啦，先卖些商品吧！');state.money-=cost;p.stock+=5;state.expenses+=cost;state.history.push({day:state.day,note:'进货',amount:cost});save();renderTab(currentTab);notify(`${p.emoji} ${p.name} 已补货 5 件！`)}
-function sell(id){let p=products.find(x=>x.id===id);if(p.stock<1)return notify('这个商品卖完啦，请先补货！');p.stock--;state.money+=p.price;state.sales+=p.price;state.visitors++;state.history.push({day:state.day,note:'售出 '+p.name,amount:p.price});save();renderTab(currentTab);notify(`售出 ${p.name}，收入 RM ${p.price.toFixed(2)}！`)}
-function restockQuick(){let p=products.filter(x=>x.stock<8).sort((a,b)=>a.stock-b.stock)[0]||products[0];buy(p.id)}
-function openCheckout(){let available=products.filter(p=>p.stock>0);if(!available.length)return notify('货架空空的，先去进货吧！');let p=available[Math.floor(Math.random()*available.length)];sell(p.id);notify(`顾客买走了 ${p.name}！`)}
-function chatCustomer(){let names=['王奶奶','乐乐','林小姐'];let lines=['今天的苹果看起来真新鲜！','谢谢你总是记得我喜欢的牛奶。','这家小店越来越温馨啦！'];let i=Math.floor(Math.random()*3);state.hearts+=2;state.chatCount++;save();showModal('💬 '+names[i]+' 对你说',`“${lines[i]}”<p class="muted">顾客好感度 +2</p><button class="action primary" onclick="closeModal()">开心收下</button>`)}
-function story(who){let data={grandma:['王奶奶','我每天都会来买新鲜鸡蛋。你这家小店让我想起以前的日子。'],child:['乐乐','姐姐！今天有牛角面包吗？我最喜欢面包香香的味道！'],worker:['林小姐','下班路上能来这里买到牛奶和面包，真的很方便。']}[who];state.hearts+=3;state.chatCount++;save();showModal('💗 '+data[0]+' 的小故事',`“${data[1]}”<p class="muted">熟客好感度 +3</p><button class="action primary" onclick="closeModal()">继续营业</button>`)}
-function cleanShop(){if(state.clean>=100)return notify('店铺已经很干净啦！');state.clean=Math.min(100,state.clean+25);save();renderTab(currentTab);notify('✨ 打扫完成！店铺整洁度提升。')}
-function saveLook(){state.manager.name=document.getElementById('mgrName').value||'小芳';state.manager.hair=document.getElementById('hair').value;state.manager.outfit=document.getElementById('outfit').value;save();renderTab('look');notify('店长新造型保存成功！')}
-function endDay(){let reward=20+Math.floor(state.sales*.08);state.money+=reward;state.history.push({day:state.day,note:'每日经营奖励',amount:reward});state.day++;state.sales=0;state.expenses=0;state.visitors=0;state.chatCount=0;state.clean=Math.max(55,state.clean-15);state.weather=['晴天','多云','小雨'][Math.floor(Math.random()*3)];save();render();notify(`今天辛苦啦！获得 RM ${reward} 经营奖励。`)}
-function showModal(title,body){modal.innerHTML=`<button class="close" onclick="closeModal()">✕</button><h2>${title}</h2>${body}`;modalBg.classList.add('show')}function closeModal(){modalBg.classList.remove('show')}
+const defaults={money:500,day:1,hearts:0,sales:0,expenses:0,clean:100,weather:'晴天',manager:{name:'小芳',hair:'栗棕色',outfit:'围裙裙装'},visitors:0,chatCount:0,history:[],storyFlags:[],todaySales:0};
+let state=load(),tab='store',toastTimer;
+function load(){try{let d=JSON.parse(localStorage.getItem('mlg-v3')||'null');if(!d)return {...defaults};d.products?.forEach(q=>{let p=products.find(x=>x.id===q.id);if(p)Object.assign(p,q)});return {...defaults,...d.state}}catch(e){return {...defaults}}}
+function save(){localStorage.setItem('mlg-v3',JSON.stringify({state,products}));hud()}
+function hud(){money.textContent=state.money.toFixed(2);hearts.textContent=state.hearts;day.textContent=state.day;weather.textContent=state.weather;dateLabel.textContent='· 第 '+state.day+' 个温暖日子'}
+function say(t){toast.textContent=t;toast.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.style.display='none',2200)}
+function modal(title,body){document.getElementById('modal').innerHTML=`<button class="close" onclick="closeModal()">×</button><h2>${title}</h2>${body}`;document.getElementById('modalbg').classList.add('show')}
+function closeModal(){document.getElementById('modalbg').classList.remove('show')}
+function render(){hud();renderTab('store')}
+function renderTab(t){tab=t;document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));let title='',body='';
+if(t==='store'){title='🌷 店铺概况';body=`<div class="grid"><div class="card"><div class="emoji">🧺</div><strong>商品种类</strong><small>${products.length} 种商品正在经营</small></div><div class="card"><div class="emoji">👣</div><strong>今日顾客</strong><small>${state.visitors} 位顾客到店</small></div><div class="card"><div class="emoji">✨</div><strong>店铺整洁度</strong><small>${state.clean}% · ${state.clean>75?'环境舒适':'需要打扫啦'}</small><div class="progress"><i style="width:${state.clean}%"></i></div></div><div class="card"><div class="emoji">💗</div><strong>顾客好感</strong><small>${state.hearts} 点</small></div></div>`}
+if(t==='stock'||t==='market'){title=t==='stock'?'📦 商品库存':'🛒 小镇批发市场';body=`<p class="muted">${t==='stock'?'查看库存、售价及商品状态。':'每次进货 5 件，进货成本会从现金扣除。'}</p><div class="grid">${products.map(p=>`<div class="card"><div class="row"><span class="emoji">${p.emoji}</span><small>${p.cat}</small></div><strong>${p.name}</strong><small>库存 ${p.stock} · 售价 RM ${p.price.toFixed(2)}</small><small>成本 RM ${p.cost.toFixed(2)}</small><button class="btn ${t==='market'?'green':''}" onclick="${t==='market'?`buy('${p.id}')`:`priceEditor('${p.id}')`}">${t==='market'?'进货 +5':'修改售价'}</button></div>`).join('')}</div>`}
+if(t==='customers'){title='👥 小镇居民';body=`<div class="grid">${[['grandma','👵🏻','王奶奶','喜欢新鲜鸡蛋和水果。'],['child','🧒🏻','乐乐','最喜欢面包和零食。'],['worker','👩🏻','林小姐','常买牛奶、面包和饮料。']].map(x=>`<div class="card"><div class="emoji">${x[1]}</div><strong>${x[2]}</strong><small>${x[3]}</small><button class="btn" onclick="story('${x[0]}')">打招呼聊天</button></div>`).join('')}</div>`}
+if(t==='clean'){title='🧹 店铺清洁';body=`<div class="card"><div class="row"><strong>店铺整洁度</strong><b>${state.clean}%</b></div><div class="progress"><i style="width:${state.clean}%"></i></div><p>打扫店铺可以让顾客更喜欢这里。</p><button class="btn green" onclick="cleanShop()">🧹 清洁店铺（+25）</button></div>`}
+if(t==='tasks'){let tasks=getTasks();title='📋 今日必做任务';body=`<div class="card"><div class="row"><strong>第 ${state.day} 天经营目标</strong><b>${tasks.filter(x=>x.done).length}/${tasks.length}</b></div>${tasks.map(x=>`<p>${x.done?'✅':'⬜'} ${x.label}</p>`).join('')}</div>`}
+if(t==='look'){title='👗 店长造型屋';body=`<div class="card"><div style="font-size:52px;text-align:center">🧑🏻‍🌾</div><div class="field"><label>店长名字</label><input id="mgrName" maxlength="12" value="${state.manager.name}"></div><div class="field"><label>发色</label><select id="hair"><option>栗棕色</option><option>黑色</option><option>奶茶棕</option><option>亚麻金</option><option>粉棕色</option></select></div><div class="field"><label>服装</label><select id="outfit"><option>围裙裙装</option><option>薄荷绿制服</option><option>奶油色针织衫</option><option>蓝色背带裤</option></select></div><button class="btn primary" onclick="saveLook()">保存造型</button></div>`}
+if(t==='ledger'){title='💰 今日经营账本';body=`<div class="grid"><div class="card"><div class="emoji">💵</div><strong>今日营业额</strong><small>RM ${state.sales.toFixed(2)}</small></div><div class="card"><div class="emoji">📦</div><strong>进货支出</strong><small>RM ${state.expenses.toFixed(2)}</small></div><div class="card"><div class="emoji">🌷</div><strong>当前现金</strong><small>RM ${state.money.toFixed(2)}</small></div></div><h3>最近记录</h3>${state.history.slice(-10).reverse().map(x=>`<p>第 ${x.day} 天 · ${x.note} · RM ${x.amount.toFixed(2)}</p>`).join('')||'<p class="muted">还没有交易记录。</p>'}`}
+if(t==='save'){title='💾 游戏存档';body=`<div class="card"><p>游戏自动保存在当前浏览器。换设备前请先下载备份。</p><button class="btn green" onclick="backup()">⬇ 下载存档</button> <button class="btn blue" onclick="document.getElementById('restore').click()">⬆ 恢复存档</button><input id="restore" type="file" accept="application/json" style="display:none" onchange="restore(event)"><button class="btn" onclick="resetGame()">重新开始</button></div>`}
+document.getElementById('content').innerHTML=`<section class="panel"><h2>${title}</h2>${body}</section>`}
+function getTasks(){return [{label:'接待至少 3 位顾客',done:state.visitors>=3},{label:'完成 2 次商品销售',done:state.history.filter(x=>x.day===state.day&&x.note.startsWith('售出')).length>=2},{label:'打扫一次店铺',done:state.clean===100},{label:'与一位顾客聊天',done:state.chatCount>0},{label:'补充任意商品库存',done:state.history.some(x=>x.day===state.day&&x.note==='进货')}]}
+function openShelf(title,ids){let list=ids.map(id=>products.find(p=>p.id===id)).filter(Boolean);modal('🧺 '+title,`<p class="muted">点击商品可以补货、调整售价或直接售出。</p><div class="grid">${list.map(p=>`<div class="card"><div class="emoji">${p.emoji}</div><strong>${p.name}</strong><small>库存 ${p.stock} · RM ${p.price.toFixed(2)}</small><button class="btn green" onclick="buy('${p.id}')">补货 +5</button><button class="btn" onclick="sell('${p.id}')">售出 1 件</button><button class="btn" onclick="priceEditor('${p.id}')">调整售价</button></div>`).join('')}</div>`)}
+function buy(id){let p=products.find(x=>x.id===id),cost=p.cost*5;if(state.money<cost)return say('现金不足，先卖出一些商品吧！');state.money-=cost;p.stock+=5;state.expenses+=cost;state.history.push({day:state.day,note:'进货',amount:cost});save();if(document.getElementById('modalbg').classList.contains('show'))openShelf(p.cat+'货架',[id]);else renderTab(tab);say(p.name+' 已补货 5 件！')}
+function sell(id){let p=products.find(x=>x.id===id);if(p.stock<1)return say('商品售罄，请先补货！');p.stock--;state.money+=p.price;state.sales+=p.price;state.visitors++;state.history.push({day:state.day,note:'售出 '+p.name,amount:p.price});save();if(document.getElementById('modalbg').classList.contains('show'))openShelf(p.cat+'货架',[id]);else renderTab(tab);say('售出 '+p.name+'，收入 RM '+p.price.toFixed(2))}
+function restockQuick(){let p=products.filter(x=>x.stock<8).sort((a,b)=>a.stock-b.stock)[0];if(!p)p=products[0];buy(p.id)}
+function openCheckout(){let available=products.filter(p=>p.stock>0);if(!available.length)return say('商品都售罄啦，先去进货吧！');let p=available[Math.floor(Math.random()*available.length)];sell(p.id);say('顾客在收银台买走了 '+p.name+'！')}
+function chatCustomer(){let a=[['王奶奶','今天的苹果看起来真新鲜！'],['乐乐','姐姐，今天有牛角包吗？'],['林小姐','下班来这里买东西真方便。']][Math.floor(Math.random()*3)];state.hearts+=2;state.chatCount++;save();modal('💬 '+a[0]+' 对你说','“'+a[1]+'”<p class="muted">顾客好感度 +2</p><button class="btn primary" onclick="closeModal()">继续营业</button>')}
+function story(id){let a={grandma:['王奶奶','我每天都会来买新鲜鸡蛋。你这家小店让我想起以前的日子。'],child:['乐乐','姐姐！我最喜欢你店里的面包香味！'],worker:['林小姐','下班路上能买到牛奶和面包，真的很方便。']}[id];state.hearts+=3;state.chatCount++;save();modal('💗 '+a[0]+' 的小故事','“'+a[1]+'”<p class="muted">熟客好感度 +3</p><button class="btn primary" onclick="closeModal()">开心收下</button>')}
+function cleanShop(){if(state.clean>=100)return say('店铺已经很干净啦！');state.clean=Math.min(100,state.clean+25);save();renderTab(tab);say('✨ 清洁完成！整洁度提升。')}
+function priceEditor(id){let p=products.find(x=>x.id===id);modal('🏷️ 调整 '+p.name+' 售价',`<p>目前 RM ${p.price.toFixed(2)}</p><div class="field"><label>新售价（RM）</label><input id="price" type="number" min=".1" step=".1" value="${p.price}"></div><button class="btn primary" onclick="applyPrice('${id}')">保存售价</button>`)}
+function applyPrice(id){let p=products.find(x=>x.id===id),n=Number(document.getElementById('price').value);if(!Number.isFinite(n)||n<=0)return say('请输入正确价格');p.price=Math.round(n*100)/100;save();closeModal();say('售价已更新！')}
+function saveLook(){state.manager.name=document.getElementById('mgrName').value||'小芳';state.manager.hair=document.getElementById('hair').value;state.manager.outfit=document.getElementById('outfit').value;save();renderTab('look');say('店长资料已保存！')}
+function endDay(){let reward=20+Math.floor(state.sales*.08);state.money+=reward;state.history.push({day:state.day,note:'每日经营奖励',amount:reward});state.day++;state.sales=0;state.expenses=0;state.visitors=0;state.chatCount=0;state.clean=Math.max(55,state.clean-15);state.weather=['晴天','多云','小雨'][Math.floor(Math.random()*3)];save();render();say('今日打烊！获得 RM '+reward+' 经营奖励。')}
 function backup(){let blob=new Blob([JSON.stringify({state,products},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='my-little-grocery-save.json';a.click();URL.revokeObjectURL(a.href)}
-function restore(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);state=d.state;d.products?.forEach(saved=>{let p=products.find(x=>x.id===saved.id);if(p)Object.assign(p,saved)});save();render();notify('存档恢复成功！')}catch(err){notify('存档文件格式不正确')}};r.readAsText(f)}
-function resetGame(){showModal('重新开始游戏？','<p>这会清除目前的游戏进度，确定要重新开始吗？</p><button class="action primary" onclick="resetConfirm()">确定重新开始</button> <button class="action" onclick="closeModal()">取消</button>')}
-function resetConfirm(){localStorage.removeItem('mlg-save');location.reload()}
+function restore(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);state={...defaults,...d.state};d.products?.forEach(q=>{let p=products.find(x=>x.id===q.id);if(p)Object.assign(p,q)});save();render();say('存档恢复成功！')}catch(x){say('存档格式不正确')}};r.readAsText(f)}
+function resetGame(){modal('重新开始？','<p>这会清除当前进度，确定吗？</p><button class="btn primary" onclick="resetConfirm()">确定</button> <button class="btn" onclick="closeModal()">取消</button>')}
+function resetConfirm(){localStorage.removeItem('mlg-v3');location.reload()}
 document.getElementById('nav').addEventListener('click',e=>{let b=e.target.closest('button[data-tab]');if(b)renderTab(b.dataset.tab)});
-function tick(){state.clean=Math.max(0,state.clean-1);save()}
-render();setInterval(()=>{if(state.clean<100){state.clean=Math.max(0,state.clean-1);save()}},120000);
+render();setInterval(()=>{if(state.clean>0){state.clean=Math.max(0,state.clean-1);save()}},180000);
 </script></body></html>
