@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f1dfbd">
-<title>小镇杂货铺 V3 · My Little Grocery</title>
+<title>小镇杂货铺 V4 · My Little Grocery</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
 :root{--ink:#624b35;--cream:#fff4dc;--paper:#f8e8c8;--wood:#b98455;--wood-dark:#8c603d;--pink:#e99579;--green:#9eb982;--blue:#9fc5cb;--line:#d9b98b;--shadow:0 5px 0 rgba(111,75,42,.22),0 10px 24px rgba(90,63,36,.12)}
@@ -30,15 +30,71 @@ main{min-width:0}.stage{background:#ead5aa;border:4px solid #bd9365;border-radiu
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#624b35;color:#fff4dc;border-radius:30px;padding:11px 18px;z-index:20;display:none;box-shadow:var(--shadow);font-weight:900;max-width:90%;text-align:center}
 .tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}.tabs button{background:#efd7b2;border:2px solid #d4b183;border-radius:13px;padding:7px 12px}.tabs button.active{background:#fff2d7}
 @media(max-width:720px){.app{padding:6px}.top{padding:7px 9px;border-radius:17px}.brand .house{font-size:27px}.brand small{font-size:8px}.stats{gap:4px}.stat{font-size:10px;padding:5px 7px}.layout{grid-template-columns:57px minmax(0,1fr);gap:7px;margin-top:8px}nav{gap:6px}nav button{font-size:9px;padding:7px 2px;border-radius:13px}nav button span{font-size:21px}.stage{padding:5px;border-radius:17px}.stagehead{font-size:12px}.stagehead small{font-size:9px}.scene{min-height:205px;aspect-ratio:1.12}.scene img{object-fit:cover}.btn{font-size:11px;padding:8px 9px}.panel{padding:10px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* V4: larger game stage, animated shoppers and cozy living environment */
+.scene{aspect-ratio:16/10;min-height:430px;background:#d7dfc4}
+.scene img{object-fit:cover;object-position:center center}
+.scene-actors{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none}
+.manager-avatar{position:absolute;left:4%;bottom:2%;width:58px;height:94px;filter:drop-shadow(0 5px 3px #624b3544);animation:managerIdle 2.4s ease-in-out infinite}
+.manager-avatar svg{width:100%;height:100%;overflow:visible}
+.manager-tag{position:absolute;top:-13px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:900;white-space:nowrap;color:#fff8e8;background:#8e7656;border-radius:12px;padding:2px 7px}
+.customer-walker{position:absolute;left:-12%;bottom:2%;width:54px;height:91px;filter:drop-shadow(0 5px 3px #624b3544);animation:customerRoute var(--walk-time,13s) linear forwards;z-index:2}
+.customer-walker svg{width:100%;height:100%;overflow:visible;animation:bodyBob .42s ease-in-out infinite alternate}
+.customer-walker .speech{position:absolute;left:50%;top:-22px;transform:translateX(-50%);background:#fff8e9;border:1.5px solid #d2ae7d;border-radius:12px;padding:3px 7px;font-size:10px;font-weight:900;white-space:nowrap;color:#70543b;box-shadow:0 2px 5px #624b3522}
+@keyframes customerRoute{
+  0%{left:-12%;bottom:1%}
+  15%{left:12%;bottom:3%}
+  35%{left:34%;bottom:1%}
+  53%{left:48%;bottom:7%}
+  68%{left:67%;bottom:3%}
+  85%{left:85%;bottom:1%}
+  100%{left:112%;bottom:2%}
+}
+@keyframes bodyBob{from{transform:translateY(0) rotate(-1deg)}to{transform:translateY(-3px) rotate(1deg)}}
+@keyframes managerIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.ambient-sparkle{position:absolute;right:13%;top:17%;color:#fff5bd;text-shadow:0 0 9px #fff4b0;font-size:22px;animation:sparkle 2.6s ease-in-out infinite}
+@keyframes sparkle{0%,100%{opacity:.15;transform:scale(.65) rotate(0)}50%{opacity:1;transform:scale(1.2) rotate(35deg)}}
+.stage{padding:10px}
+.actions{gap:10px}
+.btn{transition:transform .18s,filter .18s}
+.btn:hover{filter:brightness(1.04);transform:translateY(-2px)}
+.customer-live{display:inline-flex;align-items:center;gap:5px;background:#fff3d8;border:1px solid #d7b98c;border-radius:20px;padding:4px 9px;font-size:10px;font-weight:900}
+.customer-live i{width:7px;height:7px;border-radius:50%;background:#83ad72;display:inline-block;box-shadow:0 0 0 3px #83ad7228;animation:livePulse 1.5s infinite}
+@keyframes livePulse{50%{box-shadow:0 0 0 6px #83ad7200}}
+@media(min-width:721px){.app{max-width:1320px}.scene{min-height:500px}.layout{grid-template-columns:86px minmax(0,1fr)}}
+@media(max-width:720px){
+  .app{padding:5px 5px 88px}
+  .top{gap:5px;padding:6px 8px;border-width:3px}
+  .brand{gap:5px}.brand .house{font-size:24px}.brand h1{font-size:17px}.brand small{font-size:7px;letter-spacing:1px}
+  .stats{max-width:63%;gap:3px}.stat{font-size:9px;padding:4px 6px;border-width:1px}
+  .layout{display:block;margin-top:7px;padding-bottom:0}
+  nav{position:fixed;left:7px;right:7px;bottom:calc(7px + env(safe-area-inset-bottom));z-index:9;display:flex;flex-direction:row;gap:5px;padding:6px;background:#fff0d9ee;border:2px solid #d0a979;border-radius:18px;box-shadow:0 5px 18px #624b3540;overflow-x:auto;scrollbar-width:none;backdrop-filter:blur(8px)}
+  nav::-webkit-scrollbar{display:none}
+  nav button{flex:0 0 55px;min-width:55px;padding:5px 2px;border-width:2px;border-radius:12px;font-size:9px;box-shadow:0 2px 0 #b98e61}
+  nav button span{font-size:20px}
+  main{width:100%}
+  .stage{padding:6px;border-width:3px;border-radius:18px}
+  .stagehead{font-size:12px;padding:3px 5px 7px}
+  .stagehead small{font-size:9px}
+  .scene{width:100%;height:clamp(390px,112vw,560px);min-height:390px;aspect-ratio:auto;border-width:3px;border-radius:15px}
+  .scene img{object-fit:cover;object-position:center center}
+  .manager-avatar{width:49px;height:82px}
+  .customer-walker{width:48px;height:82px}
+  .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .actions .btn{font-size:11px;padding:10px 6px}
+  .panel{margin-top:9px;padding:10px;border-width:3px}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
 </style></head>
 <body><div class="app">
 <header class="top"><div class="brand"><div class="house">🏡</div><div><h1>小镇杂货铺</h1><small>MY LITTLE GROCERY</small></div></div><div class="stats"><div class="stat">🪙 RM <b id="money">500.00</b></div><div class="stat">❤️ <b id="hearts">0</b></div><div class="stat">📅 第 <b id="day">1</b> 天</div><div class="stat">☀️ <b id="weather">晴天</b></div></div></header>
 <div class="layout"><nav id="nav">
 <button class="active" data-tab="store"><span>🏠</span>店铺</button><button data-tab="stock"><span>📦</span>库存</button><button data-tab="market"><span>🛒</span>进货</button><button data-tab="customers"><span>👥</span>顾客</button><button data-tab="clean"><span>🧹</span>清洁</button><button data-tab="tasks"><span>📋</span>任务</button><button data-tab="look"><span>👗</span>店长</button><button data-tab="ledger"><span>💰</span>账本</button><button data-tab="save"><span>💾</span>存档</button>
 </nav><main>
-<section class="stage"><div class="stagehead"><div>🌼 今日营业中 <small id="dateLabel">· 小镇的美好一天</small></div><small id="status">精致杂货铺 · 点击货架互动</small></div>
+<section class="stage"><div class="stagehead"><div>🌼 今日营业中 <small id="dateLabel">· 小镇的美好一天</small></div><small id="status"><span class="customer-live"><i></i> 顾客营业中</span></small></div>
 <div class="scene" id="scene">
-<img src="assets/grocery-scene.jpg" alt="小镇杂货铺3D微缩场景">
+<img src="assets/grocery-scene.jpg" alt="小镇杂货铺3D微缩场景"><div class="scene-actors" id="sceneActors" aria-label="正在店内购物的顾客"><div class="manager-avatar" id="managerAvatar"><span class="manager-tag">店长</span><svg viewBox="0 0 70 100" aria-hidden="true"><ellipse cx="35" cy="94" rx="19" ry="5" fill="#76583b" opacity=".25"/><path d="M20 59 Q35 48 50 59 L55 87 Q35 95 15 87Z" fill="#8fae83" stroke="#75583d" stroke-width="2"/><path d="M22 62 L35 76 L48 62 L46 88 L24 88Z" fill="#f4dfbd"/><path d="M22 26 Q19 8 36 8 Q54 8 51 29 L48 45 L22 43Z" fill="#76513c"/><ellipse cx="36" cy="31" rx="15" ry="19" fill="#f1c49e"/><path d="M20 28 Q17 8 37 8 Q54 10 52 30 Q44 20 32 21 Q27 28 20 28" fill="#6b4937"/><circle cx="30" cy="32" r="1.8" fill="#49382f"/><circle cx="42" cy="32" r="1.8" fill="#49382f"/><path d="M32 40 Q36 43 40 40" fill="none" stroke="#a65e55" stroke-width="1.6" stroke-linecap="round"/><path d="M15 64 Q7 70 13 81 M54 64 Q62 70 56 81" fill="none" stroke="#f1c49e" stroke-width="7" stroke-linecap="round"/><path d="M23 87 L21 96 M47 87 L49 96" stroke="#6d513c" stroke-width="6" stroke-linecap="round"/></svg></div><div class="ambient-sparkle">✦</div></div>
 <button class="hotspot hs-fruit" onclick="openShelf('新鲜蔬果',['apple','banana','orange','tomato','carrot'])" aria-label="新鲜蔬果货架"><span>🍎 新鲜蔬果</span></button>
 <button class="hotspot hs-snack" onclick="openShelf('零食与食品',['noodle','chips','egg','cookie','rice'])" aria-label="零食食品货架"><span>🍪 零食食品</span></button>
 <button class="hotspot hs-drink" onclick="openShelf('饮料与牛奶',['milk','water','juice','tea'])" aria-label="饮料冰柜"><span>🥛 饮料冰柜</span></button>
@@ -59,8 +115,8 @@ const products=[
 ];
 const defaults={money:500,day:1,hearts:0,sales:0,expenses:0,clean:100,weather:'晴天',manager:{name:'小芳',hair:'栗棕色',outfit:'围裙裙装'},visitors:0,chatCount:0,history:[],storyFlags:[],todaySales:0};
 let state=load(),tab='store',toastTimer;
-function load(){try{let d=JSON.parse(localStorage.getItem('mlg-v3')||'null');if(!d)return {...defaults};d.products?.forEach(q=>{let p=products.find(x=>x.id===q.id);if(p)Object.assign(p,q)});return {...defaults,...d.state}}catch(e){return {...defaults}}}
-function save(){localStorage.setItem('mlg-v3',JSON.stringify({state,products}));hud()}
+function load(){try{let d=JSON.parse(localStorage.getItem('mlg-v4')||localStorage.getItem('mlg-v3')||'null');if(!d)return {...defaults};d.products?.forEach(q=>{let p=products.find(x=>x.id===q.id);if(p)Object.assign(p,q)});return {...defaults,...d.state}}catch(e){return {...defaults}}}
+function save(){const data=JSON.stringify({state,products});localStorage.setItem('mlg-v4',data);localStorage.setItem('mlg-v3',data);hud()}
 function hud(){money.textContent=state.money.toFixed(2);hearts.textContent=state.hearts;day.textContent=state.day;weather.textContent=state.weather;dateLabel.textContent='· 第 '+state.day+' 个温暖日子'}
 function say(t){toast.textContent=t;toast.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.style.display='none',2200)}
 function modal(title,body){document.getElementById('modal').innerHTML=`<button class="close" onclick="closeModal()">×</button><h2>${title}</h2>${body}`;document.getElementById('modalbg').classList.add('show')}
@@ -88,11 +144,69 @@ function cleanShop(){if(state.clean>=100)return say('店铺已经很干净啦！
 function priceEditor(id){let p=products.find(x=>x.id===id);modal('🏷️ 调整 '+p.name+' 售价',`<p>目前 RM ${p.price.toFixed(2)}</p><div class="field"><label>新售价（RM）</label><input id="price" type="number" min=".1" step=".1" value="${p.price}"></div><button class="btn primary" onclick="applyPrice('${id}')">保存售价</button>`)}
 function applyPrice(id){let p=products.find(x=>x.id===id),n=Number(document.getElementById('price').value);if(!Number.isFinite(n)||n<=0)return say('请输入正确价格');p.price=Math.round(n*100)/100;save();closeModal();say('售价已更新！')}
 function saveLook(){state.manager.name=document.getElementById('mgrName').value||'小芳';state.manager.hair=document.getElementById('hair').value;state.manager.outfit=document.getElementById('outfit').value;save();renderTab('look');say('店长资料已保存！')}
-function endDay(){let reward=20+Math.floor(state.sales*.08);state.money+=reward;state.history.push({day:state.day,note:'每日经营奖励',amount:reward});state.day++;state.sales=0;state.expenses=0;state.visitors=0;state.chatCount=0;state.clean=Math.max(55,state.clean-15);state.weather=['晴天','多云','小雨'][Math.floor(Math.random()*3)];save();render();say('今日打烊！获得 RM '+reward+' 经营奖励。')}
+function endDay(){let reward=20+Math.floor(state.sales*.08);state.money+=reward;state.history.push({day:state.day,note:'每日经营奖励',amount:reward});state.day++;state.sales=0;state.todaySales=0;state.expenses=0;state.visitors=0;state.chatCount=0;state.clean=Math.max(55,state.clean-15);state.weather=['晴天','多云','小雨'][Math.floor(Math.random()*3)];save();render();say('今日打烊！获得 RM '+reward+' 经营奖励。')}
 function backup(){let blob=new Blob([JSON.stringify({state,products},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='my-little-grocery-save.json';a.click();URL.revokeObjectURL(a.href)}
 function restore(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);state={...defaults,...d.state};d.products?.forEach(q=>{let p=products.find(x=>x.id===q.id);if(p)Object.assign(p,q)});save();render();say('存档恢复成功！')}catch(x){say('存档格式不正确')}};r.readAsText(f)}
 function resetGame(){modal('重新开始？','<p>这会清除当前进度，确定吗？</p><button class="btn primary" onclick="resetConfirm()">确定</button> <button class="btn" onclick="closeModal()">取消</button>')}
-function resetConfirm(){localStorage.removeItem('mlg-v3');location.reload()}
+function resetConfirm(){localStorage.removeItem('mlg-v3');localStorage.removeItem('mlg-v4');location.reload()}
+
+// V4 customer simulation: independently rendered SVG shoppers walk through the store.
+const shopperLooks=[
+  {hair:'#594333',shirt:'#e5a38a',pants:'#6e8fa7',skin:'#f0c39e',bag:'#d3a45d'},
+  {hair:'#49362f',shirt:'#9ebc8d',pants:'#d8b58b',skin:'#e9b48e',bag:'#8ca6bd'},
+  {hair:'#76513c',shirt:'#a8bfd0',pants:'#806b8c',skin:'#f2c8a5',bag:'#c78d79'},
+  {hair:'#3f302a',shirt:'#e4c47e',pants:'#7e9c79',skin:'#dba77f',bag:'#d5a66e'}
+];
+const shopperWords=['找到了！','看看这个','今天买一点','好可爱！'];
+let shopperTimer=null;
+function shopperSvg(c){
+ return `<svg viewBox="0 0 64 104" aria-hidden="true">
+ <ellipse cx="32" cy="99" rx="17" ry="4" fill="#624b35" opacity=".22"/>
+ <path d="M23 69 L21 94 L28 95 L33 75 L38 95 L45 94 L42 67Z" fill="${c.pants}" stroke="#70533b" stroke-width="1.5"/>
+ <path d="M20 42 Q32 34 45 43 L48 72 Q32 80 16 71Z" fill="${c.shirt}" stroke="#70533b" stroke-width="1.5"/>
+ <path d="M19 47 Q10 51 13 67 M45 47 Q54 52 51 66" fill="none" stroke="${c.skin}" stroke-width="6" stroke-linecap="round"/>
+ <path d="M17 48 Q11 52 15 73 L23 72 L24 52Z" fill="${c.bag}" stroke="#70533b" stroke-width="1.5"/>
+ <path d="M19 49 Q17 42 24 42 M21 50 Q22 43 28 43" fill="none" stroke="#70533b" stroke-width="2"/>
+ <ellipse cx="32" cy="26" rx="15" ry="18" fill="${c.skin}" stroke="#9a7055" stroke-width="1"/>
+ <path d="M17 25 Q13 5 32 7 Q51 6 48 27 Q42 18 32 18 Q25 25 17 25Z" fill="${c.hair}" stroke="#57402f" stroke-width="1"/>
+ <circle cx="27" cy="28" r="1.7" fill="#4b382e"/><circle cx="38" cy="28" r="1.7" fill="#4b382e"/>
+ <path d="M29 36 Q32 39 36 36" fill="none" stroke="#a85e54" stroke-width="1.5" stroke-linecap="round"/>
+ <path d="M22 94 L19 101 L29 101 M40 94 L37 101 L47 101" fill="none" stroke="#604a39" stroke-width="4" stroke-linecap="round"/>
+ </svg>`;
+}
+function spawnShopper(){
+ const layer=document.getElementById('sceneActors');
+ if(!layer || layer.querySelectorAll('.customer-walker').length>=3)return;
+ const look=shopperLooks[Math.floor(Math.random()*shopperLooks.length)];
+ const el=document.createElement('div');
+ el.className='customer-walker';
+ el.style.setProperty('--walk-time',(12+Math.random()*4)+'s');
+ el.innerHTML=shopperSvg(look)+`<span class="speech">${shopperWords[Math.floor(Math.random()*shopperWords.length)]}</span>`;
+ layer.appendChild(el);
+ // Shopper pauses mid-route, chooses an item and checks out automatically.
+ setTimeout(()=>{
+   const available=products.filter(p=>p.stock>0);
+   if(available.length){
+     const p=available[Math.floor(Math.random()*available.length)];
+     p.stock--; state.money+=p.price; state.sales+=p.price; state.todaySales=(state.todaySales||0)+p.price;
+     state.visitors++; state.history.push({day:state.day,note:'顾客购买 '+p.name,amount:p.price});
+     if(state.history.length>300)state.history=state.history.slice(-300);
+     save();
+     const bubble=el.querySelector('.speech');
+     if(bubble)bubble.textContent='买到啦！';
+   }else{
+     const bubble=el.querySelector('.speech');
+     if(bubble)bubble.textContent='下次再来～';
+   }
+ },6500);
+ el.addEventListener('animationend',()=>el.remove());
+}
+function startShopperLoop(){
+ if(shopperTimer)clearInterval(shopperTimer);
+ setTimeout(spawnShopper,900);
+ shopperTimer=setInterval(spawnShopper,5200);
+}
+
 document.getElementById('nav').addEventListener('click',e=>{let b=e.target.closest('button[data-tab]');if(b)renderTab(b.dataset.tab)});
-render();setInterval(()=>{if(state.clean>0){state.clean=Math.max(0,state.clean-1);save()}},180000);
+render();startShopperLoop();setInterval(()=>{if(state.clean>0){state.clean=Math.max(0,state.clean-1);save()}},180000);
 </script></body></html>
