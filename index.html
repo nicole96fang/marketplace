@@ -190,6 +190,75 @@ for(const x of [-7.2,0,7.2]){
 const warmFill=new THREE.PointLight(0xffd09a,34,30,1.7);
 warmFill.position.set(0,5.9,-1.5);scene.add(warmFill);
 
+// Modern checkout counter — modeled to match the approved reference style.
+const counterBodyMat=new THREE.MeshStandardMaterial({color:'#98613d',roughness:.72});
+const counterSlatMat=new THREE.MeshStandardMaterial({color:'#bd8657',roughness:.66});
+const counterTopMat=new THREE.MeshStandardMaterial({color:'#eee5d5',roughness:.3});
+const counterDarkMat=new THREE.MeshStandardMaterial({color:'#24282b',metalness:.35,roughness:.32});
+const ledMat=new THREE.MeshStandardMaterial({color:'#ffe2a7',emissive:'#ffbd62',emissiveIntensity:2.1});
+const screenMat=new THREE.MeshStandardMaterial({color:'#151d24',roughness:.22,metalness:.18});
+const plantLeafMat=new THREE.MeshStandardMaterial({color:'#477b50',roughness:.78,side:THREE.DoubleSide});
+const potMat=new THREE.MeshStandardMaterial({color:'#d7c7ad',roughness:.8});
+
+// Counter sits in the marked rear-right corner, against the right/back side.
+const cx=7.55, cz=-7.45, cw=6.35, cd=1.62, ch=1.12;
+// Main cabinet carcass and clean recessed kick base.
+addBox(cw,ch,cd,counterBodyMat,cx,.62,cz);
+addBox(cw+.08,.13,cd+.08,trimMat,cx,.065,cz);
+// Fine vertical timber slats across the customer-facing front.
+const frontZ=cz+cd/2+.035;
+for(let i=0;i<43;i++){
+  const x=cx-cw/2+.10+i*.145;
+  addBox(.075,.91,.075,counterSlatMat,x,.62,frontZ);
+}
+// Solid warm timber end cheeks.
+addBox(.16,1.02,cd+.08,counterBodyMat,cx-cw/2+.04,.59,cz);
+addBox(.16,1.02,cd+.08,counterBodyMat,cx+cw/2-.04,.59,cz);
+// Thick light stone-look countertop, with a small elegant overhang.
+addBox(cw+.22,.16,cd+.2,counterTopMat,cx,1.22,cz);
+// Thin glowing line under the counter top and at the toe-kick.
+addBox(cw-.12,.035,.035,ledMat,cx,1.105,frontZ+.035);
+addBox(cw-.18,.035,.045,ledMat,cx,.17,frontZ+.04);
+
+// Raised timber side return / small bagging ledge at the far-right end.
+const rx=cx+cw/2-.12, rz=cz+.12;
+addBox(1.0,.82,1.18,counterBodyMat,rx+.28,.50,rz-.02);
+addBox(1.08,.10,1.25,counterTopMat,rx+.28,.96,rz-.02);
+for(let i=0;i<7;i++){
+  addBox(.07,.72,1.0,counterSlatMat,rx-.18+i*.15,.50,rz-.02);
+}
+
+// POS monitor: slim dark display with a subtle stand, facing the shop.
+addBox(.10,.56,.48,counterDarkMat,cx+.95,1.60,cz-.22);
+const monitor=new THREE.Mesh(new THREE.BoxGeometry(.82,.53,.075),screenMat);
+monitor.position.set(cx+.95,1.91,cz+.02);monitor.rotation.x=-.08;scene.add(monitor);
+addBox(.36,.045,.28,counterDarkMat,cx+.95,1.635,cz+.02);
+// Card terminal on the counter beside the monitor.
+addBox(.34,.10,.25,counterDarkMat,cx+1.72,1.36,cz+.28);
+const terminalScreen=new THREE.Mesh(new THREE.BoxGeometry(.22,.015,.13),screenMat);
+terminalScreen.position.set(cx+1.72,1.425,cz+.28);scene.add(terminalScreen);
+
+// Small leafy plant on the side return, echoing the approved reference.
+const plantX=cx+cw/2-.05, plantZ=cz+.18;
+const pot=new THREE.Mesh(new THREE.CylinderGeometry(.19,.15,.27,18),potMat);
+pot.position.set(plantX,1.16,plantZ);scene.add(pot);
+const soil=new THREE.Mesh(new THREE.CylinderGeometry(.145,.145,.025,16),
+  new THREE.MeshStandardMaterial({color:'#59432e'}));
+soil.position.set(plantX,1.305,plantZ);scene.add(soil);
+for(let i=0;i<9;i++){
+  const a=i*Math.PI*2/9;
+  const leaf=new THREE.Mesh(new THREE.SphereGeometry(.11,12,10),plantLeafMat);
+  leaf.scale.set(.62,1.9,.48);
+  leaf.position.set(plantX+Math.cos(a)*.18,1.48+(i%3)*.07,plantZ+Math.sin(a)*.18);
+  leaf.rotation.z=Math.cos(a)*.55;leaf.rotation.x=Math.sin(a)*.35;scene.add(leaf);
+}
+// A few longer trailing leaves drape over the counter edge.
+for(let i=0;i<3;i++){
+  const leaf=new THREE.Mesh(new THREE.CapsuleGeometry(.035,.48,4,8),plantLeafMat);
+  leaf.position.set(plantX+.17+i*.07,1.30-i*.09,plantZ+.18+i*.035);
+  leaf.rotation.z=-.48-i*.12;leaf.rotation.x=.25;scene.add(leaf);
+}
+
 // Subtle natural daylight from the open front; no props, fixtures or furniture.
 const ambientPlane=new THREE.Mesh(
   new THREE.PlaneGeometry(30,18),
