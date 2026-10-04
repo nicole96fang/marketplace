@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#e8d8b8"><title>小镇杂货铺 · My Little Grocery</title>
+<meta name="theme-color" content="#e8d8b8"><title>小镇杂货铺 V2 · My Little Grocery</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
 :root{--ink:#594936;--cream:#fff5df;--paper:#f8e8c9;--wood:#9a6845;--wood2:#c18a5d;--green:#66885b;--pink:#e99d91;--blue:#83b5c2;--shadow:0 7px 0 rgba(92,61,34,.13),0 12px 25px rgba(83,59,35,.12)}
@@ -29,11 +29,11 @@ canvas{display:block;width:100%;height:auto;aspect-ratio:1100/610;border-radius:
 @media(max-width:700px){.game{padding:7px}.top{padding:7px 9px;border-radius:16px}.logo{font-size:27px}.stats{gap:4px}.pill{font-size:11px;padding:5px 7px}.layout{grid-template-columns:54px minmax(0,1fr);gap:7px;margin-top:8px}nav{gap:6px}nav button{font-size:9px;padding:7px 2px;border-radius:12px}nav button span{font-size:20px}.scene-wrap{padding:5px;border-radius:16px}.scene-head{font-size:12px}.scene-head small{font-size:9px}.action{font-size:11px;padding:8px 9px}.panel{padding:10px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style></head>
 <body><div class="game">
-<header class="top"><div class="brand"><div class="logo">🏡</div><div><h1>小镇杂货铺</h1><small>MY LITTLE GROCERY</small></div></div><div class="stats"><div class="pill">🪙 RM <b id="money">500</b></div><div class="pill">❤️ <b id="hearts">0</b></div><div class="pill">📅 第 <b id="day">1</b> 天</div><div class="pill">☀️ <b id="weather">晴天</b></div></div></header>
+<header class="top"><div class="brand"><div class="logo">🏡</div><div><h1>小镇杂货铺</h1><small>MY LITTLE GROCERY · V2</small></div></div><div class="stats"><div class="pill">🪙 RM <b id="money">500</b></div><div class="pill">❤️ <b id="hearts">0</b></div><div class="pill">📅 第 <b id="day">1</b> 天</div><div class="pill">☀️ <b id="weather">晴天</b></div></div></header>
 <div class="layout"><nav id="nav">
 <button class="active" data-tab="store"><span>🏠</span>店铺</button><button data-tab="stock"><span>📦</span>库存</button><button data-tab="market"><span>🛒</span>进货</button><button data-tab="customers"><span>👥</span>顾客</button><button data-tab="clean"><span>🧹</span>清洁</button><button data-tab="tasks"><span>📋</span>任务</button><button data-tab="look"><span>👗</span>店长</button><button data-tab="ledger"><span>💰</span>账本</button><button data-tab="save"><span>💾</span>存档</button>
 </nav><main>
-<section class="scene-wrap"><div class="scene-head"><div>🌼 今日营业中 <small id="dateLabel">· 小镇的美好一天</small></div><small id="shopStatus">店铺整洁 · 欢迎光临</small></div>
+<section class="scene-wrap"><div class="scene-head"><div>🌼 今日营业中 <small id="dateLabel">· 小镇的美好一天</small></div><small id="shopStatus">点击货架互动 · 顾客正在逛店</small></div>
 <canvas id="scene" width="1100" height="610" aria-label="小镇杂货铺游戏场景"></canvas>
 <div class="scene-foot"><button class="action primary" onclick="openCheckout()">🧾 收银结账</button><button class="action green" onclick="restockQuick()">📦 快速补货</button><button class="action blue" onclick="chatCustomer()">💬 和顾客聊天</button><button class="action" onclick="cleanShop()">🧹 打扫卫生</button><button class="action" onclick="endDay()">🌙 今日打烊</button></div></section>
 <div id="content"></div></main></div></div>
@@ -53,6 +53,7 @@ const products=[
 ];
 const defaultState={money:500,day:1,hearts:0,sales:0,expenses:0,clean:100,manager:{name:'小芳',hair:'栗棕色',outfit:'围裙裙装',face:'😊'},tasks:[],history:[],chatCount:0,customers:3,visitors:0,decor:0,weather:'晴天'};
 let state=load();let currentTab='store';let toastTimer;
+let walker={x:720,y:452,dir:1,step:0}; let lastFrame=0;
 function load(){try{let d=JSON.parse(localStorage.getItem('mlg-save')||'{}');if(d.state){d.products?.forEach(saved=>{let item=products.find(x=>x.id===saved.id);if(item)Object.assign(item,saved)});return {...defaultState,...d.state}}return {...defaultState,...d}}catch(e){return {...defaultState}}}
 function save(){localStorage.setItem('mlg-save',JSON.stringify({state,products}));updateHud()}
 function updateHud(){money.textContent=state.money.toFixed(2);hearts.textContent=state.hearts;day.textContent=state.day;weather.textContent=state.weather;dateLabel.textContent='· 第 '+state.day+' 个温暖日子'}
@@ -94,11 +95,40 @@ function plant(x,y){rr(x-19,y-25,38,32,7,'#c77f5d','#8c583f',3);ellipse(x,y-42,1
 plant(80,470);plant(1010,490);plant(575,500);
 // manager & customers chibi
 function person(x,y,shirt,hair,bag=false,scale=1){ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);ellipse(0,0,25,9,'#8a6746aa');rr(-17,-53,34,48,12,shirt,'#805c42',3);ellipse(0,-75,21,23,'#f2c9a3');ellipse(0,-91,22,13,hair);ellipse(-18,-77,7,15,hair);ellipse(-7,-74,2,3,'#594332');ellipse(7,-74,2,3,'#594332');ctx.beginPath();ctx.arc(0,-66,7,.1,Math.PI-.1);ctx.strokeStyle='#b86e60';ctx.lineWidth=2;ctx.stroke();line(-12,-12,-17,0,'#76513a',7);line(12,-12,17,0,'#76513a',7);if(bag){rr(16,-43,17,25,4,'#c88a51','#805b3e',2)}ctx.restore()}
-person(560,472,'#d58f78','#80543d',false,1.05);person(720,452,'#9bb9c0','#634c3e',true,.92);person(940,460,'#e6b47c','#805b42',true,.86);
+person(560,472,'#d58f78','#80543d',false,1.05);
+person(walker.x,walker.y,'#9bb9c0','#634c3e',true,.92);
+person(940,460,'#e6b47c','#805b42',true,.86);
+text('正在挑选商品…',walker.x,walker.y-112,13,'#74533a');
 // flowers & hanging lamps
 for(let x of [310,770]){line(x,140,x,178,'#755338',3);ellipse(x,180,18,9,'#f3d9a0');ellipse(x,176,11,8,'#fff0c5')}
 text('欢迎光临！',545,548,18,'#75533a');
 }
+
+// V2: click a physical shelf or the checkout counter to interact with the shop.
+scene.addEventListener('click',e=>{
+ const r=scene.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*1100,y=(e.clientY-r.top)/r.height*610;
+ if(y>320&&x>630){openCheckout();return}
+ if(x<405&&y>205&&y<475){shelfInteraction('水果与蔬菜',['apple','banana']);return}
+ if(x>=405&&x<690&&y>145&&y<330){shelfInteraction('面包与食品',['bread','egg','noodle']);return}
+ if(x>=690&&y>210&&y<370){shelfInteraction('饮料与日用品',['milk','water','soap','flower','chips']);return}
+ if(y>470){moveShopkeeper();return}
+});
+function shelfInteraction(label,ids){
+ const list=ids.map(id=>products.find(p=>p.id===id)).filter(Boolean);
+ showModal('🧺 '+label,`<p class="muted">点击商品可查看库存、补货或调整售价。</p><div class="cards">${list.map(p=>`<div class="card"><div class="emoji">${p.emoji}</div><strong>${p.name}</strong><small>库存 ${p.stock} · RM ${p.price.toFixed(2)}</small><button class="action green" onclick="buy('${p.id}')">补货 5 件</button><button class="action" onclick="changePrice('${p.id}')">调整售价</button></div>`).join('')}</div>`);
+}
+function changePrice(id){
+ const p=products.find(x=>x.id===id);
+ showModal('🏷️ 调整 '+p.name+' 售价',`<p>目前售价：RM ${p.price.toFixed(2)}</p><div class="field"><label>新售价（RM）</label><input id="newPrice" type="number" min="0.1" step="0.1" value="${p.price.toFixed(2)}"></div><button class="action primary" onclick="applyPrice('${id}')">保存售价</button>`);
+}
+function applyPrice(id){let p=products.find(x=>x.id===id),v=Number(document.getElementById('newPrice').value);if(!Number.isFinite(v)||v<=0)return notify('请输入有效售价');p.price=Math.round(v*100)/100;save();closeModal();notify('售价已更新！');}
+function moveShopkeeper(){walker.x=Math.max(490,Math.min(900,walker.x+(walker.x<700?70:-70)));notify('店长正在店里巡视～');}
+function animateShop(t){
+ if(t-lastFrame>75){lastFrame=t;walker.x+=walker.dir*1.15;if(walker.x>835){walker.x=835;walker.dir=-1}if(walker.x<680){walker.x=680;walker.dir=1}walker.step++;drawScene();}
+ requestAnimationFrame(animateShop);
+}
+requestAnimationFrame(animateShop);
+
 function render(){updateHud();drawScene();renderTab(currentTab)}
 function productCard(p,kind){return `<div class="card"><div class="row"><span class="emoji">${p.emoji}</span><span class="muted">${p.cat}</span></div><strong>${p.name}</strong><small>库存 ${p.stock} · 售价 RM ${p.price.toFixed(2)}</small>${kind==='market'?`<small>进货成本 RM ${p.cost.toFixed(2)}</small>`:''}<button class="action ${kind==='market'?'green':''}" onclick="${kind==='market'?`buy('${p.id}')`:`sell('${p.id}')`}">${kind==='market'?'进货 +5':'售出 1 件'}</button></div>`}
 function renderTab(tab){currentTab=tab;document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));let el=document.getElementById('content');
@@ -125,7 +155,8 @@ function endDay(){let reward=20+Math.floor(state.sales*.08);state.money+=reward;
 function showModal(title,body){modal.innerHTML=`<button class="close" onclick="closeModal()">✕</button><h2>${title}</h2>${body}`;modalBg.classList.add('show')}function closeModal(){modalBg.classList.remove('show')}
 function backup(){let blob=new Blob([JSON.stringify({state,products},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='my-little-grocery-save.json';a.click();URL.revokeObjectURL(a.href)}
 function restore(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);state=d.state;d.products?.forEach(saved=>{let p=products.find(x=>x.id===saved.id);if(p)Object.assign(p,saved)});save();render();notify('存档恢复成功！')}catch(err){notify('存档文件格式不正确')}};r.readAsText(f)}
-function resetGame(){showModal('重新开始游戏？','<p>这会清除目前的游戏进度，确定要重新开始吗？</p><button class="action primary" onclick="localStorage.removeItem('mlg-save');location.reload()">确定重新开始</button> <button class="action" onclick="closeModal()">取消</button>')}
+function resetGame(){showModal('重新开始游戏？','<p>这会清除目前的游戏进度，确定要重新开始吗？</p><button class="action primary" onclick="resetConfirm()">确定重新开始</button> <button class="action" onclick="closeModal()">取消</button>')}
+function resetConfirm(){localStorage.removeItem('mlg-save');location.reload()}
 document.getElementById('nav').addEventListener('click',e=>{let b=e.target.closest('button[data-tab]');if(b)renderTab(b.dataset.tab)});
 function tick(){state.clean=Math.max(0,state.clean-1);save()}
 render();setInterval(()=>{if(state.clean<100){state.clean=Math.max(0,state.clean-1);save()}},120000);
