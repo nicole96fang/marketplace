@@ -42,10 +42,10 @@ document.querySelector('.toast')?.remove();
 
 const scene=new THREE.Scene();
 scene.background=new THREE.Color('#c9d9d5');
-scene.fog=new THREE.Fog('#c9d9d5',24,48);
+scene.fog=new THREE.Fog('#c9d9d5',34,66);
 
 const camera=new THREE.PerspectiveCamera(innerWidth<700?48:42,innerWidth/innerHeight,.1,100);
-camera.position.set(13,10,18);
+camera.position.set(18,13,25);
 camera.lookAt(0,2.0,-.2);
 
 const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
@@ -58,7 +58,7 @@ renderer.toneMapping=THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure=1.08;
 root.appendChild(renderer.domElement);
 
-scene.add(new THREE.HemisphereLight(0xe8f4f2,0x78634f,2.1));
+scene.add(new THREE.HemisphereLight(0xffead5,0x78634f,2.35));
 const sun=new THREE.DirectionalLight(0xfff1dc,3.0);
 sun.position.set(-7,14,9); sun.castShadow=true;
 sun.shadow.mapSize.set(2048,2048);
@@ -108,59 +108,87 @@ function addBox(w,h,d,material,x,y,z,receive=true){
 }
 
 // Spacious rectangular shop shell; open front for a clear playable view.
-const W=16,D=13,H=6.2;
+const W=22,D=18,H=7.2;
 addBox(W,.42,D,floorMat,0,-.22,0);
 
 // Individual floorboards with fine seams and slightly varied wood tones.
 const floorBoards=['#b9855d','#c18c63','#ae7954','#c3926b','#b17c56'];
-for(let i=0;i<22;i++){
-  const x=-7.64+i*.727;
+for(let i=0;i<30;i++){
+  const x=-10.64+i*.727;
   const m=new THREE.MeshStandardMaterial({map:plankTex,roughness:.76,color:floorBoards[i%floorBoards.length]});
-  const board=addBox(.705,.055,12.72,m,x,.015,0);
+  const board=addBox(.705,.055,17.72,m,x,.015,0);
   board.position.y=.015;
 }
-for(let z=-5.8;z<=5.8;z+=1.45){
-  addBox(15.9,.018,.025,trimMat,0,.047,z);
+for(let z=-8.7;z<=8.7;z+=1.45){
+  addBox(21.9,.018,.025,trimMat,0,.047,z);
 }
 
 // Back wall, built from separate wide horizontal timber boards.
-for(let j=0;j<11;j++){
+for(let j=0;j<13;j++){
   const y=.35+j*.55;
-  addBox(W,.535,.28,wallMat,0,y,-6.36);
-  addBox(W,.025,.035,trimMat,0,y-.27,-6.19);
+  addBox(W,.535,.28,wallMat,0,y,-8.86);
+  addBox(W,.025,.035,trimMat,0,y-.27,-8.69);
 }
 // Side walls made from planks running along the depth.
 for(const side of [-1,1]){
-  for(let j=0;j<11;j++){
+  for(let j=0;j<13;j++){
     const y=.35+j*.55;
-    addBox(.28,.535,D,wallMat,side*8.0,y,0);
-    addBox(.035,.025,D,trimMat,side*7.83,y-.27,0);
+    addBox(.28,.535,D,wallMat,side*11.0,y,0);
+    addBox(.035,.025,D,trimMat,side*10.83,y-.27,0);
   }
 }
 // Exposed timber corner posts and wall framing.
-for(const x of [-7.82,0,7.82]){
-  addBox(.22,H,.34,beamMat,x,H/2-0.05,-6.18);
+for(const x of [-10.82,0,10.82]){
+  addBox(.22,H,.34,beamMat,x,H/2-0.05,-8.68);
 }
-for(const z of [-6.0,0,6.0]){
-  for(const x of [-7.82,7.82]) addBox(.34,H,.22,beamMat,x,H/2-0.05,z);
+for(const z of [-8.5,0,8.5]){
+  for(const x of [-10.82,10.82]) addBox(.34,H,.22,beamMat,x,H/2-0.05,z);
 }
 // Baseboards and top rails.
 for(const zSide of [-1,1]){
-  addBox(.34,.28,D,beamMat,zSide*7.82,.17,0);
-  addBox(.34,.24,D,beamMat,zSide*7.82,5.95,0);
+  addBox(.34,.28,D,beamMat,zSide*10.82,.17,0);
+  addBox(.34,.24,D,beamMat,zSide*10.82,6.95,0);
 }
-addBox(W,.28,.34,beamMat,0,.17,-6.12);
-addBox(W,.24,.34,beamMat,0,5.95,-6.12);
+addBox(W,.28,.34,beamMat,0,.17,-8.62);
+addBox(W,.24,.34,beamMat,0,6.95,-8.62);
 
 // Roof structure: open rafters and cross beams, leaving the room airy.
-for(let z=-5.8;z<=5.8;z+=2.9){
-  const r=addBox(16,.22,.28,beamMat,0,6.18,z);
+for(let z=-8.2;z<=8.2;z+=3.0){
+  addBox(22,.22,.28,beamMat,0,7.18,z);
 }
-for(const x of [-7.5,-4.5,-1.5,1.5,4.5,7.5]){
-  addBox(.2,.22,12.2,beamMat,x,6.18,0);
+for(const x of [-10,-6,-2,2,6,10]){
+  addBox(.2,.22,17.2,beamMat,x,7.18,0);
 }
 // A simple timber lintel across the open storefront.
-addBox(16,.28,.32,beamMat,0,6.18,6.15);
+addBox(22,.28,.32,beamMat,0,7.18,8.65);
+
+// Ceiling-mounted track lighting: three long rows with warm spot heads.
+const trackMat=new THREE.MeshStandardMaterial({color:'#292724',metalness:.72,roughness:.34});
+const lampHousingMat=new THREE.MeshStandardMaterial({color:'#34302a',metalness:.55,roughness:.38});
+const bulbMat=new THREE.MeshStandardMaterial({
+  color:'#fff0c9',emissive:'#ffbf63',emissiveIntensity:2.4,roughness:.28
+});
+for(const x of [-7.2,0,7.2]){
+  // Slim black track fixed directly under the timber ceiling.
+  addBox(.075,.075,16.6,trackMat,x,6.88,0,false);
+  for(const z of [-7,-3.5,0,3.5,7]){
+    // Short stem and compact adjustable spotlight housing.
+    const stem=new THREE.Mesh(new THREE.CylinderGeometry(.045,.045,.22,12),trackMat);
+    stem.position.set(x,6.72,z);scene.add(stem);
+    const housing=new THREE.Mesh(new THREE.CylinderGeometry(.17,.25,.34,20),lampHousingMat);
+    housing.position.set(x,6.48,z);housing.rotation.x=Math.PI;scene.add(housing);
+    const bulb=new THREE.Mesh(new THREE.SphereGeometry(.125,16,12),bulbMat);
+    bulb.position.set(x,6.29,z);scene.add(bulb);
+    // Soft warm beam aimed straight down to brighten the shop floor.
+    const spot=new THREE.SpotLight(0xffd49a,42,15,Math.PI/4.2,.55,1.25);
+    spot.position.set(x,6.25,z);
+    spot.target.position.set(x,0.2,z);
+    scene.add(spot,spot.target);
+  }
+}
+// Extra warm bounce light keeps the whole empty room evenly readable.
+const warmFill=new THREE.PointLight(0xffd09a,34,30,1.7);
+warmFill.position.set(0,5.9,-1.5);scene.add(warmFill);
 
 // Subtle natural daylight from the open front; no props, fixtures or furniture.
 const ambientPlane=new THREE.Mesh(
@@ -169,9 +197,9 @@ const ambientPlane=new THREE.Mesh(
 );
 ambientPlane.rotation.x=-Math.PI/2;ambientPlane.position.y=-.005;scene.add(ambientPlane);
 
-let dragging=false,lastX=0,lastY=0,azimuth=.63,elevation=.48,distance=22;
+let dragging=false,lastX=0,lastY=0,azimuth=.63,elevation=.48,distance=29;
 function updateCamera(){
-  const target=new THREE.Vector3(0,2.2,-.4);
+  const target=new THREE.Vector3(0,2.6,-.5);
   camera.position.set(
     target.x+Math.sin(azimuth)*Math.cos(elevation)*distance,
     target.y+Math.sin(elevation)*distance,
@@ -193,7 +221,7 @@ renderer.domElement.addEventListener('pointermove',e=>{
 renderer.domElement.addEventListener('pointerup',()=>dragging=false);
 renderer.domElement.addEventListener('pointercancel',()=>dragging=false);
 renderer.domElement.addEventListener('wheel',e=>{
-  distance=Math.max(15,Math.min(31,distance+e.deltaY*.018));updateCamera();
+  distance=Math.max(20,Math.min(42,distance+e.deltaY*.018));updateCamera();
 },{passive:true});
 
 function animate(){requestAnimationFrame(animate);renderer.render(scene,camera)}
