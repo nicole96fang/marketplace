@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#f4dfb8">
-<title>小镇杂货铺 · 3D</title>
+<meta name="theme-color" content="#c9d9d5">
+<title>小镇杂货铺 · V7.0 空店铺</title>
 <style>
 :root{--cream:#fff5df;--ink:#654a35;--brown:#a9784f;--pink:#e99583;--green:#9dbb83;--blue:#91bdc8}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#e8d5b2;font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#c9d9d5;font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink)}
 #game{position:fixed;inset:0}canvas{display:block;width:100%;height:100%}
 .topbar{position:absolute;top:12px;left:12px;right:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 13px;border:3px solid #d2ae7f;border-radius:22px;background:rgba(255,247,226,.94);box-shadow:0 5px 0 #a77c54;z-index:3}
 .brand{font-weight:900;font-size:17px;line-height:1.1}.sub{font-size:9px;letter-spacing:2px;color:#9a8065;margin-top:4px}
@@ -36,83 +36,171 @@ button.pink{background:#eca18e}button.green{background:#b1c796}button.blue{backg
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
 
 const root=document.querySelector('#game');
-const scene=new THREE.Scene(); scene.background=new THREE.Color('#d9e5d0'); scene.fog=new THREE.Fog('#d9e5d0',17,34);
-const camera=new THREE.PerspectiveCamera(innerWidth<700?62:48,innerWidth/innerHeight,.1,120);
-camera.position.set(0,10.5,20); camera.lookAt(0,1.55,0);
+document.querySelector('.topbar')?.remove();
+document.querySelector('.panel')?.remove();
+document.querySelector('.toast')?.remove();
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color('#c9d9d5');
+scene.fog=new THREE.Fog('#c9d9d5',24,48);
+
+const camera=new THREE.PerspectiveCamera(innerWidth<700?48:42,innerWidth/innerHeight,.1,100);
+camera.position.set(13,10,18);
+camera.lookAt(0,2.0,-.2);
+
 const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
-renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.setSize(innerWidth,innerHeight); renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-renderer.outputColorSpace=THREE.SRGBColorSpace; renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.15; root.appendChild(renderer.domElement);
-scene.add(new THREE.HemisphereLight(0xfff2d8,0x82917a,2.0));
-const sun=new THREE.DirectionalLight(0xffe4b6,3.2);sun.position.set(-5,12,8);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-12;sun.shadow.camera.right=12;sun.shadow.camera.top=12;sun.shadow.camera.bottom=-12;scene.add(sun);
-const mat=(c,rough=.82,metal=0)=>new THREE.MeshStandardMaterial({color:c,roughness:rough,metalness:metal});
-const wood=mat('#b77b4e'),woodLight=mat('#d7a16b'),woodDark=mat('#805033'),cream=mat('#fff0d0'),wall=mat('#f4dfb8'),leaf=mat('#6e9b62'),glass= new THREE.MeshStandardMaterial({color:'#a8dbe4',roughness:.2,metalness:.1,transparent:true,opacity:.48});
-function box(w,h,d,m,x,y,z,parent=scene){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;parent.add(o);return o}
-function sphere(r,m,x,y,z,parent=scene, sx=1,sy=1,sz=1){const o=new THREE.Mesh(new THREE.SphereGeometry(r,24,18),m);o.position.set(x,y,z);o.scale.set(sx,sy,sz);o.castShadow=true;parent.add(o);return o}
-function cylinder(rt,rb,h,m,x,y,z,parent=scene){const o=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,16),m);o.position.set(x,y,z);o.castShadow=true;parent.add(o);return o}
-// floor and cozy shop shell
-box(15,.25,12,mat('#d8b184'),0,-.15,0); 
-for(let i=-7;i<=7;i++){box(.025,.012,11,mat('#bd9065'),i,.0,0)}
-box(15,5,.25,wall,0,2.45,-5.8);box(.25,5,12,wall,-7.5,2.45,0);box(.25,5,12,wall,7.5,2.45,0);
-for(let x=-6.5;x<=6.5;x+=1.3){box(1.15,.05,.04,woodLight,x,4.55,-5.64)}
-// back sign
-box(3.4,.65,.12,woodDark,-3.5,4.05,-5.55);box(3.25,.5,.08,cream,-3.5,4.05,-5.46);
-const sign=document.createElement('canvas');sign.width=512;sign.height=96;const ctx=sign.getContext('2d');ctx.fillStyle='#68482e';ctx.font='bold 48px sans-serif';ctx.textAlign='center';ctx.fillText('每日新鲜 · FRESH DAILY',256,64);
-const tex=new THREE.CanvasTexture(sign);const sm=new THREE.MeshBasicMaterial({map:tex,transparent:true});const signMesh=new THREE.Mesh(new THREE.PlaneGeometry(3.1,.42),sm);signMesh.position.set(-3.5,4.05,-5.39);scene.add(signMesh);
-// shelf bank
-function shelf(x,z,width=5.8){box(width,.18,.65,woodDark,x,.45,z);for(let y of [1.05,1.85,2.65]){box(width,.13,.62,woodLight,x,y,z);box(width,.08,.08,woodDark,x,y-.12,z+.29)}for(let y of [.55,1.35,2.15]){box(width,.08,.08,woodDark,x,y,z-.28)}for(let xx of [x-width/2+.12,x+width/2-.12])box(.12,2.55,.16,woodDark,xx,1.55,z)}
-shelf(-3.65,-3.95,6.2);
-// product packages with variety
-const colors=['#e98e82','#e9b45f','#82b9c7','#a7bd83','#c6a2c7','#d9b68a','#f1d78d'];
-const products=[];
-for(let row=0;row<3;row++)for(let i=0;i<8;i++){let x=-6.25+i*.74+(row%2)*.12,y=.78+row*.8,z=-3.58;let c=mat(colors[(i+row*2)%colors.length],.5);let p=box(.48,.48,.36,c,x,y,z);box(.29,.05,.02,cream,x,y+.08,z+.19);sphere(.035,mat('#fff7df'),x+.14,y-.15,z+.19);products.push(p)}
-// fridge
-box(2.15,3.4,.25,woodDark,4.6,1.8,-4.6);box(1.95,3.15,.12,mat('#83bdc9'),4.6,1.8,-4.43);box(1.72,2.92,.1,glass,4.6,1.8,-4.34);
-for(let row=0;row<3;row++){box(1.65,.06,.13,woodDark,4.6,1.1+row*.82,-4.22);for(let i=0;i<4;i++){let b=cylinder(.11,.11,.42,mat(colors[(i+row)%7]),4.02+i*.38,1.38+row*.82,-4.18);b.rotation.z=Math.PI/2}}
-for(let x of [4.0,5.15])box(.06,2.8,.08,cream,x,1.8,-4.24);
-// checkout counter
-box(3.5,1.05,1.45,woodDark,2.0,.55,1.5);box(3.35,.16,1.38,woodLight,2,.98,1.5);box(3.1,.65,.08,wood,2,.48,2.22);
-box(.7,.12,.55,mat('#4f6659'),1.2,1.13,1.45);box(.6,.05,.42,mat('#9dc6c0'),1.2,1.22,1.45);
-// produce baskets
-for(let x of [-5.4,-4.5]){box(.85,.45,.8,wood, x,.28,.0);for(let i=0;i<4;i++)sphere(.19,mat(i%2?'#8eae67':'#d77b5e'),x-.28+i*.18,.62,.02)}
-// plants
-function plant(x,z){cylinder(.22,.28,.38,mat('#c98765'),x,.2,z);for(let i=0;i<5;i++){let l=sphere(.22,leaf,x+Math.sin(i*1.4)*.2,.65+(i%2)*.1,z+Math.cos(i*1.4)*.18);l.scale.set(.55,1.4,.45);l.rotation.z=(i-2)*.35}}
-plant(-6.5,2.8);plant(6.4,-1.8);
-// lamp
-cylinder(.035,.035,1.4,woodDark,-1.5,4.15,-1.5);cylinder(.42,.1,.3,mat('#e9c98e'),-1.5,3.45,-1.5);
-// Character builder: stylized 3D chibi, pivot limbs for walk
-function character(opts={}){const g=new THREE.Group();const skin=mat(opts.skin||'#f3c6a2'),hair=mat(opts.hair||'#5a382b'),shirt=mat(opts.shirt||'#8eb7a0'),pants=mat(opts.pants||'#526c86'),shoe=mat('#5b493c'),eye=mat('#382a25');
-const body=new THREE.Group();g.add(body);
-sphere(.34,skin,0,1.55,0,body,1,.92,.85); // head
-// hair cap and side locks
-sphere(.355,hair,0,1.72,-.035,body,1.03,.75,.93);sphere(.15,hair,-.29,1.55,.04,body,.7,1.1,.7);sphere(.15,hair,.29,1.55,.04,body,.7,1.1,.7);
-for(let x of [-.12,.12])sphere(.035,eye,x,1.59,.29,body,.7,1.2,.6);
-sphere(.035,mat('#d77d75'),0,1.43,.31,body,.9,.5,.4);
-const torso=box(.48,.58,.32,shirt,0,1.0,0,body);torso.geometry=new THREE.BoxGeometry(.48,.58,.32);
-const apron=box(.32,.38,.035,mat('#fff0d5'),0,.98,.18,body);
-const armL=new THREE.Group(),armR=new THREE.Group();armL.position.set(-.29,1.2,0);armR.position.set(.29,1.2,0);body.add(armL,armR);
-for(const a of [armL,armR]){let limb=cylinder(.085,.075,.48,skin,0,-.2,0,a);limb.rotation.z=.12;sphere(.09,skin,0,-.45,.02,a)}
-const legL=new THREE.Group(),legR=new THREE.Group();legL.position.set(-.13,.72,0);legR.position.set(.13,.72,0);body.add(legL,legR);
-for(const l of [legL,legR]){cylinder(.095,.09,.48,pants,0,-.22,0,l);box(.2,.13,.32,shoe,0,-.49,.08,l)}
-g.userData={body,armL,armR,legL,legR,phase:Math.random()*6};return g}
-const keeper=character({hair:'#55382c',shirt:'#83ad91',pants:'#536887'});keeper.position.set(1.0,0,3.3);keeper.rotation.y=-.2;scene.add(keeper);
-const shoppers=[];let cash=500,hearts=0,day=1,customerCount=0,stock=20;
-function addShopper(){if(shoppers.length>=3)return;const c=character({hair:['#68402d','#4a3028','#8b5738'][Math.floor(Math.random()*3)],shirt:['#d78e82','#8eacc8','#d9b777'][Math.floor(Math.random()*3)],pants:'#526b83'});c.position.set(-5.5,0,4.6);c.userData.route=[new THREE.Vector3(-5.5,0,4.6),new THREE.Vector3(-3.5,0,-2.9),new THREE.Vector3(0,0,-1.2),new THREE.Vector3(1.1,0,2.9),new THREE.Vector3(6.2,0,4.7)];c.userData.step=0;c.userData.speed=.85+Math.random()*.25;scene.add(c);shoppers.push(c);customerCount++;updateUI()}
-function updateUI(){document.querySelector('#money').textContent='🪙 RM '+cash.toFixed(2);document.querySelector('#hearts').textContent='❤️ '+hearts;document.querySelector('#day').textContent='📅 第 '+day+' 天';document.querySelector('#customers').textContent='店内顾客 '+shoppers.length+' 位';document.querySelector('#state').textContent='🌷 营业中 · 商品库存 '+stock+' 件'}
-let toastTimer;function toast(s){const t=document.querySelector('#toast');t.textContent=s;t.style.opacity=1;clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.opacity=0,1800)}
-document.querySelector('#checkout').onclick=()=>{if(shoppers.length){cash+=12;stock=Math.max(0,stock-1);hearts++;toast('🧾 结账成功！收入 RM 12.00');}else toast('顾客还在挑选商品呢！');updateUI()};
-document.querySelector('#restock').onclick=()=>{if(cash>=35){cash-=35;stock+=12;toast('📦 补货完成！增加 12 件商品');}else toast('金币不足，暂时不能补货');updateUI()};
-document.querySelector('#call').onclick=()=>{hearts++;toast('💬 顾客：这家店好温馨呀！');if(shoppers.length<3)addShopper();updateUI()};
-document.querySelector('#clean').onclick=()=>{cash=Math.max(0,cash-2);toast('🧹 店铺闪闪发亮！卫生 +10');updateUI()};
-const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();renderer.domElement.addEventListener('pointerdown',e=>{if(e.target!==renderer.domElement)return;pointer.x=e.clientX/innerWidth*2-1;pointer.y=-(e.clientY/innerHeight)*2+1;raycaster.setFromCamera(pointer,camera);const hit=raycaster.intersectObjects(products);if(hit.length)toast('📦 货架商品 · 点击「快速补货」增加库存');});
-// simple orbit and pinch zoom
-let down=false,lastX=0,lastY=0,rot=0,zoom=1;renderer.domElement.addEventListener('pointerdown',e=>{down=true;lastX=e.clientX;lastY=e.clientY;renderer.domElement.setPointerCapture(e.pointerId)});renderer.domElement.addEventListener('pointermove',e=>{if(!down)return;rot=Math.max(-.42,Math.min(.42,rot+(e.clientX-lastX)*.002));camera.position.x=20*Math.sin(rot)*zoom;camera.position.z=20*Math.cos(rot)*zoom;camera.position.y=10.5*zoom;camera.lookAt(0,1.55,0);lastX=e.clientX;lastY=e.clientY});renderer.domElement.addEventListener('pointerup',()=>down=false);renderer.domElement.addEventListener('wheel',e=>{zoom=Math.max(.9,Math.min(1.2,zoom+e.deltaY*.0005));camera.position.set(20*Math.sin(rot)*zoom,10.5*zoom,20*Math.cos(rot)*zoom);camera.lookAt(0,1.55,0)},{passive:true});
-let lastSpawn=0;const clock=new THREE.Clock();
-function animate(){requestAnimationFrame(animate);const t=clock.getElapsedTime(),dt=Math.min(clock.getDelta(),.04);
-[keeper,...shoppers].forEach((c,i)=>{const u=c.userData;u.phase+=dt*4;u.legL.rotation.x=Math.sin(u.phase)*.35;u.legR.rotation.x=-Math.sin(u.phase)*.35;u.armL.rotation.x=-Math.sin(u.phase)*.22;u.armR.rotation.x=Math.sin(u.phase)*.22;c.userData.body.position.y=.025+Math.abs(Math.sin(u.phase))*.025});
-for(let i=shoppers.length-1;i>=0;i--){const c=shoppers[i],u=c.userData,target=u.route[u.step];const dx=target.x-c.position.x,dz=target.z-c.position.z,dist=Math.hypot(dx,dz);if(dist<.16){u.step++;if(u.step>=u.route.length){scene.remove(c);shoppers.splice(i,1);cash+=8;stock=Math.max(0,stock-1);toast('🌟 顾客满意离店！收入 RM 8.00');updateUI();continue}}else{c.position.x+=dx/dist*dt*u.speed;c.position.z+=dz/dist*dt*u.speed;c.rotation.y=Math.atan2(dx,dz)}}
-if(t-lastSpawn>12&&shoppers.length<2){addShopper();lastSpawn=t}
-renderer.render(scene,camera)}
-animate();addShopper();addShopper();
-addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.fov=innerWidth<700?62:48;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(innerWidth,innerHeight);
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.08;
+root.appendChild(renderer.domElement);
+
+scene.add(new THREE.HemisphereLight(0xe8f4f2,0x78634f,2.1));
+const sun=new THREE.DirectionalLight(0xfff1dc,3.0);
+sun.position.set(-7,14,9); sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048);
+sun.shadow.camera.left=-14; sun.shadow.camera.right=14;
+sun.shadow.camera.top=14; sun.shadow.camera.bottom=-14;
+scene.add(sun);
+
+const fill=new THREE.DirectionalLight(0xd7e9f1,.85);
+fill.position.set(9,7,-5); scene.add(fill);
+
+function woodTexture(base,grain,seed=1){
+  const c=document.createElement('canvas'); c.width=512;c.height=256;
+  const g=c.getContext('2d');g.fillStyle=base;g.fillRect(0,0,512,256);
+  let n=seed*9301+49297;
+  const rand=()=>{n=(n*9301+49297)%233280;return n/233280};
+  for(let i=0;i<95;i++){
+    const y=rand()*256, x=rand()*512, w=25+rand()*300;
+    g.strokeStyle=grain;g.globalAlpha=.07+rand()*.12;g.lineWidth=.5+rand()*2;
+    g.beginPath();g.moveTo(x,y);g.bezierCurveTo(x+w*.3,y-3,x+w*.6,y+3,x+w,y+(rand()-.5)*4);g.stroke();
+  }
+  for(let i=0;i<10;i++){
+    const x=rand()*512,y=rand()*256;
+    g.strokeStyle=grain;g.globalAlpha=.13;g.lineWidth=1;
+    g.beginPath();g.ellipse(x,y,8+rand()*14,2+rand()*4,0,0,Math.PI*2);g.stroke();
+  }
+  g.globalAlpha=1;
+  const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;
+  t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=8;return t;
+}
+const plankTex=woodTexture('#a8754f','#f1c99a',4);
+const wallTex=woodTexture('#b9855d','#f4d2a6',8);
+const beamTex=woodTexture('#765039','#d9aa7d',12);
+function woodMat(tex,repeatX=1,repeatY=1,rough=.78){
+  tex=tex.clone();tex.needsUpdate=true;tex.repeat.set(repeatX,repeatY);
+  return new THREE.MeshStandardMaterial({map:tex,roughness:rough});
+}
+const floorMat=woodMat(plankTex,1.3,1.0,.72);
+const wallMat=woodMat(wallTex,1.5,1,.82);
+const beamMat=woodMat(beamTex,1,1,.8);
+const trimMat=new THREE.MeshStandardMaterial({color:'#69452f',roughness:.8});
+const edgeMat=new THREE.MeshStandardMaterial({color:'#d0a078',roughness:.75});
+
+function addBox(w,h,d,material,x,y,z,receive=true){
+  const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);
+  mesh.position.set(x,y,z);mesh.castShadow=true;mesh.receiveShadow=receive;
+  scene.add(mesh);return mesh;
+}
+
+// Spacious rectangular shop shell; open front for a clear playable view.
+const W=16,D=13,H=6.2;
+addBox(W,.42,D,floorMat,0,-.22,0);
+
+// Individual floorboards with fine seams and slightly varied wood tones.
+const floorBoards=['#b9855d','#c18c63','#ae7954','#c3926b','#b17c56'];
+for(let i=0;i<22;i++){
+  const x=-7.64+i*.727;
+  const m=new THREE.MeshStandardMaterial({map:plankTex,roughness:.76,color:floorBoards[i%floorBoards.length]});
+  const board=addBox(.705,.055,12.72,m,x,.015,0);
+  board.position.y=.015;
+}
+for(let z=-5.8;z<=5.8;z+=1.45){
+  addBox(15.9,.018,.025,trimMat,0,.047,z);
+}
+
+// Back wall, built from separate wide horizontal timber boards.
+for(let j=0;j<11;j++){
+  const y=.35+j*.55;
+  addBox(W,.535,.28,wallMat,0,y,-6.36);
+  addBox(W,.025,.035,trimMat,0,y-.27,-6.19);
+}
+// Side walls made from planks running along the depth.
+for(const side of [-1,1]){
+  for(let j=0;j<11;j++){
+    const y=.35+j*.55;
+    addBox(.28,.535,D,wallMat,side*8.0,y,0);
+    addBox(.035,.025,D,trimMat,side*7.83,y-.27,0);
+  }
+}
+// Exposed timber corner posts and wall framing.
+for(const x of [-7.82,0,7.82]){
+  addBox(.22,H,.34,beamMat,x,H/2-0.05,-6.18);
+}
+for(const z of [-6.0,0,6.0]){
+  for(const x of [-7.82,7.82]) addBox(.34,H,.22,beamMat,x,H/2-0.05,z);
+}
+// Baseboards and top rails.
+for(const zSide of [-1,1]){
+  addBox(.34,.28,D,beamMat,zSide*7.82,.17,0);
+  addBox(.34,.24,D,beamMat,zSide*7.82,5.95,0);
+}
+addBox(W,.28,.34,beamMat,0,.17,-6.12);
+addBox(W,.24,.34,beamMat,0,5.95,-6.12);
+
+// Roof structure: open rafters and cross beams, leaving the room airy.
+for(let z=-5.8;z<=5.8;z+=2.9){
+  const r=addBox(16,.22,.28,beamMat,0,6.18,z);
+}
+for(const x of [-7.5,-4.5,-1.5,1.5,4.5,7.5]){
+  addBox(.2,.22,12.2,beamMat,x,6.18,0);
+}
+// A simple timber lintel across the open storefront.
+addBox(16,.28,.32,beamMat,0,6.18,6.15);
+
+// Subtle natural daylight from the open front; no props, fixtures or furniture.
+const ambientPlane=new THREE.Mesh(
+  new THREE.PlaneGeometry(30,18),
+  new THREE.MeshBasicMaterial({color:'#d8e7e3',transparent:true,opacity:.12,side:THREE.DoubleSide})
+);
+ambientPlane.rotation.x=-Math.PI/2;ambientPlane.position.y=-.005;scene.add(ambientPlane);
+
+let dragging=false,lastX=0,lastY=0,azimuth=.63,elevation=.48,distance=22;
+function updateCamera(){
+  const target=new THREE.Vector3(0,2.2,-.4);
+  camera.position.set(
+    target.x+Math.sin(azimuth)*Math.cos(elevation)*distance,
+    target.y+Math.sin(elevation)*distance,
+    target.z+Math.cos(azimuth)*Math.cos(elevation)*distance
+  );
+  camera.lookAt(target);
+}
+updateCamera();
+renderer.domElement.addEventListener('pointerdown',e=>{
+  dragging=true;lastX=e.clientX;lastY=e.clientY;
+  renderer.domElement.setPointerCapture(e.pointerId);
+});
+renderer.domElement.addEventListener('pointermove',e=>{
+  if(!dragging)return;
+  azimuth-= (e.clientX-lastX)*.004;
+  elevation=Math.max(.18,Math.min(.95,elevation+(e.clientY-lastY)*.003));
+  lastX=e.clientX;lastY=e.clientY;updateCamera();
+});
+renderer.domElement.addEventListener('pointerup',()=>dragging=false);
+renderer.domElement.addEventListener('pointercancel',()=>dragging=false);
+renderer.domElement.addEventListener('wheel',e=>{
+  distance=Math.max(15,Math.min(31,distance+e.deltaY*.018));updateCamera();
+},{passive:true});
+
+function animate(){requestAnimationFrame(animate);renderer.render(scene,camera)}
+animate();
+addEventListener('resize',()=>{
+  camera.aspect=innerWidth/innerHeight;camera.fov=innerWidth<700?48:42;
+  camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);
+});
 </script>
 </body></html>
