@@ -1,137 +1,118 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#e9d6b4"><title>小镇杂货铺 · My Little Grocery</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#f4dfb8">
+<title>小镇杂货铺 · 3D</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap');
-:root{--ink:#624735;--cream:#fff5df;--paper:#f6e6c7;--wood:#9c6740;--wood2:#c18b59;--line:#d4ad7c;--pink:#e99b83;--sage:#9db58a;--blue:#9fc4ca;--shadow:#88603e55}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% 0%,#fff7e5,#e4d0a9 75%);color:var(--ink);font-family:"Noto Sans SC",system-ui,sans-serif}
-button{font:inherit;color:inherit;border:0;cursor:pointer}
-.app{max-width:1050px;margin:auto;padding:12px 12px 100px}
-.top{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fff4dc;border:5px solid #d4b083;border-radius:25px;padding:10px 15px;box-shadow:0 6px 0 #a77d51;margin-bottom:12px}
-.brand{display:flex;align-items:center;gap:9px}.brand .house{font-size:35px}.brand b{font-size:20px;display:block}.brand small{font-size:9px;letter-spacing:2px;color:#98775a}
-.stats{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.pill{background:#f8e8c8;border:2px solid #ddbd8f;border-radius:20px;padding:7px 10px;font-size:12px;font-weight:800;white-space:nowrap}
-.game-card{background:#f2dbb5;border:5px solid #bd9263;border-radius:30px;padding:10px;box-shadow:0 7px 0 #9c754e;margin-bottom:15px}
-.scene-head{display:flex;justify-content:space-between;align-items:center;padding:2px 5px 8px;font-size:13px;font-weight:800}.scene-head small{color:#977653;font-size:10px}
-.scene-wrap{position:relative;width:100%;border:5px solid #bd9568;border-radius:25px;overflow:hidden;background:#f0d9b3;box-shadow:inset 0 0 0 3px #f8e9cb}
-svg#shop{display:block;width:100%;height:auto;aspect-ratio:900/690}
-#people{pointer-events:none}.person{transform-box:fill-box;transform-origin:center bottom;animation:bob 1.2s ease-in-out infinite alternate}.person .legs{transform-box:fill-box;transform-origin:50% 5%;animation:leg .32s ease-in-out infinite alternate}.person .arms{transform-box:fill-box;transform-origin:50% 10%;animation:arm .32s ease-in-out infinite alternate}.person.paused .legs,.person.paused .arms{animation-play-state:paused}
-@keyframes bob{to{transform:translateY(-2px)}}@keyframes leg{to{transform:rotate(12deg)}}@keyframes arm{to{transform:rotate(-10deg)}}
-.bubble{font-size:16px;font-weight:800;fill:#654a35;paint-order:stroke;stroke:#fff1d5;stroke-width:7px;stroke-linejoin:round}
-.action-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.action{border:4px solid #c69b6c;border-radius:22px;padding:13px 5px;font-weight:800;font-size:14px;box-shadow:0 4px 0 #a77c51}.action:active{transform:translateY(3px);box-shadow:0 1px 0 #a77c51}.pink{background:#e99a81}.green{background:#a4bd8d}.blue{background:#a8cbd0}.cream{background:#fff0d2}
-.lower{display:grid;grid-template-columns:1fr 1fr;gap:10px}.panel{background:#fff5e2;border:4px solid #d7b98e;border-radius:24px;padding:13px;box-shadow:0 4px 0 #b18a60}.panel h3{margin:0 0 8px;font-size:17px}.metric{font-size:23px;font-weight:800}.muted{font-size:12px;color:#987b5e}
-.nav{position:fixed;z-index:10;bottom:10px;left:50%;transform:translateX(-50%);width:min(720px,calc(100% - 20px));display:flex;gap:5px;padding:7px;background:#fff4dfed;border:4px solid #cda779;border-radius:24px;box-shadow:0 7px 20px #63482e44;backdrop-filter:blur(10px)}
-.nav button{flex:1;min-width:0;background:#f8e8cb;border:3px solid #d6b486;border-radius:15px;padding:7px 1px;font-size:11px;font-weight:800;box-shadow:0 3px 0 #b58b5d}.nav button.active{background:#edb18d;transform:translateY(-3px)}.nav .ico{display:block;font-size:21px;margin-bottom:2px}
-.toast{position:fixed;z-index:30;top:18%;left:50%;transform:translateX(-50%);background:#fff4dd;border:3px solid #c69a69;border-radius:18px;padding:12px 18px;box-shadow:0 5px 20px #4b321d44;font-weight:800;display:none;max-width:85%;text-align:center}
-.modal-bg{position:fixed;inset:0;background:#35291f88;z-index:20;display:none;align-items:center;justify-content:center;padding:16px}.modal{width:min(520px,100%);max-height:82vh;overflow:auto;background:#fff4df;border:5px solid #c59b6e;border-radius:25px;padding:18px;box-shadow:0 10px 0 #765438}.modal h2{margin:0 0 12px}.modal .close{float:right;background:#e7cba2;border-radius:12px;padding:5px 12px}.item-list{display:grid;gap:8px}.item{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#f9e9cd;border:2px solid #dfc49b;border-radius:15px;padding:9px}.item button{background:#a5bd8e;border-radius:12px;padding:7px 11px;font-weight:800}.item button.alt{background:#e99d84}.bar{height:9px;border-radius:10px;background:#ead8ba;overflow:hidden;margin-top:5px}.bar i{display:block;height:100%;background:#91af7b}
-@media(min-width:700px){.app{padding-bottom:25px}.nav{position:static;transform:none;width:100%;margin:12px auto 0}.scene-wrap{max-height:690px}.action{font-size:16px;padding:15px}}
-@media(max-width:390px){.app{padding:7px 7px 95px}.top{padding:8px}.brand b{font-size:17px}.brand .house{font-size:28px}.pill{font-size:10px;padding:6px}.scene-head{font-size:11px}.action{font-size:12px}.nav button{font-size:10px}.nav .ico{font-size:18px}}
-</style></head>
+:root{--cream:#fff5df;--ink:#654a35;--brown:#a9784f;--pink:#e99583;--green:#9dbb83;--blue:#91bdc8}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#e8d5b2;font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink)}
+#game{position:fixed;inset:0}canvas{display:block;width:100%;height:100%}
+.topbar{position:absolute;top:12px;left:12px;right:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 13px;border:3px solid #d2ae7f;border-radius:22px;background:rgba(255,247,226,.94);box-shadow:0 5px 0 #a77c54;z-index:3}
+.brand{font-weight:900;font-size:17px;line-height:1.1}.sub{font-size:9px;letter-spacing:2px;color:#9a8065;margin-top:4px}
+.stats{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.pill{border:2px solid #dfc49b;border-radius:99px;background:#fff0d2;padding:6px 9px;font-weight:800;font-size:12px;white-space:nowrap}
+.panel{position:absolute;left:12px;right:12px;bottom:12px;z-index:3;padding:11px;border:3px solid #d2ae7f;border-radius:23px;background:rgba(255,247,226,.96);box-shadow:0 5px 0 #a77c54}
+.status{display:flex;justify-content:space-between;gap:8px;font-size:12px;font-weight:800;margin:0 3px 9px}
+.actions{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+button{border:2px solid #c99f70;border-radius:15px;padding:10px 4px;background:#f5dfb7;color:#654a35;font-weight:900;font-size:12px;box-shadow:0 3px 0 #b98b60;min-height:46px;touch-action:manipulation}
+button:active{transform:translateY(2px);box-shadow:0 1px 0 #b98b60}
+button.pink{background:#eca18e}button.green{background:#b1c796}button.blue{background:#a8cbd0}button:disabled{opacity:.5}
+.hint{font-size:10px;text-align:center;margin-top:8px;color:#92775b}
+.toast{position:absolute;top:100px;left:50%;transform:translateX(-50%);z-index:4;background:#fff5df;border:2px solid #c99f70;border-radius:30px;padding:8px 14px;font-size:12px;font-weight:800;box-shadow:0 3px 0 #b98b60;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}
+@media(min-width:760px){.topbar{left:24px;right:24px;top:18px;padding:14px 20px}.brand{font-size:22px}.pill{font-size:14px;padding:8px 13px}.panel{left:24px;right:24px;bottom:18px;padding:14px 18px}.actions{grid-template-columns:repeat(4,minmax(120px,1fr));max-width:760px;margin:auto}button{font-size:14px;min-height:52px}.hint{font-size:12px}}
+</style>
+</head>
 <body>
-<div class="app">
-<header class="top"><div class="brand"><span class="house">🏡</span><div><b>小镇杂货铺</b><small>MY LITTLE GROCERY</small></div></div><div class="stats"><span class="pill" id="money">🪙 RM 500.00</span><span class="pill" id="heart">❤️ 0</span><span class="pill" id="day">📅 第 1 天</span><span class="pill">☀️ 晴天</span></div></header>
-<section class="game-card">
-<div class="scene-head"><span>🌼 今日营业中 · <span id="dayline">第 1 个温暖日子</span></span><small>顾客会自己进店逛逛哦</small></div>
-<div class="scene-wrap">
-<svg id="shop" viewBox="0 0 900 690" role="img" aria-label="温暖精致的微缩杂货铺场景">
-<defs>
- <linearGradient id="wall" x2="0" y2="1"><stop stop-color="#f8e7c7"/><stop offset="1" stop-color="#eacb9c"/></linearGradient>
- <linearGradient id="floor" x2="0" y2="1"><stop stop-color="#e9c99a"/><stop offset="1" stop-color="#c99560"/></linearGradient>
- <linearGradient id="wood" x2="0" y2="1"><stop stop-color="#d9a36a"/><stop offset=".45" stop-color="#ad7042"/><stop offset="1" stop-color="#81502f"/></linearGradient>
- <linearGradient id="glass" x2="0" y2="1"><stop stop-color="#c9edf0"/><stop offset="1" stop-color="#77b3c2"/></linearGradient>
- <linearGradient id="cream" x2="0" y2="1"><stop stop-color="#fff1d1"/><stop offset="1" stop-color="#e9c998"/></linearGradient>
- <radialGradient id="lamp"><stop stop-color="#fff5cf" stop-opacity=".8"/><stop offset="1" stop-color="#f8d99a" stop-opacity="0"/></radialGradient>
- <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur stdDeviation="7"/></filter>
- <g id="plant"><path d="M0 30Q-16 4 -4 -15Q11 0 0 30M3 27Q12 -4 27 -8Q26 13 3 27M0 25Q-25 6 -24 -8Q-5 -3 0 25" fill="#73945c" stroke="#557747" stroke-width="2"/><path d="M-4 28L-10 38M4 28L12 38" stroke="#63834d" stroke-width="3"/><path d="M-17 38H20L15 57H-12Z" fill="#d58e69" stroke="#a76b4a" stroke-width="2"/></g>
-</defs>
-<!-- room -->
-<rect width="900" height="690" fill="url(#wall)"/><path d="M0 0H900V490L0 550Z" fill="#f5dfb8"/><path d="M0 465L900 420V690H0Z" fill="url(#floor)"/>
-<path d="M0 545L900 490M0 610L900 570M150 500L80 690M400 480L380 690M690 455L760 690" stroke="#bd8959" stroke-width="3" opacity=".28"/>
-<!-- back wall decoration -->
-<rect x="28" y="28" width="220" height="90" rx="14" fill="#fff0d4" stroke="#c99a67" stroke-width="5"/><text x="138" y="67" text-anchor="middle" font-size="27" font-weight="800" fill="#765036">每日新鲜</text><text x="138" y="94" text-anchor="middle" font-size="13" letter-spacing="3" fill="#a17a55">FRESH &amp; LOCAL</text>
-<path d="M285 0V120M600 0V90" stroke="#d6b58b" stroke-width="5" opacity=".6"/>
-<!-- left awning -->
-<path d="M0 118H230V145H0Z" fill="#fff1d8" stroke="#a86f47" stroke-width="5"/><path d="M0 118H46V150H0M92 118H138V150H92M184 118H230V150H184" fill="#92a97c"/><path d="M0 150Q22 170 46 150Q69 170 92 150Q115 170 138 150Q161 170 184 150Q207 170 230 150" fill="none" stroke="#a86f47" stroke-width="5"/>
-<!-- wall shelf -->
-<g>
-<rect x="30" y="175" width="540" height="300" rx="12" fill="#8e5935" stroke="#6f432b" stroke-width="7"/>
-<rect x="42" y="188" width="516" height="270" rx="5" fill="#d6a36a"/>
-<g id="shelfGoods"></g>
-<path d="M30 275H570M30 372H570M30 467H570" stroke="#70452c" stroke-width="17"/><path d="M30 266H570M30 363H570M30 458H570" stroke="#e6b77b" stroke-width="5"/>
-<path d="M25 476H578V495H25Z" fill="#70462d"/><path d="M40 495H53V530H40M550 495H563V530H550" fill="#895632"/>
-<rect x="180" y="135" width="245" height="55" rx="18" fill="#704a32" stroke="#d2a16b" stroke-width="5"/><text x="302" y="171" text-anchor="middle" font-size="27" font-weight="800" fill="#fff0d5">零食 · 生活好物</text>
-</g>
-<!-- fridge -->
-<g transform="translate(635 150)"><ellipse cx="105" cy="355" rx="120" ry="15" fill="#68482d" opacity=".2" filter="url(#shadow)"/><rect width="205" height="330" rx="22" fill="#7eafbd" stroke="#6b8e99" stroke-width="8"/><rect x="12" y="13" width="181" height="300" rx="15" fill="url(#glass)" stroke="#e7f4ed" stroke-width="8"/><path d="M102 22V300" stroke="#6d9daa" stroke-width="7"/><g id="fridgeGoods"></g><path d="M18 112H188M18 205H188" stroke="#638e9b" stroke-width="8"/><rect x="172" y="35" width="9" height="55" rx="4" fill="#f7edcf"/><rect x="172" y="130" width="9" height="55" rx="4" fill="#f7edcf"/><rect x="172" y="225" width="9" height="55" rx="4" fill="#f7edcf"/></g>
-<!-- counter -->
-<g><ellipse cx="455" cy="570" rx="315" ry="26" fill="#69452c" opacity=".18" filter="url(#shadow)"/><path d="M210 500L635 475L805 545L390 583Z" fill="#e0ad70" stroke="#80502f" stroke-width="8"/><path d="M390 583L805 545V640L390 676Z" fill="url(#wood)" stroke="#78492d" stroke-width="7"/><path d="M210 500L390 583V676L210 590Z" fill="#a96f42" stroke="#78492d" stroke-width="7"/><path d="M420 600L778 566V590L420 626Z" fill="#6e462e" opacity=".7"/><path d="M225 515L380 585L380 600L225 530Z" fill="#efc58a"/><rect x="492" y="500" width="95" height="18" rx="8" fill="#fff0d1" stroke="#c39460" stroke-width="3"/><rect x="610" y="490" width="65" height="17" rx="7" fill="#fff0d1" stroke="#c39460" stroke-width="3"/></g>
-<!-- produce stand -->
-<g><path d="M35 530L190 565V635L35 598Z" fill="#a76b40" stroke="#77472b" stroke-width="6"/><path d="M35 530L80 500L230 535L190 565Z" fill="#e2b579" stroke="#77472b" stroke-width="6"/><g fill="#91a969" stroke="#6d8a50" stroke-width="3"><circle cx="82" cy="526" r="17"/><circle cx="115" cy="535" r="18"/><circle cx="151" cy="541" r="17"/><circle cx="184" cy="545" r="16"/></g><g fill="#d78c68"><circle cx="75" cy="520" r="7"/><circle cx="110" cy="529" r="7"/><circle cx="150" cy="535" r="7"/></g></g>
-<!-- hanging lamp -->
-<path d="M160 0V90" stroke="#78543a" stroke-width="5"/><path d="M120 105Q160 65 200 105L186 133H134Z" fill="#866343"/><ellipse cx="160" cy="125" rx="100" ry="75" fill="url(#lamp)"/>
-<use href="#plant" x="835" y="560"/><use href="#plant" x="20" y="455" transform="translate(0 0) scale(.8)"/>
-<!-- character stage shadow -->
-<g id="people"></g>
-<g transform="translate(785 30)"><rect width="90" height="34" rx="17" fill="#fff1d7" stroke="#d5b184" stroke-width="3"/><circle cx="17" cy="17" r="6" fill="#8eaf7d"/><text x="55" y="23" text-anchor="middle" font-size="15" font-weight="800" fill="#78583e">营业中</text></g>
-</svg>
-</div>
-<div class="action-grid">
-<button class="action pink" onclick="checkout()">🧾 收银结账</button><button class="action green" onclick="openPanel('stock')">📦 快速补货</button><button class="action blue" onclick="openPanel('customers')">💬 顾客互动</button><button class="action cream" onclick="cleanShop()">🧹 打扫卫生</button><button class="action cream" onclick="nextDay()">🌙 今日打烊</button><button class="action cream" onclick="openPanel('tasks')">📋 每日任务</button>
-</div></section>
-<section class="lower">
-<div class="panel"><h3>🧺 店铺经营</h3><div class="metric" id="stockCount">20 种商品</div><div class="muted">货架商品正在等待顾客</div></div>
-<div class="panel"><h3>👣 今日顾客</h3><div class="metric" id="customerCount">0 位</div><div class="muted">进店顾客</div></div>
-<div class="panel"><h3>✨ 店铺整洁度</h3><div class="metric" id="cleanValue">100%</div><div class="bar"><i id="cleanBar" style="width:100%"></i></div></div>
-<div class="panel"><h3>💗 顾客好感</h3><div class="metric" id="loveValue">0</div><div class="muted">友善服务会提升好感</div></div>
-</section>
-<nav class="nav"><button class="active" onclick="navTo('home',this)"><span class="ico">🏠</span>店铺</button><button onclick="openPanel('stock',this)"><span class="ico">📦</span>库存</button><button onclick="openPanel('supply',this)"><span class="ico">🛒</span>进货</button><button onclick="openPanel('customers',this)"><span class="ico">👥</span>顾客</button><button onclick="cleanShop()"><span class="ico">🧹</span>清洁</button><button onclick="openPanel('tasks',this)"><span class="ico">📋</span>任务</button><button onclick="openPanel('manager',this)"><span class="ico">👗</span>店长</button></nav>
-</div>
-<div class="toast" id="toast"></div><div class="modal-bg" id="modalBg" onclick="if(event.target===this)closePanel()"><div class="modal"><button class="close" onclick="closePanel()">关闭 ✕</button><div id="modalContent"></div></div></div>
-<script>
-const products=[
-{name:'草莓牛奶',price:4.5,qty:8,kind:'drink',color:'#e99d91'},{name:'橙汁',price:4,qty:7,kind:'drink',color:'#edb35f'},{name:'汽水',price:3,qty:9,kind:'drink',color:'#83b7cb'},{name:'矿泉水',price:2,qty:10,kind:'drink',color:'#a6c9d1'},
-{name:'草莓饼干',price:5,qty:6,kind:'snack',color:'#e99b8d'},{name:'薯片',price:4,qty:7,kind:'snack',color:'#e6c16f'},{name:'巧克力',price:6,qty:5,kind:'snack',color:'#9b7054'},{name:'吐司',price:5,qty:8,kind:'bread',color:'#d8a46d'},
-{name:'苹果',price:2.5,qty:12,kind:'fruit',color:'#d96e62'},{name:'梨子',price:2,qty:10,kind:'fruit',color:'#b2bc78'},{name:'橘子',price:2.5,qty:10,kind:'fruit',color:'#e7a44f'},{name:'牛角包',price:4,qty:5,kind:'bread',color:'#d7a36b'},
-{name:'洗衣液',price:8,qty:4,kind:'home',color:'#8db8c5'},{name:'洗洁精',price:6,qty:4,kind:'home',color:'#a9bf86'},{name:'纸巾',price:3.5,qty:8,kind:'home',color:'#e9dfc9'},{name:'鸡蛋',price:5,qty:6,kind:'food',color:'#e8d4a3'},
-{name:'方便面',price:3,qty:12,kind:'snack',color:'#df9d77'},{name:'麦片',price:7,qty:4,kind:'food',color:'#c39b72'},{name:'果酱',price:6,qty:5,kind:'food',color:'#b17b8a'},{name:'咖啡',price:5,qty:6,kind:'drink',color:'#a67b5c'}
-];
-let state=JSON.parse(localStorage.getItem('mlg-v5')||'null')||{money:500,day:1,heart:0,customers:0,clean:100,sales:0,closed:0};
-let visitors=[],nextVisitor=0,customerTotal=0;
-function save(){localStorage.setItem('mlg-v5',JSON.stringify(state));updateUI()}
-function updateUI(){money.textContent='🪙 RM '+state.money.toFixed(2);heart.textContent='❤️ '+state.heart;day.textContent='📅 第 '+state.day+' 天';dayline.textContent='第 '+state.day+' 个温暖日子';customerCount.textContent=state.customers+' 位';cleanValue.textContent=state.clean+'%';cleanBar.style.width=state.clean+'%';loveValue.textContent=state.heart;stockCount.textContent=products.length+' 种商品';}
-const ns='http://www.w3.org/2000/svg';
-function svgEl(tag,attrs,parent){let e=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v));parent.appendChild(e);return e}
-function drawPackage(x,y,w,h,color,idx,parent){let g=svgEl('g',{transform:`translate(${x} ${y})`},parent);svgEl('rect',{x:1,y:3,width:w,height:h,rx:5,fill:'#68482f',opacity:.2},g);svgEl('rect',{width:w,height:h,rx:5,fill:color,stroke:'#704d36','stroke-width':2},g);svgEl('rect',{x:4,y:5,width:w-8,height:h*.34,rx:3,fill:'#fff4df',opacity:.8},g);svgEl('path',{d:`M${w*.18} ${h*.64}h${w*.64}`,stroke:'#fff5df','stroke-width':2,opacity:.8},g);if(idx%3===0)svgEl('circle',{cx:w/2,cy:h*.8,r:3,fill:'#fff2d7'},g)}
-function makeShelf(){let root=document.getElementById('shelfGoods');products.forEach((p,i)=>{let row=Math.floor(i/7),col=i%7;let x=48+col*72+(row%2?3:0),y=202+row*96;let color=p.color;drawPackage(x,y,52,61,color,i,root);svgEl('rect',{x:x+8,y:y+68,width:36,height:3,rx:2,fill:'#f5d39d',opacity:.8},root)})}
-function makeFridge(){let root=document.getElementById('fridgeGoods');for(let r=0;r<3;r++)for(let c=0;c<4;c++){let p=products[(r*4+c)%products.length],x=22+c*40,y=35+r*92;drawPackage(x,y,29,62,p.color,r+c,root)}}
-function character(id,x,y,kind,name){let g=svgEl('g',{class:'person',id:'person'+id,transform:`translate(${x} ${y}) scale(${kind==='manager'?.88:.92})`},document.getElementById('people'));svgEl('ellipse',{cx:0,cy:0,rx:35,ry:9,fill:'#765334',opacity:.2},g);
-let body=svgEl('g',{transform:'translate(-30 -130)'},g);
-svgEl('path',{d:'M17 72Q30 64 43 72L47 111Q30 121 12 111Z',fill:kind==='manager'?'#91ad7b':'#88b8c8',stroke:'#77553e','stroke-width':3},body);
-svgEl('path',{d:'M15 78Q3 80 5 103L13 111M44 78Q57 80 56 103L48 111',fill:'none',stroke:'#e9b99b','stroke-width':9,'stroke-linecap':'round',class:'arms'},body);
-svgEl('path',{d:'M19 108L17 132L28 132L31 111L37 132L48 132L44 108Z',fill:kind==='manager'?'#66577d':'#536f8d',stroke:'#725039','stroke-width':2,class:'legs'},body);
-svgEl('path',{d:'M15 130Q9 134 12 139H29Q31 133 25 130M38 130Q34 135 39 139H55Q57 133 48 130',fill:'#f8ead1',stroke:'#76563d','stroke-width':2},body);
-if(kind!=='manager'){svgEl('path',{d:'M11 76Q0 84 8 109L17 112L20 79Z',fill:'#c58b50',stroke:'#765039','stroke-width':3},body);svgEl('path',{d:'M12 83L19 91L15 115',fill:'none',stroke:'#6e513d','stroke-width':3},body)}
-svgEl('rect',{x:11,y:76,width:36,height:31,rx:7,fill:'none',stroke:'#fff0d1','stroke-width':2,opacity:.5},body);
-svgEl('ellipse',{cx:31,cy:48,rx:23,ry:27,fill:'#edc09e',stroke:'#77553e','stroke-width':2},body);
-svgEl('path',{d:'M8 48Q1 13 28 15Q55 11 55 44L49 38Q43 27 34 30Q21 35 12 29Z',fill:kind==='manager'?'#6b4435':'#684331',stroke:'#543828','stroke-width':3});
-svgEl('path',{d:'M8 42Q1 63 14 70L10 48M52 42Q61 61 47 70L50 48',fill:'#684331'},body);
-svgEl('circle',{cx:23,cy:49,r:2.7,fill:'#49362d'},body);svgEl('circle',{cx:40,cy:49,r:2.7,fill:'#49362d'},body);
-svgEl('path',{d:'M26 61Q31 66 37 61',fill:'none',stroke:'#b76f68','stroke-width':2.5,'stroke-linecap':'round'},body);
-svgEl('ellipse',{cx:16,cy:58,rx:5,ry:3,fill:'#e99a8c',opacity:.6},body);svgEl('ellipse',{cx:46,cy:58,rx:5,ry:3,fill:'#e99a8c',opacity:.6},body);
-let label=svgEl('text',{x:0,y:-143,'text-anchor':'middle',class:'bubble'},g);label.textContent=name;
-return g}
-function spawn(){if(visitors.length>=3)return;let id=++nextVisitor;let startX=70+Math.random()*80;let g=character(id,startX,590,'customer',['小葵','安安','米米','乐乐'][Math.floor(Math.random()*4)]);let path=[{x:190,y:590},{x:320,y:560},{x:440,y:500},{x:550,y:560},{x:710,y:600}];let v={id,g,path,index:0,x:startX,y:590,wait:0};visitors.push(v);walk(v)}
-function walk(v){if(!visitors.includes(v))return;let target=v.path[v.index];let dx=target.x-v.x,dy=target.y-v.y,dist=Math.hypot(dx,dy);if(dist<4){v.index++;if(v.index>=v.path.length){shopFor(v);return}setTimeout(()=>walk(v),350+Math.random()*500);return}let step=Math.min(2.1,dist);v.x+=dx/dist*step;v.y+=dy/dist*step;v.g.setAttribute('transform',`translate(${v.x} ${v.y}) scale(.92)`);requestAnimationFrame(()=>walk(v))}
-function shopFor(v){v.g.classList.add('paused');let available=products.filter(p=>p.qty>0);if(available.length){let p=available[Math.floor(Math.random()*available.length)];p.qty--;state.money+=p.price;state.sales++;state.customers++;state.heart+=Math.random()<.35?1:0;toast('🛍️ '+p.name+' 卖出 RM '+p.price.toFixed(2));save()}setTimeout(()=>{v.g.remove();visitors=visitors.filter(x=>x!==v)},1400)}
-function toast(t){let el=document.getElementById('toast');el.textContent=t;el.style.display='block';clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.style.display='none',2100)}
-function checkout(){let sold=state.sales;toast(sold?'🧾 今日已自动完成 '+sold+' 笔销售！':'🧾 顾客正在慢慢挑选商品');}
-function cleanShop(){state.clean=100;state.heart+=1;save();toast('🧹 店铺闪闪发亮！顾客好感 +1')}
-function nextDay(){if(state.sales===0){toast('今天还没有营业记录，再等等顾客吧！');return}state.day++;state.sales=0;state.clean=Math.max(65,state.clean-10);products.forEach(p=>p.qty=Math.max(0,p.qty));save();toast('🌙 打烊完成！新的一天开始啦')}
-function openPanel(type){let c=document.getElementById('modalContent'),title='',body='';if(type==='stock'||type==='supply'){title=type==='stock'?'📦 商品库存':'🛒 进货补货';body=products.map((p,i)=>`<div class="item"><div><b>${p.name}</b><div class="muted">售价 RM ${p.price.toFixed(2)} · 库存 ${p.qty}</div></div><button onclick="restock(${i})">补货 RM ${(p.price*.45*5).toFixed(2)}</button></div>`).join('')}else if(type==='customers'){title='💬 顾客互动';body=`<p>今天有 ${state.customers} 位顾客来过店里。</p><div class="item"><b>小葵：这家店好温馨呀！</b><button onclick="reply()">亲切回应</button></div><div class="item"><b>安安：有我喜欢的零食吗？</b><button onclick="reply()">推荐商品</button></div>`}else if(type==='tasks'){title='📋 每日小任务';body=`<div class="item"><b>接待 3 位顾客</b><span>${Math.min(3,state.customers)}/3</span></div><div class="item"><b>保持店铺整洁</b><span>${state.clean}%</span></div><div class="item"><b>卖出 5 件商品</b><span>${Math.min(5,state.sales)}/5</span></div>`}else{title='👗 店长小衣橱';body='<p>今天也要好好经营杂货铺！</p><div class="item"><b>薄荷绿围裙</b><button onclick="toast(\'已穿上薄荷绿围裙！\')">穿上</button></div><div class="item"><b>奶油色工作服</b><button onclick="toast(\'已换上奶油色工作服！\')">穿上</button></div>'}c.innerHTML='<h2>'+title+'</h2><div class="item-list">'+body+'</div>';document.getElementById('modalBg').style.display='flex'}
-function closePanel(){document.getElementById('modalBg').style.display='none'}
-function restock(i){let p=products[i],cost=p.price*.45*5;if(state.money<cost){toast('金币不够啦！');return}state.money-=cost;p.qty+=5;save();openPanel('stock');toast('📦 '+p.name+' 已补货 5 件')}
-function reply(){state.heart+=2;save();toast('💗 顾客很开心！好感 +2')}
-function navTo(page,btn){document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
-makeShelf();makeFridge();updateUI();setTimeout(spawn,800);setInterval(()=>{if(Math.random()<.72)spawn();state.clean=Math.max(55,state.clean-1);updateUI();save()},9000);
-</script></body></html>
+<div id="game"></div>
+<div class="topbar"><div><div class="brand">🏡 小镇杂货铺</div><div class="sub">MY LITTLE GROCERY · 3D WORLD</div></div>
+<div class="stats"><span class="pill" id="money">🪙 RM 500.00</span><span class="pill" id="hearts">❤️ 0</span><span class="pill" id="day">📅 第 1 天</span></div></div>
+<div class="toast" id="toast"></div>
+<div class="panel"><div class="status"><span id="state">🌷 营业中 · 欢迎来到小店</span><span id="customers">顾客 0 位</span></div>
+<div class="actions">
+<button class="pink" id="checkout">🧾 收银结账</button><button class="green" id="restock">📦 快速补货</button><button class="blue" id="call">💬 招呼顾客</button><button id="clean">🧹 打扫卫生</button>
+</div><div class="hint">拖动屏幕旋转视角 · 双指/滚轮缩放 · 点击商品可查看</div></div>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+
+const root=document.querySelector('#game');
+const scene=new THREE.Scene(); scene.background=new THREE.Color('#d9e5d0'); scene.fog=new THREE.Fog('#d9e5d0',17,34);
+const camera=new THREE.PerspectiveCamera(35,innerWidth/innerHeight,.1,100);
+camera.position.set(10,9,13); camera.lookAt(0,1.7,0);
+const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.setSize(innerWidth,innerHeight); renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.outputColorSpace=THREE.SRGBColorSpace; renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.15; root.appendChild(renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xfff2d8,0x82917a,2.0));
+const sun=new THREE.DirectionalLight(0xffe4b6,3.2);sun.position.set(-5,12,8);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-12;sun.shadow.camera.right=12;sun.shadow.camera.top=12;sun.shadow.camera.bottom=-12;scene.add(sun);
+const mat=(c,rough=.82,metal=0)=>new THREE.MeshStandardMaterial({color:c,roughness:rough,metalness:metal});
+const wood=mat('#b77b4e'),woodLight=mat('#d7a16b'),woodDark=mat('#805033'),cream=mat('#fff0d0'),wall=mat('#f4dfb8'),leaf=mat('#6e9b62'),glass= new THREE.MeshStandardMaterial({color:'#a8dbe4',roughness:.2,metalness:.1,transparent:true,opacity:.48});
+function box(w,h,d,m,x,y,z,parent=scene){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;parent.add(o);return o}
+function sphere(r,m,x,y,z,parent=scene, sx=1,sy=1,sz=1){const o=new THREE.Mesh(new THREE.SphereGeometry(r,24,18),m);o.position.set(x,y,z);o.scale.set(sx,sy,sz);o.castShadow=true;parent.add(o);return o}
+function cylinder(rt,rb,h,m,x,y,z,parent=scene){const o=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,16),m);o.position.set(x,y,z);o.castShadow=true;parent.add(o);return o}
+// floor and cozy shop shell
+box(15,.25,12,mat('#d8b184'),0,-.15,0); 
+for(let i=-7;i<=7;i++){box(.025,.012,11,mat('#bd9065'),i,.0,0)}
+box(15,5,.25,wall,0,2.45,-5.8);box(.25,5,12,wall,-7.5,2.45,0);box(.25,5,12,wall,7.5,2.45,0);
+for(let x=-6.5;x<=6.5;x+=1.3){box(1.15,.05,.04,woodLight,x,4.55,-5.64)}
+// back sign
+box(3.4,.65,.12,woodDark,-3.5,4.05,-5.55);box(3.25,.5,.08,cream,-3.5,4.05,-5.46);
+const sign=document.createElement('canvas');sign.width=512;sign.height=96;const ctx=sign.getContext('2d');ctx.fillStyle='#68482e';ctx.font='bold 48px sans-serif';ctx.textAlign='center';ctx.fillText('每日新鲜 · FRESH DAILY',256,64);
+const tex=new THREE.CanvasTexture(sign);const sm=new THREE.MeshBasicMaterial({map:tex,transparent:true});const signMesh=new THREE.Mesh(new THREE.PlaneGeometry(3.1,.42),sm);signMesh.position.set(-3.5,4.05,-5.39);scene.add(signMesh);
+// shelf bank
+function shelf(x,z,width=5.8){box(width,.18,.65,woodDark,x,.45,z);for(let y of [1.05,1.85,2.65]){box(width,.13,.62,woodLight,x,y,z);box(width,.08,.08,woodDark,x,y-.12,z+.29)}for(let y of [.55,1.35,2.15]){box(width,.08,.08,woodDark,x,y,z-.28)}for(let xx of [x-width/2+.12,x+width/2-.12])box(.12,2.55,.16,woodDark,xx,1.55,z)}
+shelf(-3.65,-3.95,6.2);
+// product packages with variety
+const colors=['#e98e82','#e9b45f','#82b9c7','#a7bd83','#c6a2c7','#d9b68a','#f1d78d'];
+const products=[];
+for(let row=0;row<3;row++)for(let i=0;i<8;i++){let x=-6.25+i*.74+(row%2)*.12,y=.78+row*.8,z=-3.58;let c=mat(colors[(i+row*2)%colors.length],.5);let p=box(.48,.48,.36,c,x,y,z);box(.29,.05,.02,cream,x,y+.08,z+.19);sphere(.035,mat('#fff7df'),x+.14,y-.15,z+.19);products.push(p)}
+// fridge
+box(2.15,3.4,.25,woodDark,4.6,1.8,-4.6);box(1.95,3.15,.12,mat('#83bdc9'),4.6,1.8,-4.43);box(1.72,2.92,.1,glass,4.6,1.8,-4.34);
+for(let row=0;row<3;row++){box(1.65,.06,.13,woodDark,4.6,1.1+row*.82,-4.22);for(let i=0;i<4;i++){let b=cylinder(.11,.11,.42,mat(colors[(i+row)%7]),4.02+i*.38,1.38+row*.82,-4.18);b.rotation.z=Math.PI/2}}
+for(let x of [4.0,5.15])box(.06,2.8,.08,cream,x,1.8,-4.24);
+// checkout counter
+box(3.5,1.05,1.45,woodDark,2.0,.55,1.5);box(3.35,.16,1.38,woodLight,2,.98,1.5);box(3.1,.65,.08,wood,2,.48,2.22);
+box(.7,.12,.55,mat('#4f6659'),1.2,1.13,1.45);box(.6,.05,.42,mat('#9dc6c0'),1.2,1.22,1.45);
+// produce baskets
+for(let x of [-5.4,-4.5]){box(.85,.45,.8,wood, x,.28,.0);for(let i=0;i<4;i++)sphere(.19,mat(i%2?'#8eae67':'#d77b5e'),x-.28+i*.18,.62,.02)}
+// plants
+function plant(x,z){cylinder(.22,.28,.38,mat('#c98765'),x,.2,z);for(let i=0;i<5;i++){let l=sphere(.22,leaf,x+Math.sin(i*1.4)*.2,.65+(i%2)*.1,z+Math.cos(i*1.4)*.18);l.scale.set(.55,1.4,.45);l.rotation.z=(i-2)*.35}}
+plant(-6.5,2.8);plant(6.4,-1.8);
+// lamp
+cylinder(.035,.035,1.4,woodDark,-1.5,4.15,-1.5);cylinder(.42,.1,.3,mat('#e9c98e'),-1.5,3.45,-1.5);
+// Character builder: stylized 3D chibi, pivot limbs for walk
+function character(opts={}){const g=new THREE.Group();const skin=mat(opts.skin||'#f3c6a2'),hair=mat(opts.hair||'#5a382b'),shirt=mat(opts.shirt||'#8eb7a0'),pants=mat(opts.pants||'#526c86'),shoe=mat('#5b493c'),eye=mat('#382a25');
+const body=new THREE.Group();g.add(body);
+sphere(.34,skin,0,1.55,0,body,1,.92,.85); // head
+// hair cap and side locks
+sphere(.355,hair,0,1.72,-.035,body,1.03,.75,.93);sphere(.15,hair,-.29,1.55,.04,body,.7,1.1,.7);sphere(.15,hair,.29,1.55,.04,body,.7,1.1,.7);
+for(let x of [-.12,.12])sphere(.035,eye,x,1.59,.29,body,.7,1.2,.6);
+sphere(.035,mat('#d77d75'),0,1.43,.31,body,.9,.5,.4);
+const torso=box(.48,.58,.32,shirt,0,1.0,0,body);torso.geometry=new THREE.BoxGeometry(.48,.58,.32);
+const apron=box(.32,.38,.035,mat('#fff0d5'),0,.98,.18,body);
+const armL=new THREE.Group(),armR=new THREE.Group();armL.position.set(-.29,1.2,0);armR.position.set(.29,1.2,0);body.add(armL,armR);
+for(const a of [armL,armR]){let limb=cylinder(.085,.075,.48,skin,0,-.2,0,a);limb.rotation.z=.12;sphere(.09,skin,0,-.45,.02,a)}
+const legL=new THREE.Group(),legR=new THREE.Group();legL.position.set(-.13,.72,0);legR.position.set(.13,.72,0);body.add(legL,legR);
+for(const l of [legL,legR]){cylinder(.095,.09,.48,pants,0,-.22,0,l);box(.2,.13,.32,shoe,0,-.49,.08,l)}
+g.userData={body,armL,armR,legL,legR,phase:Math.random()*6};return g}
+const keeper=character({hair:'#55382c',shirt:'#83ad91',pants:'#536887'});keeper.position.set(1.0,0,3.3);keeper.rotation.y=-.2;scene.add(keeper);
+const shoppers=[];let cash=500,hearts=0,day=1,customerCount=0,stock=20;
+function addShopper(){if(shoppers.length>=3)return;const c=character({hair:['#68402d','#4a3028','#8b5738'][Math.floor(Math.random()*3)],shirt:['#d78e82','#8eacc8','#d9b777'][Math.floor(Math.random()*3)],pants:'#526b83'});c.position.set(-5.5,0,4.6);c.userData.route=[new THREE.Vector3(-5.5,0,4.6),new THREE.Vector3(-3.5,0,-2.9),new THREE.Vector3(0,0,-1.2),new THREE.Vector3(1.1,0,2.9),new THREE.Vector3(6.2,0,4.7)];c.userData.step=0;c.userData.speed=.85+Math.random()*.25;scene.add(c);shoppers.push(c);customerCount++;updateUI()}
+function updateUI(){document.querySelector('#money').textContent='🪙 RM '+cash.toFixed(2);document.querySelector('#hearts').textContent='❤️ '+hearts;document.querySelector('#day').textContent='📅 第 '+day+' 天';document.querySelector('#customers').textContent='店内顾客 '+shoppers.length+' 位';document.querySelector('#state').textContent='🌷 营业中 · 商品库存 '+stock+' 件'}
+let toastTimer;function toast(s){const t=document.querySelector('#toast');t.textContent=s;t.style.opacity=1;clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.opacity=0,1800)}
+document.querySelector('#checkout').onclick=()=>{if(shoppers.length){cash+=12;stock=Math.max(0,stock-1);hearts++;toast('🧾 结账成功！收入 RM 12.00');}else toast('顾客还在挑选商品呢！');updateUI()};
+document.querySelector('#restock').onclick=()=>{if(cash>=35){cash-=35;stock+=12;toast('📦 补货完成！增加 12 件商品');}else toast('金币不足，暂时不能补货');updateUI()};
+document.querySelector('#call').onclick=()=>{hearts++;toast('💬 顾客：这家店好温馨呀！');if(shoppers.length<3)addShopper();updateUI()};
+document.querySelector('#clean').onclick=()=>{cash=Math.max(0,cash-2);toast('🧹 店铺闪闪发亮！卫生 +10');updateUI()};
+const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();renderer.domElement.addEventListener('pointerdown',e=>{if(e.target!==renderer.domElement)return;pointer.x=e.clientX/innerWidth*2-1;pointer.y=-(e.clientY/innerHeight)*2+1;raycaster.setFromCamera(pointer,camera);const hit=raycaster.intersectObjects(products);if(hit.length)toast('📦 货架商品 · 点击「快速补货」增加库存');});
+// simple orbit and pinch zoom
+let down=false,lastX=0,lastY=0,rot=0,zoom=1;renderer.domElement.addEventListener('pointerdown',e=>{down=true;lastX=e.clientX;lastY=e.clientY;renderer.domElement.setPointerCapture(e.pointerId)});renderer.domElement.addEventListener('pointermove',e=>{if(!down)return;rot+=(e.clientX-lastX)*.005;camera.position.x=10*Math.sin(.65+rot)*zoom;camera.position.z=13*Math.cos(rot)*zoom;camera.lookAt(0,1.5,0);lastX=e.clientX;lastY=e.clientY});renderer.domElement.addEventListener('pointerup',()=>down=false);renderer.domElement.addEventListener('wheel',e=>{zoom=Math.max(.75,Math.min(1.45,zoom+e.deltaY*.001));camera.position.multiplyScalar(zoom/(camera.position.length()/Math.sqrt(camera.position.x**2+camera.position.y**2+camera.position.z**2)));camera.position.set(10*Math.sin(.65+rot)*zoom,9*zoom,13*Math.cos(rot)*zoom);camera.lookAt(0,1.5,0)},{passive:true});
+let lastSpawn=0;const clock=new THREE.Clock();
+function animate(){requestAnimationFrame(animate);const t=clock.getElapsedTime(),dt=Math.min(clock.getDelta(),.04);
+[keeper,...shoppers].forEach((c,i)=>{const u=c.userData;u.phase+=dt*4;u.legL.rotation.x=Math.sin(u.phase)*.35;u.legR.rotation.x=-Math.sin(u.phase)*.35;u.armL.rotation.x=-Math.sin(u.phase)*.22;u.armR.rotation.x=Math.sin(u.phase)*.22;c.userData.body.position.y=.025+Math.abs(Math.sin(u.phase))*.025});
+for(let i=shoppers.length-1;i>=0;i--){const c=shoppers[i],u=c.userData,target=u.route[u.step];const dx=target.x-c.position.x,dz=target.z-c.position.z,dist=Math.hypot(dx,dz);if(dist<.16){u.step++;if(u.step>=u.route.length){scene.remove(c);shoppers.splice(i,1);cash+=8;stock=Math.max(0,stock-1);toast('🌟 顾客满意离店！收入 RM 8.00');updateUI();continue}}else{c.position.x+=dx/dist*dt*u.speed;c.position.z+=dz/dist*dt*u.speed;c.rotation.y=Math.atan2(dx,dz)}}
+if(t-lastSpawn>12&&shoppers.length<2){addShopper();lastSpawn=t}
+renderer.render(scene,camera)}
+animate();addShopper();addShopper();
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+</script>
+</body></html>
