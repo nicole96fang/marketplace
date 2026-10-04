@@ -265,6 +265,147 @@ for(let i=0;i<3;i++){
   leaf.rotation.z=-.55-i*.1;leaf.rotation.x=.2;scene.add(leaf);
 }
 
+// Five upright refrigerated display units on the wall opposite the checkout.
+// Three beverage coolers + two upright freezers; all interiors start empty.
+const coolerBodyMat=new THREE.MeshStandardMaterial({color:'#d9e0e2',metalness:.42,roughness:.3});
+const coolerSideMat=new THREE.MeshStandardMaterial({color:'#b9c5ca',metalness:.35,roughness:.38});
+const freezerBodyMat=new THREE.MeshStandardMaterial({color:'#cbd8e3',metalness:.38,roughness:.3});
+const coolerDarkMat=new THREE.MeshStandardMaterial({color:'#29343a',metalness:.55,roughness:.32});
+const innerMat=new THREE.MeshStandardMaterial({color:'#e8f3f6',roughness:.35,metalness:.08});
+const shelfMat=new THREE.MeshStandardMaterial({color:'#c9d7dc',metalness:.42,roughness:.3});
+const glassMat=new THREE.MeshPhysicalMaterial({
+  color:'#d9f3ff',transparent:true,opacity:.24,roughness:.08,metalness:.12,
+  clearcoat:1,clearcoatRoughness:.05,depthWrite:false,side:THREE.DoubleSide
+});
+const glassEdgeMat=new THREE.MeshStandardMaterial({color:'#e8f7ff',metalness:.62,roughness:.2});
+const handleMat=new THREE.MeshStandardMaterial({color:'#66767d',metalness:.82,roughness:.2});
+const coolGlowMat=new THREE.MeshStandardMaterial({color:'#e9fbff',emissive:'#b8eaff',emissiveIntensity:1.35});
+const freezeGlowMat=new THREE.MeshStandardMaterial({color:'#eaf7ff',emissive:'#9bd4ff',emissiveIntensity:1.55});
+
+function coolerHeaderTexture(label, frozen=false){
+  const c=document.createElement('canvas');c.width=512;c.height=128;
+  const g=c.getContext('2d');
+  const grad=g.createLinearGradient(0,0,512,128);
+  if(frozen){grad.addColorStop(0,'#b8d9ed');grad.addColorStop(1,'#e8f6ff');}
+  else{grad.addColorStop(0,'#d8edf0');grad.addColorStop(1,'#f8f1df');}
+  g.fillStyle=grad;g.fillRect(0,0,512,128);
+  g.fillStyle=frozen?'#47758f':'#557d7b';g.font='bold 46px Arial';g.textAlign='center';g.textBaseline='middle';
+  g.fillText(label,256,65);
+  const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t;
+}
+const drinkHeaderMat=new THREE.MeshStandardMaterial({map:coolerHeaderTexture('DRINKS'),roughness:.42});
+const frozenHeaderMat=new THREE.MeshStandardMaterial({map:coolerHeaderTexture('FROZEN',true),roughness:.42});
+const coolerDoors=[];
+const coolerUnits=[];
+
+// Store interior is toward -X from this right-side wall. Doors hinge at their front edge.
+const coolerX=9.95, unitW=2.12, unitD=1.48, unitH=4.55, unitBottom=.08;
+const unitZs=[-6.05,-3.62,-1.19,1.24,3.67];
+for(let i=0;i<5;i++){
+  const frozen=i>=3, z=unitZs[i];
+  const shell=frozen?freezerBodyMat:coolerBodyMat;
+  const accent=frozen?freezeGlowMat:coolGlowMat;
+  const unit=new THREE.Group();scene.add(unit);coolerUnits.push(unit);
+  // Build the insulated cabinet as separate panels so the empty interior remains visible.
+  const midY=unitBottom+unitH/2;
+  const back=new THREE.Mesh(new THREE.BoxGeometry(.14,unitH,unitW),shell);
+  back.position.set(coolerX+unitD/2-.07,midY,z);back.castShadow=true;unit.add(back);
+  const topPanel=new THREE.Mesh(new THREE.BoxGeometry(unitD, .14, unitW),shell);
+  topPanel.position.set(coolerX,unitBottom+unitH-.07,z);unit.add(topPanel);
+  const bottomPanel=new THREE.Mesh(new THREE.BoxGeometry(unitD, .14, unitW),shell);
+  bottomPanel.position.set(coolerX,unitBottom+.07,z);unit.add(bottomPanel);
+  // Insulated side walls, with an open front for the transparent hinged door.
+  for(const side of [-1,1]){
+    const panel=new THREE.Mesh(new THREE.BoxGeometry(unitD,unitH,.14),coolerSideMat);
+    panel.position.set(coolerX,midY,z+side*(unitW/2-.07));panel.castShadow=true;unit.add(panel);
+  }
+  // Dark rear liner and a cool-white interior back surface.
+  const rearLiner=new THREE.Mesh(new THREE.BoxGeometry(.025,unitH-.34,unitW-.30),innerMat);
+  rearLiner.position.set(coolerX+unitD/2-.15,midY,z);unit.add(rearLiner);
+  // Front uprights and cross rails make the appliance look like a finished commercial unit.
+  for(const side of [-1,1]){
+    const upright=new THREE.Mesh(new THREE.BoxGeometry(.13,unitH-.10,.13),shell);
+    upright.position.set(coolerX-unitD/2+.02,midY,z+side*(unitW/2-.065));unit.add(upright);
+  }
+  // Four empty display shelves with slim front lips.
+  for(let s=0;s<4;s++){
+    const y=unitBottom+.82+s*.78;
+    const shelf=new THREE.Mesh(new THREE.BoxGeometry(unitD-.30,.045,unitW-.34),shelfMat);
+    shelf.position.set(coolerX-.20,y,z);shelf.castShadow=true;unit.add(shelf);
+    const lip=new THREE.Mesh(new THREE.BoxGeometry(.045,.10,unitW-.34),glassEdgeMat);
+    lip.position.set(coolerX-.34,y+.055,z);unit.add(lip);
+    for(const side of [-1,1]){
+      const support=new THREE.Mesh(new THREE.BoxGeometry(unitD-.30,.035,.035),coolerDarkMat);
+      support.position.set(coolerX-.20,y-.12,z+side*(unitW/2-.23));unit.add(support);
+    }
+  }
+  // Interior vertical LED strips and soft cool illumination.
+  for(const side of [-1,1]){
+    const strip=new THREE.Mesh(new THREE.BoxGeometry(.045,unitH-.62,.045),accent);
+    strip.position.set(coolerX-.69,unitBottom+unitH/2,z+side*(unitW/2-.16));unit.add(strip);
+  }
+  const interiorLight=new THREE.PointLight(frozen?0xc7e8ff:0xd9f4ff,frozen?2.0:1.8,4.2,2);
+  interiorLight.position.set(coolerX-.72,2.55,z);unit.add(interiorLight);
+  // Top sign panel, visible above the glass door.
+  const header=new THREE.Mesh(new THREE.BoxGeometry(.13,.43,unitW-.10),frozen?frozenHeaderMat:drinkHeaderMat);
+  header.position.set(coolerX-unitD/2-.015,unitBottom+unitH-.22,z);unit.add(header);
+  // Bottom compressor grille with clean horizontal vents.
+  const grille=new THREE.Mesh(new THREE.BoxGeometry(.12,.42,unitW-.12),coolerDarkMat);
+  grille.position.set(coolerX-unitD/2-.025,unitBottom+.24,z);unit.add(grille);
+  for(let k=0;k<7;k++){
+    const vent=new THREE.Mesh(new THREE.BoxGeometry(.035,.025,unitW-.28),glassEdgeMat);
+    vent.position.set(coolerX-unitD/2-.10,unitBottom+.10+k*.045,z);unit.add(vent);
+  }
+  // Glass door on a real hinge pivot: tap/click to swing open or closed.
+  const frontX=coolerX-unitD/2-.105;
+  const hingeZ=z-unitW/2+.075;
+  const pivot=new THREE.Group();pivot.position.set(frontX,unitBottom+.48,hingeZ);scene.add(pivot);
+  const doorH=unitH-.96, doorW=unitW-.15;
+  const doorGlass=new THREE.Mesh(new THREE.BoxGeometry(.055,doorH,doorW),glassMat);
+  doorGlass.position.set(-.018,doorH/2,doorW/2);doorGlass.userData.coolerDoor=pivot;pivot.add(doorGlass);
+  // Metallic door perimeter frame.
+  for(const side of [-1,1]){
+    const stile=new THREE.Mesh(new THREE.BoxGeometry(.09,doorH,.075),glassEdgeMat);
+    stile.position.set(-.055,doorH/2,doorW/2+side*(doorW/2-.035));stile.userData.coolerDoor=pivot;pivot.add(stile);
+  }
+  for(const ySide of [0,1]){
+    const rail=new THREE.Mesh(new THREE.BoxGeometry(.09,.075,doorW),glassEdgeMat);
+    rail.position.set(-.055,ySide?doorH-.035:.035,doorW/2);rail.userData.coolerDoor=pivot;pivot.add(rail);
+  }
+  // Long vertical handle on the free edge.
+  const handle=new THREE.Mesh(new THREE.BoxGeometry(.10,.62,.075),handleMat);
+  handle.position.set(-.11,doorH*.53,doorW-.10);handle.userData.coolerDoor=pivot;pivot.add(handle);
+  const hinge=new THREE.Mesh(new THREE.BoxGeometry(.12,doorH-.12,.09),coolerDarkMat);
+  hinge.position.set(.015,doorH/2,.055);pivot.add(hinge);
+  pivot.userData.isOpen=false;pivot.userData.target=0;pivot.userData.kind=frozen?'freezer':'fridge';
+  coolerDoors.push(pivot);
+  // Small floor-level feet and side edge trim.
+  for(const side of [-1,1]){
+    const foot=new THREE.Mesh(new THREE.BoxGeometry(.48,.12,.18),coolerDarkMat);
+    foot.position.set(coolerX+.36,unitBottom-.02,z+side*(unitW/2-.12));unit.add(foot);
+  }
+}
+
+// Tap a glass door to open/close it. A short easing animation gives a hinged 3D swing.
+const doorRaycaster=new THREE.Raycaster();
+const doorPointer=new THREE.Vector2();
+let pressX=0,pressY=0;
+renderer.domElement.addEventListener('pointerdown',e=>{pressX=e.clientX;pressY=e.clientY;});
+renderer.domElement.addEventListener('pointerup',e=>{
+  if(Math.hypot(e.clientX-pressX,e.clientY-pressY)>7)return;
+  const rect=renderer.domElement.getBoundingClientRect();
+  doorPointer.x=((e.clientX-rect.left)/rect.width)*2-1;
+  doorPointer.y=-((e.clientY-rect.top)/rect.height)*2+1;
+  doorRaycaster.setFromCamera(doorPointer,camera);
+  const hits=doorRaycaster.intersectObjects(coolerDoors,true);
+  if(hits.length){
+    let node=hits[0].object;
+    while(node&&!node.userData.coolerDoor)node=node.parent;
+    const pivot=node?.userData.coolerDoor;
+    if(pivot){pivot.userData.isOpen=!pivot.userData.isOpen;pivot.userData.target=pivot.userData.isOpen?-1.18:0;}
+  }
+});
+
 // Subtle natural daylight from the open front; no props, fixtures or furniture.
 const ambientPlane=new THREE.Mesh(
   new THREE.PlaneGeometry(30,18),
@@ -299,7 +440,15 @@ renderer.domElement.addEventListener('wheel',e=>{
   distance=Math.max(20,Math.min(42,distance+e.deltaY*.018));updateCamera();
 },{passive:true});
 
-function animate(){requestAnimationFrame(animate);renderer.render(scene,camera)}
+function animate(){
+  requestAnimationFrame(animate);
+  for(const door of coolerDoors){
+    const target=door.userData.target||0;
+    door.rotation.y+=(target-door.rotation.y)*.16;
+    if(Math.abs(target-door.rotation.y)<.001)door.rotation.y=target;
+  }
+  renderer.render(scene,camera);
+}
 animate();
 addEventListener('resize',()=>{
   camera.aspect=innerWidth/innerHeight;camera.fov=innerWidth<700?48:42;
