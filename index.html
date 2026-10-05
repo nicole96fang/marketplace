@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#c9d9d5">
-<title>乡间小杂货铺 · V7.5 前置招牌</title>
+<title>乡间小杂货铺 · V7.6 斜屋顶与立体招牌</title>
 <style>
 :root{--cream:#fff5df;--ink:#654a35;--brown:#a9784f;--pink:#e99583;--green:#9dbb83;--blue:#91bdc8}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#c9d9d5;font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink)}
@@ -416,31 +416,47 @@ const signGlowMat=new THREE.MeshStandardMaterial({
   color:'#fff0ce',emissive:'#ffc66e',emissiveIntensity:2.2,roughness:.25
 });
 
-// Custom high-resolution timber sign face with the exact shop name.
+// Custom high-resolution illustrated timber sign face: house on the left,
+// large raised-looking shop name in the middle, and produce basket on the right.
 const signCanvas=document.createElement('canvas');
 signCanvas.width=2048;signCanvas.height=320;
 const sg=signCanvas.getContext('2d');
 const signGrad=sg.createLinearGradient(0,0,0,320);
-signGrad.addColorStop(0,'#d6a879');signGrad.addColorStop(.48,'#bd895b');signGrad.addColorStop(1,'#a9754b');
+signGrad.addColorStop(0,'#d8ad7d');signGrad.addColorStop(.5,'#c18c5d');signGrad.addColorStop(1,'#a9754b');
 sg.fillStyle=signGrad;sg.fillRect(0,0,2048,320);
-// Fine natural timber grain.
 let signSeed=4821;
 const signRand=()=>{signSeed=(signSeed*9301+49297)%233280;return signSeed/233280;};
 for(let i=0;i<115;i++){
   const y=signRand()*320,x=signRand()*2048,w=80+signRand()*560;
-  sg.strokeStyle=i%3===0?'#f4d3a6':'#70482f';
-  sg.globalAlpha=.10+signRand()*.12;sg.lineWidth=1+signRand()*3;
+  sg.strokeStyle=i%3===0?'#f4d3a6':'#70482f';sg.globalAlpha=.10+signRand()*.12;sg.lineWidth=1+signRand()*3;
   sg.beginPath();sg.moveTo(x,y);sg.bezierCurveTo(x+w*.3,y-4,x+w*.7,y+4,x+w,y);sg.stroke();
 }
 sg.globalAlpha=1;
-// Inner inset border.
 sg.strokeStyle='#f0d0a7';sg.lineWidth=12;sg.strokeRect(22,22,2004,276);
 sg.strokeStyle='#805435';sg.lineWidth=5;sg.strokeRect(37,37,1974,246);
-// Shop name with a warm cream outline and dark raised-looking face.
+// Little cottage illustration, hand-painted sign style.
+sg.save();sg.translate(235,166);
+sg.fillStyle='#f5dfbd';sg.strokeStyle='#70442c';sg.lineWidth=13;sg.lineJoin='round';
+sg.beginPath();sg.moveTo(-105,-12);sg.lineTo(0,-105);sg.lineTo(105,-12);sg.lineTo(92,83);sg.lineTo(-92,83);sg.closePath();sg.fill();sg.stroke();
+sg.fillStyle='#9b5437';sg.beginPath();sg.moveTo(-125,-10);sg.lineTo(0,-126);sg.lineTo(125,-10);sg.lineTo(105,2);sg.lineTo(0,-94);sg.lineTo(-105,2);sg.closePath();sg.fill();sg.stroke();
+sg.fillStyle='#6d422d';sg.fillRect(-27,20,54,63);
+sg.fillStyle='#9fc4c5';sg.fillRect(-78,5,37,38);sg.fillRect(42,5,37,38);
+sg.strokeStyle='#6d422d';sg.lineWidth=8;sg.strokeRect(-78,5,37,38);sg.strokeRect(42,5,37,38);
+sg.fillStyle='#d9b16f';sg.beginPath();sg.arc(14,52,5,0,Math.PI*2);sg.fill();
+sg.restore();
+// Produce basket with simple fruit shapes.
+sg.save();sg.translate(1807,172);
+sg.fillStyle='#9a623c';sg.strokeStyle='#6f452d';sg.lineWidth=12;
+sg.beginPath();sg.moveTo(-105,-6);sg.quadraticCurveTo(-90,95,-55,100);sg.lineTo(55,100);sg.quadraticCurveTo(90,95,105,-6);sg.closePath();sg.fill();sg.stroke();
+sg.strokeStyle='#d8a66c';sg.lineWidth=9;for(let y=20;y<90;y+=24){sg.beginPath();sg.moveTo(-85,y);sg.quadraticCurveTo(0,y+18,85,y);sg.stroke();}
+for(const f of [{x:-45,y:-45,c:'#c95b43'},{x:10,y:-64,c:'#e2a94f'},{x:58,y:-35,c:'#78934e'},{x:-2,y:-18,c:'#bd4f3e'}]){sg.fillStyle=f.c;sg.beginPath();sg.arc(f.x,f.y,34,0,Math.PI*2);sg.fill();}
+sg.strokeStyle='#577c45';sg.lineWidth=12;sg.beginPath();sg.moveTo(-15,-75);sg.quadraticCurveTo(-10,-120,22,-122);sg.stroke();
+sg.restore();
+// Large central lettering with a cream outline and subtle extrusion shadow.
 sg.textAlign='center';sg.textBaseline='middle';
-sg.font='900 184px "PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif';
-sg.lineJoin='round';sg.shadowColor='rgba(55,31,17,.48)';sg.shadowBlur=8;sg.shadowOffsetY=9;
-sg.lineWidth=25;sg.strokeStyle='#fff0d9';sg.strokeText('乡间小杂货铺',1024,165);
+sg.font='900 164px "PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif';
+sg.lineJoin='round';sg.shadowColor='rgba(55,31,17,.55)';sg.shadowBlur=9;sg.shadowOffsetY=9;
+sg.lineWidth=27;sg.strokeStyle='#fff0d9';sg.strokeText('乡间小杂货铺',1024,165);
 sg.fillStyle='#60351f';sg.fillText('乡间小杂货铺',1024,165);
 sg.shadowColor='transparent';sg.shadowBlur=0;sg.shadowOffsetY=0;
 const signTexture=new THREE.CanvasTexture(signCanvas);
@@ -511,6 +527,84 @@ for(const side of [-1,1]){
     const center=new THREE.Mesh(new THREE.SphereGeometry(.045,10,8),signCenterMat);
     flower.add(center);
   }
+}
+
+// V7.6 WEATHERPROOF GABLE ROOF — dark walnut shingles, deep eaves,
+// visible timber underside and gutters. The sign remains in front of the gable.
+const roofFront=8.78, roofBack=-9.85, eaveX=12.05, eaveY=7.48, ridgeY=10.78;
+const roofLength=roofFront-roofBack;
+function makeRoofSide(side){
+  const geo=new THREE.BufferGeometry();
+  const x0=side*eaveX, x1=0;
+  const verts=[
+    x0,eaveY,roofBack,  x0,eaveY,roofFront,
+    x1,ridgeY,roofFront, x1,ridgeY,roofBack
+  ];
+  geo.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));
+  geo.setAttribute('uv',new THREE.Float32BufferAttribute([0,0,0,6,3,6,3,0],2));
+  geo.setIndex([0,1,2,0,2,3]);geo.computeVertexNormals();
+  return geo;
+}
+// Procedural shingle texture: overlapping staggered rows with fine wood grain.
+const shingleCanvas=document.createElement('canvas');shingleCanvas.width=512;shingleCanvas.height=512;
+const sh=shingleCanvas.getContext('2d');
+const shGrad=sh.createLinearGradient(0,0,512,512);shGrad.addColorStop(0,'#493025');shGrad.addColorStop(1,'#76503a');
+sh.fillStyle=shGrad;sh.fillRect(0,0,512,512);
+for(let row=0;row<8;row++){
+  const y=row*64, offset=(row%2)*32;
+  for(let col=-1;col<9;col++){
+    const x=col*64+offset;
+    const tones=['#694632','#76503a','#5a3b2c','#81583e'];
+    sh.fillStyle=tones[(row+col+12)%tones.length];
+    sh.beginPath();sh.moveTo(x+2,y+2);sh.lineTo(x+62,y+2);sh.lineTo(x+62,y+54);sh.quadraticCurveTo(x+32,y+67,x+2,y+54);sh.closePath();sh.fill();
+    sh.strokeStyle='rgba(35,22,15,.65)';sh.lineWidth=3;sh.stroke();
+    sh.strokeStyle='rgba(220,174,126,.22)';sh.lineWidth=2;sh.beginPath();sh.moveTo(x+8,y+9);sh.lineTo(x+53,y+9);sh.stroke();
+    sh.strokeStyle='rgba(28,19,14,.25)';sh.lineWidth=1;for(let k=0;k<3;k++){sh.beginPath();sh.moveTo(x+8,y+18+k*8);sh.lineTo(x+45,y+18+k*8);sh.stroke();}
+  }
+}
+const shingleTex=new THREE.CanvasTexture(shingleCanvas);shingleTex.colorSpace=THREE.SRGBColorSpace;
+shingleTex.wrapS=shingleTex.wrapT=THREE.RepeatWrapping;shingleTex.repeat.set(2.2,2.8);shingleTex.anisotropy=8;
+const roofMat=new THREE.MeshStandardMaterial({map:shingleTex,roughness:.9,side:THREE.DoubleSide});
+const roofUnderMat=new THREE.MeshStandardMaterial({map:woodMat(woodTexture('#9a704e','#d2a77a',21),2.2,3.2,.86).map,roughness:.88,side:THREE.DoubleSide});
+for(const side of [-1,1]){
+  const roofDeck=new THREE.Mesh(makeRoofSide(side),roofMat);roofDeck.castShadow=true;roofDeck.receiveShadow=true;scene.add(roofDeck);
+  // Warm timber lining on the underside, slightly below the waterproof deck.
+  const underGeo=makeRoofSide(side);
+  const pos=underGeo.attributes.position;
+  for(let i=0;i<pos.count;i++)pos.setY(i,pos.getY(i)-.13);
+  underGeo.computeVertexNormals();
+  const under=new THREE.Mesh(underGeo,roofUnderMat);under.receiveShadow=true;scene.add(under);
+  // Exposed rafters beneath the roof, repeated along the shop depth.
+  const slopeLen=Math.sqrt(eaveX*eaveX+(ridgeY-eaveY)**2);
+  const angle=Math.atan2(ridgeY-eaveY,eaveX)*(side===1?-1:1);
+  for(let z=roofBack+.45;z<roofFront;z+=3.05){
+    const rafter=new THREE.Mesh(new THREE.BoxGeometry(slopeLen,.22,.25),beamMat);
+    rafter.position.set(side*eaveX/2,(eaveY+ridgeY)/2-.12,z);rafter.rotation.z=angle;
+    rafter.castShadow=true;scene.add(rafter);
+  }
+}
+// Strong fascia boards along the two eaves and a rounded ridge cap.
+for(const side of [-1,1]){
+  addBox(.30,.34,roofLength+.38,beamMat,side*(eaveX+.02),eaveY-.03,(roofFront+roofBack)/2);
+  // Rain gutter beneath each eave.
+  const gutter=new THREE.Mesh(new THREE.CylinderGeometry(.105,.105,roofLength+.35,16),trackMat);
+  gutter.rotation.x=Math.PI/2;gutter.position.set(side*(eaveX+.10),eaveY-.27,(roofFront+roofBack)/2);scene.add(gutter);
+}
+const ridgeCap=new THREE.Mesh(new THREE.CylinderGeometry(.24,.24,roofLength+.45,12),signWoodMat);
+ridgeCap.rotation.x=Math.PI/2;ridgeCap.position.set(0,ridgeY+.06,(roofFront+roofBack)/2);ridgeCap.castShadow=true;scene.add(ridgeCap);
+// Front and rear gable timber outlines; the front sign is mounted just ahead of them.
+function beamBetween(a,b,depth=.24,material=beamMat){
+  const A=new THREE.Vector3(...a),B=new THREE.Vector3(...b),d=B.clone().sub(A);
+  const mesh=new THREE.Mesh(new THREE.BoxGeometry(d.length(),.24,depth),material);
+  mesh.position.copy(A.add(B).multiplyScalar(.5));mesh.rotation.z=Math.atan2(d.y,d.x);mesh.castShadow=true;scene.add(mesh);return mesh;
+}
+for(const z of [roofFront-.06,roofBack+.06]){
+  beamBetween([-eaveX,eaveY,z],[0,ridgeY,z],.30,signWoodMat);
+  beamBetween([0,ridgeY,z],[eaveX,eaveY,z],.30,signWoodMat);
+}
+// Short decorative brackets below the deep eaves.
+for(const side of [-1,1])for(const z of [roofBack+1,roofFront-1]){
+  beamBetween([side*10.9,6.9,z],[side*11.8,7.43,z],.22,beamMat);
 }
 
 // Subtle natural daylight from the open front; no props, fixtures or furniture.
